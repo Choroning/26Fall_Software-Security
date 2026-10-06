@@ -138,6 +138,7 @@ This course covers the core principles of software security and recent security 
 |W16|12/15, 12/17|Final Exam||
 
 - The planned topics follow the syllabus, while the lecture decks are covered continuously as time allows.
+- The lecture deck roadmap presented in Lecture 03 is: 1 Introduction, 2 Basic principle, 3 Software Lifecycle, 4 Security Policies, 5 Software Bugs, 6 Exploitation, 7 Mitigations, 8 Advanced Mitigations, 9 Sanitization, 10 Fuzzing, 11 Symbolic Execution, 12 Network Security, 15~16 Cryptography, 17~18 Web Security, 19 Hardware Security, and 20 AI security.
 
 - **📖 References**
 
@@ -170,6 +171,9 @@ This course covers the core principles of software security and recent security 
 │   ├── Concepts_Lecture.ko.md
 │   └── Concepts_Lecture.md
 ├── L02_Basic-Principles
+│   ├── Concepts_Lecture.ko.md
+│   └── Concepts_Lecture.md
+├── L03_Software-Lifecycle
 │   ├── Concepts_Lecture.ko.md
 │   └── Concepts_Lecture.md
 ├── images

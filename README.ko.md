@@ -138,6 +138,7 @@
 |16주차|12/15, 12/17|기말고사||
 
 - 계획된 주제는 강의 계획을 따르며, 실제 강의자료는 시간이 되는 만큼 이어서 진행한다.
+- 강의 03에서 제시된 강의자료 로드맵은 1 Introduction, 2 Basic principle, 3 Software Lifecycle, 4 Security Policies, 5 Software Bugs, 6 Exploitation, 7 Mitigations, 8 Advanced Mitigations, 9 Sanitization, 10 Fuzzing, 11 Symbolic Execution, 12 Network Security, 15~16 Cryptography, 17~18 Web Security, 19 Hardware Security, 20 AI security이다.
 
 - **📖 참고 자료**
 
@@ -170,6 +171,9 @@
 │   ├── Concepts_Lecture.ko.md
 │   └── Concepts_Lecture.md
 ├── L02_Basic-Principles
+│   ├── Concepts_Lecture.ko.md
+│   └── Concepts_Lecture.md
+├── L03_Software-Lifecycle
 │   ├── Concepts_Lecture.ko.md
 │   └── Concepts_Lecture.md
 ├── images
