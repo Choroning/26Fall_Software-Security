@@ -182,6 +182,9 @@
 ├── L05_Software-Bugs
 │   ├── Concepts_Lecture.ko.md
 │   └── Concepts_Lecture.md
+├── L06_Exploitation
+│   ├── Concepts_Lecture.ko.md
+│   └── Concepts_Lecture.md
 ├── images
 │   └── (강의 도표 이미지)
 ├── LICENSE

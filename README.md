@@ -182,6 +182,9 @@ This course covers the core principles of software security and recent security 
 ├── L05_Software-Bugs
 │   ├── Concepts_Lecture.ko.md
 │   └── Concepts_Lecture.md
+├── L06_Exploitation
+│   ├── Concepts_Lecture.ko.md
+│   └── Concepts_Lecture.md
 ├── images
 │   └── (lecture figure images)
 ├── LICENSE
