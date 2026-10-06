@@ -58,7 +58,7 @@ This course covers the core principles of software security and recent security 
 
 - **Credits:** 3
 - **Meeting times:** Tuesday, period 2; Thursday, period 2 (10:30 ~ 11:45)
-- **Classroom:** Information and Communication Building (정보통신관), Room 604
+- **Classroom:** Woo Jung Informatics Building (우정정보관), Room 604
 - **Class format:** In-person lectures delivered in Korean with a real-time translation system; slides, assignments, and exams are provided in English
 
 ### Assessment
