@@ -42,6 +42,37 @@ This repository contains bilingual study materials and code developed for a univ
 |:----------:|:------------------|:-------------:|:---------------:|:----------------------------------------|
 |`COSE451-00`|SOFTWARE SECURITY|Major Elective|Prof. Yuseok&nbsp;Jeon|Department of Computer Science and Engineering|
 
+- **👤 Instructor and TAs**
+
+| Item | Details |
+|:-----|:--------|
+| Instructor | Prof. Yuseok Jeon (전유석) |
+| Office | Woo Jung Informatics Building (우정정보관) 504 |
+| Email | *Redacted for privacy.* |
+| Office Hours | By appointment |
+| Lab | Secure Software Lab (S2 Lab) ([https://s2-lab.github.io/](https://s2-lab.github.io/)) |
+
+| Period | Position | Organization |
+|:-------|:---------|:-------------|
+| 2010.02 ~ 2013.06 | Researcher | NSR (National Security Research Institute) |
+| 2013.12 ~ 2015.06 | Researcher | Samsung Research |
+| 2015.08 | Ph.D. begin | Purdue University |
+| 2016.05 ~ 2016.08 | Research Intern | NEC Laboratories America |
+| 2018.05 ~ 2018.08 | Research Intern | Intel |
+| 2020.08 | Ph.D. graduation | Purdue University |
+| 2021.02 ~ 2025.02 | Assistant Professor | UNIST |
+| 2025.03 ~ present | Associate Professor | Korea University |
+
+| TA | Program | Email |
+|:---|:--------|:------|
+| Sumin Yang (양수민) | Ph.D. | *Redacted for privacy.* |
+| Ingyu Jang (장인규) | Master's-Ph.D. integrated program | *Redacted for privacy.* |
+| Changheon Lee (이창헌) | Master's-Ph.D. integrated program | *Redacted for privacy.* |
+
+- **🎯 Course Objectives**
+
+From various research works and state-of-the-art security mechanisms, students learn to recognize software security problems and to devise their solutions. The highlighted topics are Memory Safety, Type Confusion, Cross-Language Security, Directed & Hybrid Fuzzing, Rust Security, Robot Security, Network Protocol Security, and LLM Security.
+
 - **📖 References**
 
 | Type | Contents |
@@ -53,26 +84,83 @@ This repository contains bilingual study materials and code developed for a univ
 
 > Lectures are delivered in Korean, while slides, assignments, and exams are provided in English.
 
-- **🗓 Weekly Progress**
+- **🗓 Syllabus and Weekly Progress**
 
-| Week | Class Dates (Tue, Thu) | Lecture Decks Covered |
-|:----:|:-----:|:----------------------|
-|W01|09/01, 09/03|01. Introduction<br>02. Basic Principles|
-|W02|09/08, 09/10|03. Software Lifecycle<br>04. Security Policies|
-|W03|09/15, 09/17|05. Software Bugs<br>06. Exploitation|
-|W04|09/22, 09/24|07. Mitigations|
-|W05|09/29, 10/01|08. Advanced Mitigations|
-|W06|10/06, 10/08|09. Testing<br>10. Sanitization|
-|W07|10/13, 10/15||
-|W08|10/20, 10/22|*Midterm Exam*|
-|W09|10/27, 10/29||
-|W10|11/03, 11/05||
-|W11|11/10, 11/12||
-|W12|11/17, 11/19||
-|W13|11/24, 11/26||
-|W14|12/01, 12/03||
-|W15|12/08, 12/10||
-|W16|12/15, 12/17|*Final Exam*|
+| Week | Class Dates (Tue, Thu) | Planned Topic | Lecture Decks Covered |
+|:----:|:-----:|:--------------|:----------------------|
+|W01|09/01, 09/03|Introduction to software security|01. Introduction<br>02. Basic Principles|
+|W02|09/08, 09/10|Basic Principles|03. Software Lifecycle<br>04. Security Policies|
+|W03|09/15, 09/17|Software Lifecycle and Security Policies|05. Software Bugs<br>06. Exploitation|
+|W04|09/22, 09/24|Software Bugs|07. Mitigations|
+|W05|09/29, 10/01|Exploitation|08. Advanced Mitigations|
+|W06|10/06, 10/08|Mitigations|09. Testing<br>10. Sanitization|
+|W07|10/13, 10/15|Testing / Advanced Mitigations||
+|W08|10/20, 10/22|**Midterm Exam**||
+|W09|10/27, 10/29|Sanitization||
+|W10|11/03, 11/05|Fuzzing||
+|W11|11/10, 11/12|Symbolic execution||
+|W12|11/17, 11/19|Network security||
+|W13|11/24, 11/26|Web Security / Hardware Security||
+|W14|12/01, 12/03|AI security||
+|W15|12/08, 12/10|AI security||
+|W16|12/15, 12/17|**Final Exam**||
+
+> The planned topics follow the syllabus, while the lecture decks are covered continuously as time allows.
+
+- **📊 Assessment**
+
+| Component | Weight |
+|:----------|:------:|
+| Assignments | 40% |
+| Midterm | 25% |
+| Final | 25% |
+| Participation (e.g., questions during class) | 5% |
+| Attendance | 5% |
+
+- **📋 Course Policies**
+
+**Attendance**
+- Attendance is checked with the LMS Smart Attendance System (electronic attendance). If the system does not work for any reason, students take one selfie at the beginning of the class showing (1) the time, (2) the location, and (3) themselves, and email it to the instructor.
+- Students must attend at least 3/4 of the total class hours. Otherwise, they fail the class without exception, and keeping track of attendance is each student's own duty.
+- Depending on attendance, random attendance checks (e.g., pop quizzes) may be conducted. A significant penalty is given to students who are marked as electronically present but are not actually in the class.
+
+**Course Homepage (LMS)**
+- The LMS is used to download course materials, to check and submit assignments, to check the score of each assignment, and to ask questions about everything.
+
+| Communication | Rule |
+|:-------------:|:-----|
+| Should not | Send emails, calls, KakaoTalk messages, or SMS to the professor or TAs about technical questions (course content, homework, and so on). All such questions must be shared among the students on the LMS. |
+| Should not | Post a chunk of source code. TAs are not debuggers; they cannot fix your bugs and will not parse through your code to find them. |
+| Should | Post technical questions about lectures, homework, and so on through the LMS. |
+| Should | Email the professor or TAs for personal matters. |
+
+**Late Submission**
+- Only the most recent submission is considered, so a submission one is confident about should not be re-submitted.
+
+| Delay | Penalty |
+|:------|:--------|
+| More than 0 and up to 24 hours | 10% deduction |
+| More than 24 and up to 48 hours | 20% deduction |
+| More than 48 and up to 72 hours | 30% deduction |
+| More than 72 hours | Not accepted |
+
+**AI-Generated Code**
+- Using ChatGPT, Copilot, Gemini, or any similar AI model is unacceptable for programming assignments and results in an F.
+- Submissions are checked with a third-party AI-generated code detection solution.
+- Students who rely on AI-generated code learn nothing and will not survive the exams.
+
+**Plagiarism**
+
+| | Rule |
+|:-:|:-----|
+| Should not | Copy code from the Internet. |
+| Should not | Use code written by friends. |
+| Should not | Get an idea by looking at another student's code. |
+| Should | Discuss concepts and ideas with others. |
+| Should | Ask questions to the TAs and the professor. |
+
+- Under the plagiarism rules, both the code provider and the receiver receive an F and are reported to the committee.
+- A code copy detection solution is used, and there are no exceptions.
 
 <br><a name="prerequisites"></a>
 ## ✅ Prerequisites
