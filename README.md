@@ -92,6 +92,11 @@ This repository contains bilingual study materials and code developed for a univ
 
 ```plaintext
 26Fall_Software-Security
+├── L01_Introduction
+│   ├── Concepts_Lecture.ko.md
+│   └── Concepts_Lecture.md
+├── images
+│   └── (lecture figure images)
 ├── LICENSE
 ├── README.ko.md
 └── README.md
