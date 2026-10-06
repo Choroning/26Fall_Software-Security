@@ -48,7 +48,6 @@
 |:-----|:--------|
 | 교수자 | 전유석 교수 (Prof. Yuseok Jeon) |
 | 교수실 | 우정정보관(Woo Jung Informatics Building) 504호 |
-| 이메일 | *Redacted for privacy.* |
 | 면담 시간 | 사전 약속 시 |
 | 연구실 | Secure Software Lab (S2 Lab) ([https://s2-lab.github.io/](https://s2-lab.github.io/)) |
 
@@ -63,11 +62,11 @@
 | 2021.02 ~ 2025.02 | 조교수 | UNIST |
 | 2025.03 ~ 현재 | 부교수 | 고려대학교 |
 
-| 조교 | 과정 | 이메일 |
-|:---|:--------|:------|
-| 양수민 (Sumin Yang) | 박사 과정 | *Redacted for privacy.* |
-| 장인규 (Ingyu Jang) | 석박사 통합 과정 | *Redacted for privacy.* |
-| 이창헌 (Changheon Lee) | 석박사 통합 과정 | *Redacted for privacy.* |
+| 조교 | 과정 |
+|:---|:--------|
+| 양수민 (Sumin Yang) | 박사 과정 |
+| 장인규 (Ingyu Jang) | 석박사 통합 과정 |
+| 이창헌 (Changheon Lee) | 석박사 통합 과정 |
 
 - **🎯 강의 목표**
 

@@ -48,7 +48,6 @@ This repository contains bilingual study materials and code developed for a univ
 |:-----|:--------|
 | Instructor | Prof. Yuseok Jeon (전유석) |
 | Office | Woo Jung Informatics Building (우정정보관) 504 |
-| Email | *Redacted for privacy.* |
 | Office Hours | By appointment |
 | Lab | Secure Software Lab (S2 Lab) ([https://s2-lab.github.io/](https://s2-lab.github.io/)) |
 
@@ -63,11 +62,11 @@ This repository contains bilingual study materials and code developed for a univ
 | 2021.02 ~ 2025.02 | Assistant Professor | UNIST |
 | 2025.03 ~ present | Associate Professor | Korea University |
 
-| TA | Program | Email |
-|:---|:--------|:------|
-| Sumin Yang (양수민) | Ph.D. | *Redacted for privacy.* |
-| Ingyu Jang (장인규) | Master's-Ph.D. integrated program | *Redacted for privacy.* |
-| Changheon Lee (이창헌) | Master's-Ph.D. integrated program | *Redacted for privacy.* |
+| TA | Program |
+|:---|:--------|
+| Sumin Yang (양수민) | Ph.D. |
+| Ingyu Jang (장인규) | Master's-Ph.D. integrated program |
+| Changheon Lee (이창헌) | Master's-Ph.D. integrated program |
 
 - **🎯 Course Objectives**
 
