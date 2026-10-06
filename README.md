@@ -29,8 +29,8 @@ This repository contains bilingual study materials and code developed for a univ
 - Directories are named by lecture deck number (`L01`, `L02`, and so on) rather than by week, because a single deck often spans several class sessions. The weekly progress table in [Course Information](#course-information) shows which decks were covered in each week.
 
 > **🤖 AI-Assisted Development**
-> This course encourages the use of AI agents.
-> [Claude Code](https://claude.ai/download) and [Gemini CLI](https://github.com/google-gemini/gemini-cli) were used as coding assistants throughout the course.
+> Unlike many recent courses that allow AI agents, this course **prohibits** AI-generated code for programming assignments (ChatGPT, Copilot, Gemini, or any similar AI model), and violations result in an F.
+> [Claude Code](https://claude.ai/download) and [Codex](https://github.com/openai/codex) were used only as study assistants for organizing the lecture notes, not for writing assignment code.
 
 <br><a name="course-information"></a>
 ## 📚 Course Information
@@ -47,6 +47,8 @@ This repository contains bilingual study materials and code developed for a univ
 | Type | Contents |
 |:----:|:---------|
 |Textbook|No designated textbook|
+|Reference Book|"Software Security: Principles, Policies, and Protection" by Mathias Payer ([free online](https://nebelwelt.net/SS3P/))|
+|Reference Course|[MIT 6.858: Computer Systems Security](https://css.csail.mit.edu/6.858/2024/schedule.html)|
 |Lecture Notes|Instructor's slides in English, distributed via the LMS|
 
 > Lectures are delivered in Korean with support from a real-time translation system. All other course materials, including slides, assignments, and exams, are provided in English.

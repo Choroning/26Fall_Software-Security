@@ -29,8 +29,8 @@
 - 강의자료 하나가 여러 차례의 수업에 걸쳐 진행되는 경우가 많으므로, 디렉토리는 주차가 아닌 강의자료 번호(`L01`, `L02` 등)를 기준으로 구성합니다. 각 주차에 진행한 강의자료는 [강의 정보](#course-information)의 주차별 진도 표에서 확인할 수 있습니다.
 
 > **🤖 AI 에이전트 활용**
-> 본 과목은 AI 에이전트 사용을 권장합니다.
-> 수업 전반에 걸쳐 [Claude Code](https://claude.ai/download)와 [Gemini CLI](https://github.com/google-gemini/gemini-cli)를 코딩 어시스턴트로 활용하였습니다.
+> 최근 AI 에이전트 사용을 허용하는 강의가 많은 것과 달리, 본 과목은 프로그래밍 과제에서 AI 생성 코드(ChatGPT, Copilot, Gemini 및 이와 유사한 모든 AI 모델) 사용을 **금지**하며, 위반 시 F 학점이 부여됩니다.
+> [Claude Code](https://claude.ai/download)와 [Codex](https://github.com/openai/codex)는 강의 내용 정리를 위한 학습 보조 도구로만 활용하였으며, 과제 코드 작성에는 사용하지 않았습니다.
 
 <br><a name="course-information"></a>
 ## 📚 강의 정보
@@ -47,6 +47,8 @@
 | 유형 | 내용 |
 |:----:|:---------|
 |교재|지정 교재 없음|
+|참고 도서|Software Security: Principles, Policies, and Protection (Mathias Payer) ([온라인 무료 공개](https://nebelwelt.net/SS3P/))|
+|참고 강의|[MIT 6.858: Computer Systems Security](https://css.csail.mit.edu/6.858/2024/schedule.html)|
 |강의자료|교수자 제공 영문 슬라이드 (LMS 배포)|
 
 > 강의는 실시간 번역 시스템의 지원을 받아 한국어로 진행되며, 슬라이드, 과제, 시험 등 그 외의 모든 자료는 영어로 제공됩니다.
