@@ -5,7 +5,7 @@
 
 This repository organizes and stores study notes and sample code written for university lectures and assignments.
 
-*Author: Cheolwon Park (Korea University Seoul, Software Technology & Entrepreneurship), Year 3 (Junior) as of 2026*
+*Author: Cheolwon Park (Korea University Seoul, Software Technology & Entrepreneurship) – Year 3 (Junior) as of 2026*
 <br><br>
 
 ## 📑 Table of Contents
@@ -35,7 +35,7 @@ This repository contains bilingual study materials and code developed for a univ
 <br><a name="course-information"></a>
 ## 📚 Course Information
 
-- **Semester:** Fall 2026 (September to December)
+- **Semester:** Fall 2026 (September - December)
 - **Affiliation:** Korea University Seoul
 
 | Course&nbsp;Code| Course            | Type          | Instructor      | Department                              |
