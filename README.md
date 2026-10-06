@@ -185,6 +185,9 @@ This course covers the core principles of software security and recent security 
 ├── L06_Exploitation
 │   ├── Concepts_Lecture.ko.md
 │   └── Concepts_Lecture.md
+├── L07_Mitigations
+│   ├── Concepts_Lecture.ko.md
+│   └── Concepts_Lecture.md
 ├── images
 │   └── (lecture figure images)
 ├── LICENSE
