@@ -188,6 +188,9 @@ This course covers the core principles of software security and recent security 
 ├── L07_Mitigations
 │   ├── Concepts_Lecture.ko.md
 │   └── Concepts_Lecture.md
+├── L08_Advanced-Mitigations
+│   ├── Concepts_Lecture.ko.md
+│   └── Concepts_Lecture.md
 ├── images
 │   └── (lecture figure images)
 ├── LICENSE
