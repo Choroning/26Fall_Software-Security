@@ -176,6 +176,9 @@
 ├── L03_Software-Lifecycle
 │   ├── Concepts_Lecture.ko.md
 │   └── Concepts_Lecture.md
+├── L04_Security-Policies
+│   ├── Concepts_Lecture.ko.md
+│   └── Concepts_Lecture.md
 ├── images
 │   └── (강의 도표 이미지)
 ├── LICENSE
