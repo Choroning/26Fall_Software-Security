@@ -26,7 +26,7 @@ This repository contains bilingual study materials and code developed for a univ
 
 - Each lecture deck has bilingual Concepts notes written in Korean (`.ko.md`) and English (`.md`).
 - Each assignment includes a solution together with a detailed explanation document.
-- Directories are organized by lecture deck (`L01`, `L02`, and so on), and the weekly progress table maps each week to the decks covered.
+- Directories are organized by lecture deck (`L01`, `L02`, and so on), and the course roadmap table maps each week to the decks covered.
 
 > **🤖 AI-Assisted Development**
 > This course **prohibits** AI-generated code for programming assignments.
@@ -42,81 +42,36 @@ This repository contains bilingual study materials and code developed for a univ
 |:----------:|:------------------|:-------------:|:---------------:|:----------------------------------------|
 |`COSE451-00`|SOFTWARE SECURITY|Major Elective|Prof. Yuseok&nbsp;Jeon|Department of Computer Science and Engineering|
 
-- **👤 Instructor and TAs**
+### Course Overview
 
-| Item | Details |
-|:-----|:--------|
-| Instructor | Prof. Yuseok Jeon (전유석) |
-| Office | Woo Jung Informatics Building (우정정보관) 504 |
-| Office Hours | By appointment |
-| Lab | Secure Software Lab (S2 Lab) ([https://s2-lab.github.io/](https://s2-lab.github.io/)) |
+This course covers the core principles of software security and recent security issues. It examines why software vulnerabilities arise and how attacks proceed, and introduces techniques to detect, analyze, and mitigate them. Through various research works and state-of-the-art security mechanisms, students learn to recognize software security problems, understand the limitations of existing techniques, and devise solutions for newly emerging problems. The highlighted topics are Memory Safety, Type Confusion, Cross-Language Security, Directed & Hybrid Fuzzing, Rust Security, Robot Security, Network Protocol Security, and LLM Security.
 
-| Period | Position | Organization |
-|:-------|:---------|:-------------|
-| 2010.02 ~ 2013.06 | Researcher | NSR (National Security Research Institute) |
-| 2013.12 ~ 2015.06 | Researcher | Samsung Research |
-| 2015.08 | Ph.D. begin | Purdue University |
-| 2016.05 ~ 2016.08 | Research Intern | NEC Laboratories America |
-| 2018.05 ~ 2018.08 | Research Intern | Intel |
-| 2020.08 | Ph.D. graduation | Purdue University |
-| 2021.02 ~ 2025.02 | Assistant Professor | UNIST |
-| 2025.03 ~ present | Associate Professor | Korea University |
+### Instructor, TAs, and Research Lab
 
-| TA | Program |
-|:---|:--------|
-| Sumin Yang (양수민) | Ph.D. |
-| Ingyu Jang (장인규) | Master's-Ph.D. integrated program |
-| Changheon Lee (이창헌) | Master's-Ph.D. integrated program |
+- **Instructor:** Prof. Yuseok Jeon (전유석)
+- **Office:** Woo Jung Informatics Building (우정정보관), Room 504; office hours by appointment
+- **Research lab:** [Secure Software Lab (S2 Lab)](https://s2-lab.github.io/), focusing on enforcing software and system security, including type and memory safety in C/C++, Rust language security, and the security of autonomous vehicles, drones, web browsers, and AI
+- **Career:** Researcher at NSR (2010.02 ~ 2013.06), Researcher at Samsung Research (2013.12 ~ 2015.06), Ph.D. at Purdue University (2015.08 ~ 2020.08), Research Intern at NEC Laboratories America (2016.05 ~ 2016.08) and Intel (2018.05 ~ 2018.08), Assistant Professor at UNIST (2021.02 ~ 2025.02), and Associate Professor at Korea University (2025.03 ~ present)
+- **TAs:** Sumin Yang (양수민, Ph.D.), Ingyu Jang (장인규, Master's-Ph.D. integrated program), Changheon Lee (이창헌, Master's-Ph.D. integrated program)
 
-- **🎯 Course Objectives**
+### Schedule and Class Format
 
-From various research works and state-of-the-art security mechanisms, students learn to recognize software security problems and to devise their solutions. The highlighted topics are Memory Safety, Type Confusion, Cross-Language Security, Directed & Hybrid Fuzzing, Rust Security, Robot Security, Network Protocol Security, and LLM Security.
+- **Credits:** 3
+- **Meeting times:** Tuesday, period 2; Thursday, period 2 (10:30 ~ 11:45)
+- **Classroom:** Information and Communication Building (정보통신관), Room 604
+- **Class format:** In-person lectures delivered in Korean with a real-time translation system; slides, assignments, and exams are provided in English
 
-- **📖 References**
-
-| Type | Contents |
-|:----:|:---------|
-|Textbook|No designated textbook|
-|Reference Book|"Software Security: Principles, Policies, and Protection" by Mathias Payer ([free online](https://nebelwelt.net/SS3P/))|
-|Reference Course|[MIT 6.858: Computer Systems Security](https://css.csail.mit.edu/6.858/2024/schedule.html)|
-|Lecture Notes|Instructor's slides (LMS)|
-
-> Lectures are delivered in Korean, while slides, assignments, and exams are provided in English.
-
-- **🗓 Syllabus and Weekly Progress**
-
-| Week | Class Dates (Tue, Thu) | Planned Topic | Lecture Decks Covered |
-|:----:|:-----:|:--------------|:----------------------|
-|W01|09/01, 09/03|Introduction to software security|01. Introduction<br>02. Basic Principles|
-|W02|09/08, 09/10|Basic Principles|03. Software Lifecycle<br>04. Security Policies|
-|W03|09/15, 09/17|Software Lifecycle and Security Policies|05. Software Bugs<br>06. Exploitation|
-|W04|09/22, 09/24|Software Bugs|07. Mitigations|
-|W05|09/29, 10/01|Exploitation|08. Advanced Mitigations|
-|W06|10/06, 10/08|Mitigations|09. Testing<br>10. Sanitization|
-|W07|10/13, 10/15|Testing / Advanced Mitigations||
-|W08|10/20, 10/22|**Midterm Exam**||
-|W09|10/27, 10/29|Sanitization||
-|W10|11/03, 11/05|Fuzzing||
-|W11|11/10, 11/12|Symbolic execution||
-|W12|11/17, 11/19|Network security||
-|W13|11/24, 11/26|Web Security / Hardware Security||
-|W14|12/01, 12/03|AI security||
-|W15|12/08, 12/10|AI security||
-|W16|12/15, 12/17|**Final Exam**||
-
-> The planned topics follow the syllabus, while the lecture decks are covered continuously as time allows.
-
-- **📊 Assessment**
+### Assessment
 
 | Component | Weight |
-|:----------|:------:|
+|:----------|-------:|
 | Assignments | 40% |
 | Midterm | 25% |
 | Final | 25% |
 | Participation (e.g., questions during class) | 5% |
 | Attendance | 5% |
 
-- **📋 Course Policies**
+### Course Policies
 
 **Attendance**
 - Attendance is checked with the LMS Smart Attendance System (electronic attendance). If the system does not work for any reason, students take one selfie at the beginning of the class showing (1) the time, (2) the location, and (3) themselves, and email it to the instructor.
@@ -160,6 +115,38 @@ From various research works and state-of-the-art security mechanisms, students l
 
 - Under the plagiarism rules, both the code provider and the receiver receive an F and are reported to the committee.
 - A code copy detection solution is used, and there are no exceptions.
+
+### Course Roadmap and Weekly Progress
+
+| Week | Class Dates (Tue, Thu) | Planned Topic | Lecture Decks Covered |
+|:----:|:-----:|:--------------|:----------------------|
+|W01|09/01, 09/03|Introduction to software security|01. Introduction<br>02. Basic Principles|
+|W02|09/08, 09/10|Basic Principles|03. Software Lifecycle<br>04. Security Policies|
+|W03|09/15, 09/17|Software Lifecycle and Security Policies|05. Software Bugs<br>06. Exploitation|
+|W04|09/22, 09/24|Software Bugs|07. Mitigations|
+|W05|09/29, 10/01|Exploitation|08. Advanced Mitigations|
+|W06|10/06, 10/08|Mitigations|09. Testing<br>10. Sanitization|
+|W07|10/13, 10/15|Testing / Advanced Mitigations||
+|W08|10/20, 10/22|Midterm Exam||
+|W09|10/27, 10/29|Sanitization||
+|W10|11/03, 11/05|Fuzzing||
+|W11|11/10, 11/12|Symbolic execution||
+|W12|11/17, 11/19|Network security||
+|W13|11/24, 11/26|Web Security / Hardware Security||
+|W14|12/01, 12/03|AI security||
+|W15|12/08, 12/10|AI security||
+|W16|12/15, 12/17|Final Exam||
+
+- The planned topics follow the syllabus, while the lecture decks are covered continuously as time allows.
+
+- **📖 References**
+
+| Type | Contents |
+|:----:|:---------|
+|Textbook|No designated textbook|
+|Reference Book|"Software Security: Principles, Policies, and Protection" by Mathias Payer ([free online](https://nebelwelt.net/SS3P/))|
+|Reference Course|[MIT 6.858: Computer Systems Security](https://css.csail.mit.edu/6.858/2024/schedule.html)|
+|Lecture Notes|Instructor's slides (LMS)|
 
 <br><a name="prerequisites"></a>
 ## ✅ Prerequisites
