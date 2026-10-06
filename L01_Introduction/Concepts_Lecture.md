@@ -62,7 +62,6 @@
   - [8.3 Background: Fuzzing](#83-background-fuzzing)
   - [8.4 AutoFuzzer: Input Mutation](#84-autofuzzer-input-mutation)
   - [8.5 AutoFuzzer: Detected Bugs](#85-autofuzzer-detected-bugs)
-  - [8.6 Call for Collaborators](#86-call-for-collaborators)
 - [Summary](#summary)
 - [Self-Check Questions](#self-check-questions)
 
@@ -95,8 +94,6 @@
 | 2020.08 | Ph.D. graduation | Purdue University |
 | 2021.02 ~ 2025.02 | Assistant Professor | UNIST |
 | 2025.03 ~ present | Associate Professor | Korea University |
-
-The S2 Lab consists of graduate students, undergraduate students, and a researcher, as shown in the member photos on the slide.
 
 **TAs:**
 
@@ -682,10 +679,6 @@ The input of the fuzzer (called **AutoFuzzer** on the slides) is a **driving sce
 - The last slide of this part shows a bird's-eye view of an intersection in which the planned path of the vehicle leads it into an unsafe maneuver.
 
 > **Note:** Unlike memory safety bugs in C/C++, most of these bugs are **logic errors**. A sanitizer would not detect them, because no memory is corrupted. This is why fuzzing cyber-physical systems requires a domain-specific bug monitor that understands traffic rules and collisions.
-
-### 8.6 Call for Collaborators
-
-The instructor is looking for **motivated collaborators (graduate students and undergraduate interns)** interested in **software and systems security**. Details are available on the lab homepage ([https://s2-lab.github.io/](https://s2-lab.github.io/)), and the contact email on the slide is redacted (*Redacted for privacy.*).
 
 ---
 
