@@ -74,9 +74,37 @@
 
 ### 1.1 Instructor and TAs
 
-> *Redacted for privacy.*
+**Instructor: Prof. Yuseok Jeon (전유석)**
 
-The instructor leads the **Secure Software Lab (S2 Lab)**, whose members include graduate students, undergraduate students, and researchers. The course is supported by **three TAs**.
+| Item | Details |
+|:-----|:--------|
+| Office | Woo Jung Informatics Building (우정정보관) 504 |
+| Email | *Redacted for privacy.* |
+| Office Hours | By appointment |
+| Lab | Leads the **Secure Software Lab (S2 Lab)** ([https://s2-lab.github.io/](https://s2-lab.github.io/)) |
+
+**Career:**
+
+| Period | Position | Organization |
+|:-------|:---------|:-------------|
+| 2010.02 ~ 2013.06 | Researcher | NSR (National Security Research Institute) |
+| 2013.12 ~ 2015.06 | Researcher | Samsung Research |
+| 2015.08 | Ph.D. begin | Purdue University |
+| 2016.05 ~ 2016.08 | Research Intern | NEC Laboratories America |
+| 2018.05 ~ 2018.08 | Research Intern | Intel |
+| 2020.08 | Ph.D. graduation | Purdue University |
+| 2021.02 ~ 2025.02 | Assistant Professor | UNIST |
+| 2025.03 ~ present | Associate Professor | Korea University |
+
+The S2 Lab consists of graduate students, undergraduate students, and a researcher, as shown in the member photos on the slide.
+
+**TAs:**
+
+| Name | Program | Email |
+|:-----|:--------|:------|
+| Sumin Yang (양수민) | Ph.D. | *Redacted for privacy.* |
+| Ingyu Jang (장인규) | Master's-Ph.D. integrated program | *Redacted for privacy.* |
+| Changheon Lee (이창헌) | Master's-Ph.D. integrated program | *Redacted for privacy.* |
 
 ### 1.2 Course Objectives
 
@@ -657,7 +685,7 @@ The input of the fuzzer (called **AutoFuzzer** on the slides) is a **driving sce
 
 ### 8.6 Call for Collaborators
 
-The instructor is looking for **motivated collaborators (graduate students and undergraduate interns)** interested in **software and systems security**. Details are available on the lab homepage ([https://s2-lab.github.io/](https://s2-lab.github.io/)).
+The instructor is looking for **motivated collaborators (graduate students and undergraduate interns)** interested in **software and systems security**. Details are available on the lab homepage ([https://s2-lab.github.io/](https://s2-lab.github.io/)), and the contact email on the slide is redacted (*Redacted for privacy.*).
 
 ---
 

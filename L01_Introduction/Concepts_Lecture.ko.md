@@ -74,9 +74,37 @@
 
 ### 1.1 담당 교수 및 조교
 
-> *Redacted for privacy.*
+**담당 교수: 전유석 교수 (Prof. Yuseok Jeon)**
 
-담당 교수는 **Secure Software Lab (S2 Lab)** 을 이끌고 있으며, 연구실에는 대학원생, 학부생, 연구원이 소속되어 있다. 본 강의는 **3명의 조교(TA)** 가 지원한다.
+| 항목 | 내용 |
+|:-----|:--------|
+| 교수실 | 우정정보관(Woo Jung Informatics Building) 504호 |
+| 이메일 | *Redacted for privacy.* |
+| 면담 시간 | 사전 약속 시 |
+| 연구실 | **Secure Software Lab (S2 Lab)** 운영 ([https://s2-lab.github.io/](https://s2-lab.github.io/)) |
+
+**경력:**
+
+| 기간 | 직위 | 기관 |
+|:-------|:---------|:-------------|
+| 2010.02 ~ 2013.06 | 연구원 | 국가보안기술연구소(NSR) |
+| 2013.12 ~ 2015.06 | 연구원 | 삼성리서치(Samsung Research) |
+| 2015.08 | 박사 과정 입학 | Purdue University |
+| 2016.05 ~ 2016.08 | 연구 인턴 | NEC Laboratories America |
+| 2018.05 ~ 2018.08 | 연구 인턴 | Intel |
+| 2020.08 | 박사 학위 취득 | Purdue University |
+| 2021.02 ~ 2025.02 | 조교수 | UNIST |
+| 2025.03 ~ 현재 | 부교수 | 고려대학교 |
+
+슬라이드의 구성원 사진에서 볼 수 있듯이, S2 Lab은 대학원생, 학부생, 연구원 1명으로 구성되어 있다.
+
+**조교(TA):**
+
+| 이름 | 과정 | 이메일 |
+|:-----|:--------|:------|
+| 양수민 (Sumin Yang) | 박사 과정 | *Redacted for privacy.* |
+| 장인규 (Ingyu Jang) | 석박사 통합 과정 | *Redacted for privacy.* |
+| 이창헌 (Changheon Lee) | 석박사 통합 과정 | *Redacted for privacy.* |
 
 ### 1.2 강의 목표
 
@@ -657,7 +685,7 @@ Rust 안에는 이러한 메모리 안전성 보장을 강제하지 않는 **숨
 
 ### 8.6 공동 연구자 모집
 
-담당 교수는 **소프트웨어 및 시스템 보안**에 관심이 있는 **의욕 있는 공동 연구자(대학원생 및 학부 인턴)** 를 찾고 있다. 자세한 내용은 연구실 홈페이지([https://s2-lab.github.io/](https://s2-lab.github.io/))에서 확인할 수 있다.
+담당 교수는 **소프트웨어 및 시스템 보안**에 관심이 있는 **의욕 있는 공동 연구자(대학원생 및 학부 인턴)** 를 찾고 있다. 자세한 내용은 연구실 홈페이지([https://s2-lab.github.io/](https://s2-lab.github.io/))에서 확인할 수 있으며, 슬라이드에 적힌 연락용 이메일은 비공개 처리하였다(*Redacted for privacy.*).
 
 ---
 
