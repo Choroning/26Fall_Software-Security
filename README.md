@@ -194,6 +194,9 @@ This course covers the core principles of software security and recent security 
 ├── L09_Testing
 │   ├── Concepts_Lecture.ko.md
 │   └── Concepts_Lecture.md
+├── L10_Sanitization
+│   ├── Concepts_Lecture.ko.md
+│   └── Concepts_Lecture.md
 ├── images
 │   └── (lecture figure images)
 ├── LICENSE
