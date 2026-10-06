@@ -22,15 +22,15 @@ This repository organizes and stores study notes and sample code written for uni
 <br><a name="about-this-repository"></a>
 ## 📝 About This Repository
 
-This repository contains bilingual study materials and code developed for a university-level Software Security course. It is organized as follows:
+This repository contains bilingual study materials and code developed for a university-level Software Security course, including:
 
 - Each lecture deck has bilingual Concepts notes written in Korean (`.ko.md`) and English (`.md`).
 - Each assignment includes a solution together with a detailed explanation document.
-- Directories are named by lecture deck number (`L01`, `L02`, and so on) rather than by week, because a single deck often spans several class sessions. The weekly progress table in [Course Information](#course-information) shows which decks were covered in each week.
+- Directories are organized by lecture deck (`L01`, `L02`, and so on), and the weekly progress table maps each week to the decks covered.
 
 > **🤖 AI-Assisted Development**
-> Unlike many recent courses that allow AI agents, this course **prohibits** AI-generated code for programming assignments (ChatGPT, Copilot, Gemini, or any similar AI model), and violations result in an F.
-> [Claude Code](https://claude.ai/download) and [Codex](https://github.com/openai/codex) were used only as study assistants for organizing the lecture notes, not for writing assignment code.
+> This course **prohibits** AI-generated code for programming assignments.
+> [Claude Code](https://claude.ai/download) and [Codex](https://github.com/openai/codex) were used as study assistants for organizing the lecture notes.
 
 <br><a name="course-information"></a>
 ## 📚 Course Information
@@ -49,9 +49,9 @@ This repository contains bilingual study materials and code developed for a univ
 |Textbook|No designated textbook|
 |Reference Book|"Software Security: Principles, Policies, and Protection" by Mathias Payer ([free online](https://nebelwelt.net/SS3P/))|
 |Reference Course|[MIT 6.858: Computer Systems Security](https://css.csail.mit.edu/6.858/2024/schedule.html)|
-|Lecture Notes|Instructor's slides in English, distributed via the LMS|
+|Lecture Notes|Instructor's slides (LMS)|
 
-> Lectures are delivered in Korean with support from a real-time translation system. All other course materials, including slides, assignments, and exams, are provided in English.
+> Lectures are delivered in Korean, while slides, assignments, and exams are provided in English.
 
 - **🗓 Weekly Progress**
 

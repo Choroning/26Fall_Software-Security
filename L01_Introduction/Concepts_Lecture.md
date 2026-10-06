@@ -126,8 +126,6 @@ From various research works and state-of-the-art security mechanisms, students l
 | 7 | Testing / Advanced Mitigations | 15 | AI security |
 | 8 | **Midterm** | 16 | **Final Exam** |
 
-> **Note:** The syllabus above is the planned schedule. In practice, the lecture decks are covered continuously as time allows, so a deck does not always match a single week. The actual progress is recorded in the weekly progress table of the repository README.
-
 ### 1.4 Assessment
 
 | Component | Weight |
@@ -142,8 +140,6 @@ From various research works and state-of-the-art security mechanisms, students l
 
 - Mathias Payer, *Software Security: Principles, Policies, and Protection* ([https://nebelwelt.net/SS3P/](https://nebelwelt.net/SS3P/))
 - MIT 6.858: Computer Systems Security ([https://css.csail.mit.edu/6.858/2024/schedule.html](https://css.csail.mit.edu/6.858/2024/schedule.html))
-
-> **Note:** The course has no designated textbook, but the lecture sequence (basic principles, software lifecycle, security policies, bugs, exploitation, mitigations, testing, sanitization, fuzzing) closely follows the structure of Payer's book, which is freely available online. When a lecture is difficult to follow, the corresponding chapter of the book is the most direct supplementary reading.
 
 ### 1.6 Attendance Check
 
@@ -200,8 +196,6 @@ Only the **most recent submission** is considered, so a confident submission sho
 - Under the plagiarism rules, **both the code provider and the receiver receive an F** and are reported to the committee.
 - A **code copy detection solution** is used, and there are **no exceptions**.
 
-> **Exam Tip:** The distinction to remember is "ideas may be shared, code may not." Discussing how an algorithm or attack works is encouraged, whereas looking at, copying, or providing code is plagiarism for both sides.
-
 ---
 
 <br>
@@ -245,7 +239,7 @@ The lecture presents several news headlines that show the impact of software vul
 | A Tesla in Taiwan crashes directly into an overturned truck and ignores a pedestrian with Autopilot on | **Autopilot leads to a crash.** |
 | Medical devices are found to be controllable by attackers | **Medical devices can be maliciously controlled.** |
 
-> **Note:** Two of these incidents are classic case studies. **Heartbleed** (CVE-2014-0160, 2014) was a missing bounds check in the heartbeat extension of OpenSSL. The server copied as many bytes as the client *claimed* to send, so an attacker could read up to 64 KB of server memory per request, including private keys and passwords. The **TSMC** incident (2018) was caused by a variant of the WannaCry ransomware worm that spread through unpatched fab equipment and halted production lines for several days. Both show that a single software flaw can affect hundreds of thousands of servers or an entire industry.
+> **Note:** **Heartbleed** (CVE-2014-0160) was a missing bounds check in the heartbeat extension of OpenSSL. The server copied as many bytes as the client *claimed* to send, so an attacker could read up to 64 KB of server memory per request, including private keys and passwords.
 
 ### 2.4 Economic Damage of Cybercrime
 
@@ -263,11 +257,9 @@ The lecture presents several news headlines that show the impact of software vul
 - **$15.6T** is the forecast by 2029, which corresponds to a compound annual growth rate (CAGR) of about 15%.
 - Source: Cybersecurity Ventures / Statista, 2026
 
-> **Definition:** The **compound annual growth rate (CAGR)** is the constant yearly growth rate that would take a value from its starting amount to its ending amount. Growing from $10.5T to $15.6T over three years corresponds to about 14% per year, which the slide rounds to about 15%.
-
 ### 2.5 Emerging Targets: AI, Robots, and Autonomous Systems
 
-Software now drives **AI systems, IoT devices, autonomous vehicles, and humanoid robots**. The slides illustrate this trend with images of robotaxis and robots, followed by images of the *Terminator*. The message is that as software gains direct control over the physical world, a compromised system can cause physical harm, so security must be considered from the design stage of these systems.
+Software now drives **AI systems, IoT devices, autonomous vehicles, and humanoid robots**, as the slides illustrate with images of robotaxis, robots, and the *Terminator*. As software gains direct control over the physical world, a compromised system can cause physical harm.
 
 ### 2.6 Demand for Security Researchers
 
@@ -294,7 +286,7 @@ Modern computer systems are **mainly implemented in C/C++**.
 | **AI** | PyTorch, TensorFlow, Microsoft CNTK, NVIDIA CUDA |
 | **IoT** | TinyOS, Contiki, FreeRTOS |
 
-> **[C Programming]** C and C++ are called **unsafe languages** because the language does not check whether an operation is valid at run time. For example, `a[i]` is compiled to "the address of `a` plus `i` times the element size" without any check that `i` lies within the array. An invalid access is classified as **undefined behavior (UB)**: the standard places no requirement on what happens, so the program may crash, silently corrupt data, or continue in an attacker-controlled state. This design choice gives C/C++ their performance and low-level control, which is exactly why they dominate operating systems, browsers, and AI runtimes.
+> **[C Programming]** C and C++ are called **unsafe languages** because the language does not check whether an operation is valid at run time. For example, `a[i]` is compiled to "the address of `a` plus `i` times the element size" without any check that `i` lies within the array. An invalid access is classified as **undefined behavior (UB)**: the standard places no requirement on what happens, so the program may crash, silently corrupt data, or continue in an attacker-controlled state.
 
 ### 3.2 Vulnerabilities on the Rise
 
@@ -314,7 +306,7 @@ Modern computer systems are **mainly implemented in C/C++**.
 - The number of published vulnerabilities increased about **nine times** between 2012 and 2025.
 - Data source: CVE Program / NVD annual published CVE counts (2012 to 2025)
 
-> **Definition:** A **CVE (Common Vulnerabilities and Exposures)** identifier, such as `CVE-2014-0160`, is a unique public name assigned to one disclosed vulnerability, so that vendors, researchers, and tools can refer to the same issue unambiguously. The **NVD (National Vulnerability Database)**, operated by NIST, enriches each CVE with additional data, such as a **CVSS** severity score from 0.0 to 10.0. The rising count reflects both the growth of software and the growth of vulnerability research and disclosure programs.
+> **Definition:** A **CVE (Common Vulnerabilities and Exposures)** identifier, such as `CVE-2014-0160`, is a unique public name assigned to one disclosed vulnerability, so that vendors, researchers, and tools can refer to the same issue unambiguously. The **NVD (National Vulnerability Database)**, operated by NIST, enriches each CVE with additional data, such as a **CVSS** severity score from 0.0 to 10.0.
 
 ### 3.3 Type and Memory Safety Violations Are Common
 
@@ -325,7 +317,7 @@ Modern computer systems are **mainly implemented in C/C++**.
 - According to the slide, **63% of all Microsoft patches** address **memory and type safety violations**, and the remaining 37% address other vulnerability classes.
 - Data source: ZDNet, "Microsoft: 70 percent of all security bugs are memory safety issues"
 
-> **Note:** The cited article reports Microsoft's own analysis that roughly **70%** of the CVEs it assigns each year are memory safety issues. Google has reported a similar proportion for Chrome. Regardless of the exact figure, the consistent conclusion is that the majority of severe vulnerabilities in large C/C++ code bases fall into this single category.
+> **Note:** The cited article itself reports that about **70%** of the CVEs Microsoft assigns each year are memory safety issues.
 
 ### 3.4 Type Safety Violation vs. Memory Safety Violation
 
@@ -371,7 +363,7 @@ void set(int idx, int val) {
 
 > **Definition:** An **attack primitive** is a basic capability that an attacker gains from a bug, such as "write any value to any address" (an **arbitrary write**) or "read any address" (an **arbitrary read**). Real exploits are built by chaining such primitives. An arbitrary write is one of the strongest primitives, because overwriting a function pointer or a return address immediately leads to control-flow hijacking.
 
-> **Note:** The ±2 GB figure comes from the range of the index itself: a signed 32-bit `int` ranges from about −2<sup>31</sup> to 2<sup>31</sup>, that is, about ±2 billion elements. Strictly speaking, the compiler scales the index by `sizeof(int)` = 4, so on a 64-bit platform the reachable byte range is about ±8 GB. Either way, the attacker can reach almost any interesting memory near the program's data. The fix is a bounds check such as `if (idx < 0 || idx >= 10) return;`, or the use of an unsigned type with an upper bound check.
+> **Note:** The ±2 GB figure is the range of the index itself, since a signed 32-bit `int` covers about ±2<sup>31</sup> elements. Because the index is scaled by `sizeof(int)` = 4, the actual byte range on a 64-bit platform is about ±8 GB. The fix is a bounds check such as `if (idx < 0 || idx >= 10) return;`.
 
 ### 4.3 Attack Primitive: Arbitrary Writing, Limited Location
 
@@ -398,7 +390,7 @@ The commented "equivalent" loop explains both restrictions. The copy proceeds by
 | Location | Any offset chosen by `idx` | Only the contiguous region directly above `tmp` |
 | Content | Any 4-byte value | Any bytes except `\0`, terminated by `\0` |
 
-> **[Computer Architecture]** The "no `\0` byte" restriction matters in practice. On x86-64, user-space addresses are canonical 48-bit values such as `0x00007ffd12345678`, so their upper two bytes are zero. An attacker who wants to overwrite a return address with such a value can write the non-zero lower bytes and rely on the terminating `\0` to supply exactly one zero byte. Constraints like this are the reason exploit writers carefully design payloads, and why "bad characters" are a standard consideration in exploit development.
+> **[Computer Architecture]** The "no `\0` byte" restriction matters in practice. On x86-64, user-space addresses are canonical 48-bit values such as `0x00007ffd12345678`, so their upper two bytes are zero. An attacker who wants to overwrite a return address with such a value can write the non-zero lower bytes and rely on the terminating `\0` to supply exactly one zero byte.
 
 ### 4.4 Use After Free
 
@@ -418,9 +410,9 @@ This leads to two problems:
 1. The new object is of a **different type**, so accessing it through `P2` is also a type confusion.
 2. `P2->foo()` can execute the **attacker's code** placed in the new object.
 
-> **[Operating Systems]** Heap allocators such as glibc `malloc` keep freed chunks in free lists grouped by size and hand them out again for the next request of a similar size, because reuse is fast and cache friendly. An attacker exploits this behavior by freeing the victim object and then immediately allocating an object of the same size whose contents the attacker controls, a technique known as **heap grooming** or **heap feng shui**.
+> **[Operating Systems]** Heap allocators such as glibc `malloc` keep freed chunks in free lists grouped by size and hand them out again for the next request of a similar size. An attacker exploits this behavior by freeing the victim object and then immediately allocating an object of the same size whose contents the attacker controls.
 
-> **[Object-Oriented Programming]** In C++, an object with virtual functions begins with a hidden **vtable pointer** (vptr) that points to a table of function addresses. A call `P2->foo()` is compiled into "load the vptr from `*P2`, load the address of `foo` from the vtable, and jump there." If the attacker controls the memory that `P2` now points to, the attacker controls the vptr, and therefore controls the address that the call jumps to. This is why use-after-free bugs in browsers so often lead to arbitrary code execution.
+> **[Object-Oriented Programming]** In C++, an object with virtual functions begins with a hidden **vtable pointer** (vptr) that points to a table of function addresses. A call `P2->foo()` is compiled into "load the vptr from `*P2`, load the address of `foo` from the vtable, and jump there." If the attacker controls the memory that `P2` now points to, the attacker controls the vptr, and therefore controls the address that the call jumps to.
 
 ---
 
@@ -439,7 +431,7 @@ A **sanitizer** is a tool that **debugs policy violations**: it observes actual 
 | **Thread Sanitizer (TSan)** | Data races between threads |
 | **Undefined Behavior Sanitizer (UBSan)** | Undefined behavior (e.g., signed integer overflow, invalid shifts, misaligned or null pointer use) |
 
-> **Note:** The "Main Target" column adds detail that the slide does not list. Sanitizers are enabled at compile time with Clang or GCC, for example `clang -fsanitize=address prog.c`. They are **dynamic** tools: they can only report a violation that actually occurs during an execution. This limitation is the reason sanitizers are paired with input generators such as fuzzers (Section 5.3). Sanitization is covered in depth in Lecture 10.
+> **Note:** Sanitizers are enabled at compile time (e.g., `clang -fsanitize=address prog.c`). They are **dynamic** tools that report only violations that actually occur during an execution, which is why they are paired with input generators such as fuzzers (Section 5.3).
 
 ### 5.2 Address Sanitizer (ASan)
 
@@ -474,13 +466,11 @@ The detection works in three steps:
 
 The two tools complement each other. The fuzzer is good at *reaching* buggy states but is bad at *noticing* silent memory corruption. The sanitizer is good at *noticing* corruption the moment it happens but cannot generate inputs. Combined, a silent out-of-bounds write that would otherwise go unnoticed becomes an immediate, reproducible crash report.
 
-> **[Software Engineering]** Modern fuzzers such as AFL and libFuzzer are **coverage-guided**. The target is instrumented to record which code paths an input exercises (the **coverage**). An input that reaches new code is kept in the **corpus** and mutated further, while inputs that add nothing are discarded. This feedback loop allows the fuzzer to progress deep into the program, which pure random input generation rarely achieves. Fuzzing is covered in depth in a later lecture.
+> **[Software Engineering]** Modern fuzzers such as AFL and libFuzzer are **coverage-guided**. The target is instrumented to record which code paths an input exercises (the **coverage**). An input that reaches new code is kept in the **corpus** and mutated further, while inputs that add nothing are discarded. This feedback loop allows the fuzzer to progress deep into the program, which pure random input generation rarely achieves.
 
 ### 5.4 Fuzzing Farm
 
 The slide shows photographs of a **fuzzing farm**: racks of machines (and devices) dedicated to running fuzzers continuously. Because fuzzing is a numbers game, organizations scale it out across many machines to execute billions of test inputs per day.
-
-> **Note:** A well-known example is Google's **ClusterFuzz**, which runs fuzzers for Chrome on a large cluster, and its open-source counterpart **OSS-Fuzz**, which continuously fuzzes critical open-source projects and has reported tens of thousands of bugs.
 
 ### 5.5 Bug Bounty Programs
 
@@ -493,8 +483,6 @@ Companies pay rewards to researchers who report vulnerabilities responsibly.
 | Meta (Facebook) Bug Bounty Program | Up to **$300,000** (over $25M awarded to date) |
 | Microsoft Bug Bounty Program | Up to **$250,000** |
 | Intel Bug Bounty Program | Up to **$100,000** |
-
-> **Note:** The amounts reflect how valuable a vulnerability is to an attacker. Vendors pay to learn about a flaw before it is sold to or discovered by malicious actors. The largest rewards are reserved for full exploit chains against the most protected targets, such as zero-click remote code execution on a phone or a compromise of a hardware security chip.
 
 ---
 
@@ -520,8 +508,6 @@ The first area focuses on **developing advanced sanitizers and fuzzers**. The wo
 | Type++ | NDSS'25 | iChecker | ASE'26 |
 | | | RustGo | CCS'26 |
 
-> **Note:** The venues are the top conferences in the field. **CCS** (ACM Conference on Computer and Communications Security), **S&P** (IEEE Symposium on Security and Privacy), **USENIX Security** (SEC), and **NDSS** (Network and Distributed System Security Symposium) are the "big four" of security research. ICSE and ASE are top software engineering venues, and USENIX ATC is a top systems venue. For example, TypeSan and HexType detect **type confusion** (bad casting) in C++ programs, which corresponds to the type safety violations of Section 3.4.
-
 ---
 
 <br>
@@ -546,7 +532,7 @@ The first area focuses on **developing advanced sanitizers and fuzzers**. The wo
 
 *Lecture 01, Slide 32 — C/C++ and Rust usage in Firefox (2019 to 2020)*
 
-> **Note:** In the chart, the C/C++ share (blue) drops from about 94% to about 88% within roughly a year and a half, and the Rust share (red) grows correspondingly. Mozilla created Rust in the first place to write a safer browser engine, and rewrote components such as the CSS engine (Stylo) in Rust.
+> **Note:** In the chart, the C/C++ share (blue) drops from about 94% to about 88%, and the Rust share (red) grows correspondingly.
 
 ### 7.3 Ownership
 
@@ -584,7 +570,7 @@ Rust contains **a second language hidden inside it** that does not enforce these
 
 **Therefore, Rust is not entirely secure!**
 
-> **Note:** Unsafe Rust is unavoidable in practice, because low-level code (operating system interfaces, hardware access, and calls into C libraries through FFI) cannot be verified by the compiler. A bug inside an `unsafe` block, or in C/C++ code called from Rust, can break the guarantees of the entire program. This is why the protection of unsafe Rust and **cross-language security** (Rust mixed with C/C++) are active research areas, as listed in the course objectives.
+> **Note:** Unsafe Rust is unavoidable in practice, because low-level code (operating system interfaces, hardware access, and calls into C libraries through FFI) cannot be verified by the compiler. A bug inside an `unsafe` block, or in C/C++ code called from Rust, can break the guarantees of the entire program.
 
 ---
 
@@ -596,7 +582,7 @@ Rust contains **a second language hidden inside it** that does not enforce these
 
 *Lecture 01, Slide 37 — DriveFuzz (ACM CCS 2022) mutates driving scenarios, and AdversarialSwarm (IEEE S&P 2022) tests drone swarms*
 
-The third area applies security testing to **cyber-physical systems** such as autonomous vehicles and drone swarms. The rest of this section follows the slides' case study on fuzzing autonomous driving systems.
+The third area applies security testing to **cyber-physical systems** such as autonomous vehicles and drone swarms.
 
 ### 8.1 Motivation
 
@@ -627,7 +613,7 @@ Fuzzing is an automated software testing technique that works in a loop:
 
 > **Key research question:** How can fuzzing be applied to autonomous driving systems?
 
-> **Note:** The difficulty is that the "input" of a car is not a byte string but an entire physical scene, and a "bug" is not a crash but unsafe driving behavior. Applying fuzzing therefore requires redefining three things: what an input is (a driving scenario), how to mutate it (change the scene), and how to detect a bug (a driving-quality monitor that detects collisions, lane invasions, and similar violations instead of a sanitizer).
+> **Note:** The difficulty is that the input of a car is an entire physical scene rather than a byte string, and a bug is unsafe driving behavior rather than a crash. Therefore, the input, the mutation, and the bug monitor must all be redefined for the driving domain.
 
 ### 8.4 AutoFuzzer: Input Mutation
 
