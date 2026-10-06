@@ -2,7 +2,7 @@
 
 > **Last Updated:** 2026-10-06
 >
-> Lecture Slides 01 (Week 1) / Mathias Payer, Software Security: Principles, Policies, and Protection - Ch 1
+> Software Security: Principles, Policies, and Protection, Payer - Ch 1
 
 > **Learning Objectives**:
 > 1. Explain why software vulnerabilities lead to critical real-world attacks and economic damage
@@ -220,7 +220,7 @@ $$\text{Developers' mistakes} \rightarrow \text{Vulnerabilities in software}, \q
 
 Developers inevitably make mistakes, and some of those mistakes become **vulnerabilities**. When an attacker discovers and abuses a vulnerability, the result is a critical attack.
 
-> **[Computer Security]** Three terms are often confused. A **bug** is any deviation of a program from its intended behavior. A **vulnerability** is a bug that an attacker can use to violate a security property (confidentiality, integrity, or availability). An **exploit** is a concrete input or program that triggers a vulnerability to achieve the attacker's goal. Therefore, every vulnerability is a bug, but not every bug is a vulnerability. This distinction is treated formally in Lecture 02.
+> **Definition:** Three terms are often confused. A **bug** is any deviation of a program from its intended behavior. A **vulnerability** is a bug that an attacker can use to violate a security property (confidentiality, integrity, or availability). An **exploit** is a concrete input or program that triggers a vulnerability to achieve the attacker's goal. Therefore, every vulnerability is a bug, but not every bug is a vulnerability. This distinction is treated formally in Lecture 02.
 
 ```mermaid
 graph LR
@@ -298,7 +298,7 @@ Modern computer systems are **mainly implemented in C/C++**.
 
 ### 3.2 Vulnerabilities on the Rise
 
-![Number of published CVEs per year](../images/L01_p16.png)
+![Lecture 01, Slide 16 — Number of published CVEs per year (2012 to 2025)](../images/L01_p16.png)
 
 *Lecture 01, Slide 16 — Number of published CVEs per year (2012 to 2025)*
 
@@ -314,11 +314,11 @@ Modern computer systems are **mainly implemented in C/C++**.
 - The number of published vulnerabilities increased about **nine times** between 2012 and 2025.
 - Data source: CVE Program / NVD annual published CVE counts (2012 to 2025)
 
-> **[Computer Security]** A **CVE (Common Vulnerabilities and Exposures)** identifier, such as `CVE-2014-0160`, is a unique public name assigned to one disclosed vulnerability, so that vendors, researchers, and tools can refer to the same issue unambiguously. The **NVD (National Vulnerability Database)**, operated by NIST, enriches each CVE with additional data, such as a **CVSS** severity score from 0.0 to 10.0. The rising count reflects both the growth of software and the growth of vulnerability research and disclosure programs.
+> **Definition:** A **CVE (Common Vulnerabilities and Exposures)** identifier, such as `CVE-2014-0160`, is a unique public name assigned to one disclosed vulnerability, so that vendors, researchers, and tools can refer to the same issue unambiguously. The **NVD (National Vulnerability Database)**, operated by NIST, enriches each CVE with additional data, such as a **CVSS** severity score from 0.0 to 10.0. The rising count reflects both the growth of software and the growth of vulnerability research and disclosure programs.
 
 ### 3.3 Type and Memory Safety Violations Are Common
 
-![Share of type and memory safety vulnerabilities at Microsoft](../images/L01_p17.png)
+![Lecture 01, Slide 17 — 63% of all Microsoft patches are memory and type safety violations](../images/L01_p17.png)
 
 *Lecture 01, Slide 17 — 63% of all Microsoft patches are memory and type safety violations*
 
@@ -331,7 +331,7 @@ Modern computer systems are **mainly implemented in C/C++**.
 
 C/C++ **trade type and memory safety for performance**.
 
-![Type safety violation and memory safety violation](../images/L01_p18.png)
+![Lecture 01, Slide 18 — Type safety violation (top) and memory safety violation (bottom)](../images/L01_p18.png)
 
 *Lecture 01, Slide 18 — Type safety violation (top) and memory safety violation (bottom)*
 
@@ -340,7 +340,7 @@ C/C++ **trade type and memory safety for performance**.
 | **Type safety violation** | Data is used with its **incorrect type**. | Memory holding a `Password` object is interpreted as a different type (the attacker asks, "Is this a chat?"). |
 | **Memory safety violation** | **Out-of-bounds (or deleted) memory** is accessed. | An access that starts in the allocated data runs out of bounds into the adjacent `Password` (the attacker accesses out-of-bound data). |
 
-> **[Computer Security]** Memory safety violations are usually divided into two classes. A **spatial** violation accesses memory *outside the bounds* of an object (e.g., a buffer overflow). A **temporal** violation accesses an object *outside its lifetime*, that is, after it has been freed (e.g., use-after-free, double free). A **type safety** violation, often called **type confusion**, accesses a valid object through a pointer of an incompatible type. In C++, a typical case is an unchecked downcast with `static_cast` from a base class pointer to the wrong derived class, after which fields and virtual functions are read at the wrong offsets.
+> **Key Point:** Memory safety violations are usually divided into two classes. A **spatial** violation accesses memory *outside the bounds* of an object (e.g., a buffer overflow). A **temporal** violation accesses an object *outside its lifetime*, that is, after it has been freed (e.g., use-after-free, double free). A **type safety** violation, often called **type confusion**, accesses a valid object through a pointer of an incompatible type. In C++, a typical case is an unchecked downcast with `static_cast` from a base class pointer to the wrong derived class, after which fields and virtual functions are read at the wrong offsets.
 
 > **Exam Tip:** When asked to compare the two violations, state *what* is wrong in each case. In a memory safety violation, the **location or lifetime** of the access is wrong. In a type safety violation, the location may be valid, but the **interpretation** of the data is wrong.
 
@@ -402,7 +402,7 @@ The commented "equivalent" loop explains both restrictions. The copy proceeds by
 
 ### 4.4 Use After Free
 
-![Use-after-free timeline](../images/L01_p22.png)
+![Lecture 01, Slide 22 — Use after free: a dangling pointer ends up pointing to a new object](../images/L01_p22.png)
 
 *Lecture 01, Slide 22 — Use after free: a dangling pointer ends up pointing to a new object*
 
@@ -450,7 +450,7 @@ Address Sanitizer is the **most widely used sanitizer**.
 - It uses **shadow memory** to record whether each byte is accessible.
 - It has detected **over 10,000 memory safety violations**.
 
-![ASan redzones and shadow memory](../images/L01_p24.png)
+![Lecture 01, Slide 24 — ASan checks `IsAccessible(p)` in shadow memory before each access; touching a redzone reports a bug](../images/L01_p24.png)
 
 *Lecture 01, Slide 24 — ASan checks `IsAccessible(p)` in shadow memory before each access; touching a redzone reports a bug*
 
@@ -468,7 +468,7 @@ The detection works in three steps:
 - To **detect** triggered bugs, fuzzers **leverage sanitizers**.
 - **Fuzzer + Sanitizer** is a popular and effective combination.
 
-![Fuzzer and sanitizer combination](../images/L01_p25.png)
+![Lecture 01, Slide 25 — The fuzzer sends random inputs to a sanitizer-instrumented target (e.g., Chrome built with LLVM or GCC) and uses feedback to find bugs](../images/L01_p25.png)
 
 *Lecture 01, Slide 25 — The fuzzer sends random inputs to a sanitizer-instrumented target (e.g., Chrome built with LLVM or GCC) and uses feedback to find bugs*
 
@@ -530,7 +530,7 @@ The first area focuses on **developing advanced sanitizers and fuzzers**. The wo
 
 ### 7.1 Why Rust
 
-![Control and performance versus safety, and developer preference](../images/L01_p30.png)
+![Lecture 01, Slide 30 — Languages positioned by control/performance and safety (left) and "love for programming language" over time (right)](../images/L01_p30.png)
 
 *Lecture 01, Slide 30 — Languages positioned by control/performance and safety (left) and "love for programming language" over time (right)*
 
@@ -542,7 +542,7 @@ The first area focuses on **developing advanced sanitizers and fuzzers**. The wo
 - **Government policy:** A news article titled "White House urges software developers to use memory-safe programming languages" (February 2024) reports that a number of headline-making cyberattacks started with memory safety flaws, according to a White House cyber official.
 - **Firefox:** The share of C/C++ lines in Firefox steadily decreased while the share of Rust lines increased.
 
-![C/C++ and Rust usage in Firefox](../images/L01_p32.png)
+![Lecture 01, Slide 32 — C/C++ and Rust usage in Firefox (2019 to 2020)](../images/L01_p32.png)
 
 *Lecture 01, Slide 32 — C/C++ and Rust usage in Firefox (2019 to 2020)*
 
@@ -550,7 +550,7 @@ The first area focuses on **developing advanced sanitizers and fuzzers**. The wo
 
 ### 7.3 Ownership
 
-![Rust ownership](../images/L01_p33.png)
+![Lecture 01, Slide 33 — In `let x = v;`, the variable `x` owns the value `v`](../images/L01_p33.png)
 
 *Lecture 01, Slide 33 — In `let x = v;`, the variable `x` owns the value `v`*
 
@@ -592,7 +592,7 @@ Rust contains **a second language hidden inside it** that does not enforce these
 
 ## 8. Research Area 3: Autonomous Vehicle and Drone Security
 
-![DriveFuzz and AdversarialSwarm](../images/L01_p37.png)
+![Lecture 01, Slide 37 — DriveFuzz (ACM CCS 2022) mutates driving scenarios, and AdversarialSwarm (IEEE S&P 2022) tests drone swarms](../images/L01_p37.png)
 
 *Lecture 01, Slide 37 — DriveFuzz (ACM CCS 2022) mutates driving scenarios, and AdversarialSwarm (IEEE S&P 2022) tests drone swarms*
 
@@ -615,7 +615,7 @@ Therefore, we need **(1) an end-to-end testing framework for autonomous driving 
 
 ### 8.3 Background: Fuzzing
 
-![Fuzzing feedback loop](../images/L01_p44.png)
+![Lecture 01, Slide 44 — A fuzzer feeds mutated inputs to the target system and uses the bug monitor and coverage map as feedback](../images/L01_p44.png)
 
 *Lecture 01, Slide 44 — A fuzzer feeds mutated inputs to the target system and uses the bug monitor and coverage map as feedback*
 
@@ -631,7 +631,7 @@ Fuzzing is an automated software testing technique that works in a loop:
 
 ### 8.4 AutoFuzzer: Input Mutation
 
-![AutoFuzzer input](../images/L01_p46.png)
+![Lecture 01, Slide 46 — The input is a driving scene in a simulator, with a goal that the autopilot vehicle must reach](../images/L01_p46.png)
 
 *Lecture 01, Slide 46 — The input is a driving scene in a simulator, with a goal that the autopilot vehicle must reach*
 
@@ -639,7 +639,7 @@ The input of the fuzzer (called **AutoFuzzer** on the slides) is a **driving sce
 
 **Mutating weather:**
 
-![Mutating weather](../images/L01_p47.png)
+![Lecture 01, Slide 47 — The same scene with different cloud and rain parameters](../images/L01_p47.png)
 
 *Lecture 01, Slide 47 — The same scene with different cloud and rain parameters*
 
@@ -651,7 +651,7 @@ The input of the fuzzer (called **AutoFuzzer** on the slides) is a **driving sce
 
 **Mutating actors:**
 
-![Mutating actors](../images/L01_p48.png)
+![Lecture 01, Slide 48 — Adding other vehicles and pedestrians to the scene](../images/L01_p48.png)
 
 *Lecture 01, Slide 48 — Adding other vehicles and pedestrians to the scene*
 
@@ -662,7 +662,7 @@ The input of the fuzzer (called **AutoFuzzer** on the slides) is a **driving sce
 
 **AutoFuzzer found 20 critical bugs!**
 
-![Bugs detected by AutoFuzzer](../images/L01_p49.png)
+![Lecture 01, Slide 49 — The 20 critical bugs, classified by layer, component, impact, and root cause](../images/L01_p49.png)
 
 *Lecture 01, Slide 49 — The 20 critical bugs, classified by layer, component, impact, and root cause*
 
@@ -709,35 +709,35 @@ The input of the fuzzer (called **AutoFuzzer** on the slides) is a **driving sce
 
 ## Self-Check Questions
 
-1. What is the difference between a type safety violation and a memory safety violation? Give one example of each.
+1. **Type vs. Memory Safety:** What is the difference between a type safety violation and a memory safety violation? Give one example of each.
 
    > **Answer:** In a **type safety violation**, data is used with an incorrect type. For example, a `Password` object is accessed through a pointer to a different class after a bad `static_cast`, so its bytes are interpreted at the wrong offsets. In a **memory safety violation**, memory outside the bounds of an object (spatial) or memory that has already been freed (temporal) is accessed. For example, a buffer overflow reads past the end of an array into an adjacent `Password`, or a use-after-free accesses a freed object.
 
-2. In `void set(int idx, int val) { global[idx] = val; }`, why does an attacker obtain an arbitrary write primitive, and how should the function be fixed?
+2. **Arbitrary Write:** In `void set(int idx, int val) { global[idx] = val; }`, why does an attacker obtain an arbitrary write primitive, and how should the function be fixed?
 
    > **Answer:** The function does not check that `idx` lies between 0 and 9, and `global[idx]` is computed as `global + idx * 4`. Since the attacker controls both `idx` (any signed 32-bit value, positive or negative) and `val`, the attacker can write any 4-byte value to almost any location around `global`, such as a function pointer. The fix is a bounds check, for example `if (idx < 0 || idx >= 10) return;`.
 
-3. In the `strcpy` example, which locations can the attacker overwrite, and why can the attacker not write `\0` bytes freely?
+3. **`strcpy` Overflow:** In the `strcpy` example, which locations can the attacker overwrite, and why can the attacker not write `\0` bytes freely?
 
    > **Answer:** The attacker can overwrite only the contiguous region of the stack directly above `tmp`, which includes other locals, the saved frame pointer, and the return address. `strcpy` copies bytes until it meets the first `\0` in the source and then writes a terminating `\0`, so the payload cannot contain zero bytes in the middle, and the overwritten region always ends with exactly one `\0`.
 
-4. Describe the use-after-free scenario from t0 to t3, and explain why `P2->foo()` can execute attacker code.
+4. **Use After Free:** Describe the use-after-free scenario from t0 to t3, and explain why `P2->foo()` can execute attacker code.
 
    > **Answer:** At t0, `P1` and `P2` point to object `A`. At t1, `A` is freed through `P1`, but `P2` still points to it and becomes a dangling pointer. At t2, the attacker allocates a new object, and the allocator reuses the freed memory. At t3, `P2` points to the new, attacker-controlled object. If `foo` is a virtual function, `P2->foo()` loads the vtable pointer from the object that `P2` points to, which the attacker now controls, so the call jumps to an address of the attacker's choice.
 
-5. How does ASan detect an out-of-bounds access?
+5. **ASan:** How does ASan detect an out-of-bounds access?
 
    > **Answer:** ASan inserts inaccessible **redzones** around every object and records in **shadow memory** whether each byte of the program's memory is accessible. The compiler inserts a check `IsAccessible(p)` before every memory access. An access that touches a redzone (or freed memory, which is also marked inaccessible) fails the check, and ASan reports the bug with the exact location.
 
-6. Why are fuzzers combined with sanitizers?
+6. **Fuzzer + Sanitizer:** Why are fuzzers combined with sanitizers?
 
    > **Answer:** A fuzzer generates many inputs and explores many program states, but many memory corruptions are silent and do not crash the program, so the fuzzer would not notice them. A sanitizer turns such silent violations into immediate, reproducible reports, but it cannot generate inputs by itself. The combination therefore both reaches and detects bugs.
 
-7. How does Rust prevent dangling pointers and buffer overflows, and why is Rust "not entirely secure"?
+7. **Rust Safety:** How does Rust prevent dangling pointers and buffer overflows, and why is Rust "not entirely secure"?
 
    > **Answer:** Every value has a unique owner and is freed exactly once when the owner goes out of scope. The borrow checker prohibits shared mutable aliases and ensures that references do not outlive the value, which prevents dangling pointers. Objects such as slices and vectors carry a length field, and indexing is bounds-checked at run time, which prevents buffer overflows. However, **unsafe Rust** allows raw pointer dereferences, calls to unsafe functions, and access to mutable statics, which the compiler does not check, so bugs in unsafe code (or in C/C++ code called from Rust) can still break memory safety.
 
-8. Why is it difficult to test autonomous driving systems, and how does the fuzzer presented in the lecture define and mutate its inputs?
+8. **Autonomous Driving Fuzzing:** Why is it difficult to test autonomous driving systems, and how does the fuzzer presented in the lecture define and mutate its inputs?
 
    > **Answer:** The input space of the physical world is infinite, so not all corner cases can be tested, and existing tests check individual components rather than the system as a whole. The fuzzer performs end-to-end testing in a simulator: its input is a driving scene, and it mutates the weather (sun angle, clouds, rain), puddles, and actors (moving or stationary vehicles and pedestrians). Bugs are detected as unsafe driving outcomes, such as collisions, immobility, lane invasions, speeding, and other traffic violations, which revealed 20 critical bugs.
 
