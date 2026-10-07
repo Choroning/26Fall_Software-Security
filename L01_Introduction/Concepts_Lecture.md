@@ -145,7 +145,7 @@ Modern computer systems are **mainly implemented in C/C++**.
 | **AI** | PyTorch, TensorFlow, Microsoft CNTK, NVIDIA CUDA |
 | **IoT** | TinyOS, Contiki, FreeRTOS |
 
-> **[C Programming]** C and C++ are called **unsafe languages** because the language does not check whether an operation is valid at run time. For example, `a[i]` is compiled to "the address of `a` plus `i` times the element size" without any check that `i` lies within the array. An invalid access is classified as **undefined behavior (UB)**: the standard places no requirement on what happens, so the program may crash, silently corrupt data, or continue in an attacker-controlled state. This design choice gives C/C++ their performance and low-level control, which is exactly why they dominate operating systems, browsers, and AI runtimes.
+> **[Programming Languages]** C and C++ are called **unsafe languages** because the language does not check whether an operation is valid at run time. For example, `a[i]` is compiled to "the address of `a` plus `i` times the element size" without any check that `i` lies within the array. An invalid access is classified as **undefined behavior (UB)**: the standard places no requirement on what happens, so the program may crash, silently corrupt data, or continue in an attacker-controlled state. This design choice gives C/C++ their performance and low-level control, which is exactly why they dominate operating systems, browsers, and AI runtimes.
 
 ### 2.2 Vulnerabilities on the Rise
 
