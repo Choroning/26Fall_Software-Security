@@ -193,6 +193,8 @@ The same idea applied to function pointers yields the **possible call targets**:
 
 **Symbolic execution (SE)** is an abstract interpretation of code:
 
+> **Intuition:** Ordinary testing runs a program with chosen concrete inputs, such as `x = 3`. Symbolic execution instead starts with a placeholder such as `x`, follows branches by collecting conditions on that placeholder, and asks which concrete values satisfy them. This can reach inputs that are easy to miss by hand, although the number of paths can grow rapidly.
+
 - It uses **symbolic values**, not concrete ones. Values turn into **formulas**, and constraints concretize the formulas.
 - Target conditions must be defined.
 - It finds a **concrete input** that triggers an "interesting" condition.

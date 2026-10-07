@@ -65,6 +65,8 @@ The slide shows the history of Windows: Windows 1 (1985), Windows 3.1 (1992), Wi
 
 The software development cycle consists of six phases: (1) planning, (2) analysis, (3) design, (4) implementation, (5) testing and integration, and (6) maintenance.
 
+> **[Software Engineering]** The regular development cycle is the baseline for secure development. Security adds work to each phase: define security requirements during analysis, review the design for threats, check code and dependencies during implementation, test security properties, and keep fixing vulnerabilities during maintenance.
+
 ### 2.2 Secure Software Engineering
 
 Secure software engineering **incorporates security throughout the software development lifecycle** in order to:

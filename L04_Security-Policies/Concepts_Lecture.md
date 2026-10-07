@@ -114,6 +114,8 @@
 
 **Type safety** means that operations on an object are always **compatible with the object's type**. A **type safety violation** occurs when data is used with its incorrect type, for example when memory holding a `Password` object is interpreted as a different type ("Is this a chat?").
 
+> **[Programming Languages]** A variable's *static type* is the type the compiler sees in its declaration; an object's *dynamic type* is the class of the object that actually exists at run time. Safe downcasting must check that the dynamic type is compatible with the requested class. This distinction explains why an unchecked `static_cast` can compile and still lead to type confusion.
+
 ### 3.2 C++ Casting Operations
 
 | Cast | Check | Runtime Type Information | Use |

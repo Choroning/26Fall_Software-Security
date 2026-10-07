@@ -194,6 +194,8 @@ LeakSanitizer는 **런타임 메모리 누수**를 탐지한다. AddressSanitize
 
 > **용어 정의:** **WAW, RAW, WAR** 는 write-after-write, read-after-write, write-after-read로, 같은 위치에 대한 동기화되지 않은 접근 쌍 중 적어도 하나가 쓰기인 경우이다. 에포크는 스레드별 **스칼라(논리) 시계**로, TSan이 접근을 순서화하고 happens-before 관계가 있는지 판단하게 해 준다. 그런 관계가 없으면 두 접근은 경쟁한다.
 
+> **직관:** 뮤텍스는 *happens-before* 관계의 간단한 예다. 한 스레드가 공유 데이터를 수정한 뒤 뮤텍스를 해제하고, 다른 스레드가 데이터를 읽기 전에 뮤텍스를 획득하면 두 작업의 순서가 보장된다. 이런 동기화 관계가 없으면 겹치는 읽기와 쓰기가 데이터 경쟁을 일으킬 수 있으며, TSan은 이처럼 순서 보장이 빠진 경우를 검사한다.
+
 ### 3.3 MemorySanitizer (MSan)
 
 MemorySanitizer는 **초기화되지 않은 읽기**, 즉 초기화되지 않은 데이터를 읽는 것을 찾는다.

@@ -59,6 +59,8 @@ To hijack control flow, an attacker must:
 
 **Advanced mitigations restrict the usage of modified code pointers.**
 
+> **[Computer Architecture]** A code pointer stores an address the processor may use as the next instruction location. A function return uses a saved return address; an indirect call or jump uses a function pointer or similar value. These are the backward and forward control-flow edges that stack-integrity and CFI mechanisms protect.
+
 ### 1.2 Control-Flow Hijacking Targets
 
 There are four types of code pointers:

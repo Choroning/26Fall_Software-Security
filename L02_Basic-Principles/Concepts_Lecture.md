@@ -70,6 +70,8 @@
 
 The slide draws the three properties as the corners of a triangle with **security** at its center: a system is secure only when all three are maintained.
 
+> **[Operating Systems]** These goals describe *what* protection should achieve; operating-system mechanisms help enforce them. File permissions can protect confidentiality and integrity, while process scheduling and resource limits help preserve availability. One mechanism can support several goals, and none of these mechanisms alone guarantees a secure system.
+
 ### 1.3 Authentication and Non-repudiation
 
 ISO/IEC 7498-2 adds two more properties of computer security:

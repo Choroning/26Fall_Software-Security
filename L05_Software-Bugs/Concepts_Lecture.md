@@ -139,6 +139,8 @@ According to the slide, **`bar` is set if `foo != 12`, while `baz` is never set.
 
 > **Note:** Because `||` short-circuits, the assignment `bar = 13` is only evaluated when `foo != 12`, which is the side effect the slide warns about. Strictly speaking, as written, `bar = 13` evaluates to 13 (true), so `baz` is set in both cases; the point to remember is that an assignment or function call inside a condition may or may not run depending on the other operands.
 
+> **[C Programming]** In C, `=` assigns a value and the assignment expression itself evaluates to that value; any nonzero value is true in a condition. By contrast, `==` compares two values. Thus `(bar = 13)` is true, and short-circuit evaluation determines whether that assignment runs at all. Keeping assignment and comparison distinct makes this example much easier to trace.
+
 ### 2.3 Scoping
 
 ```c

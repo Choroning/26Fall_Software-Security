@@ -194,6 +194,8 @@ In the figure, Thread 1 reads `Y = 5` and computes `5 + 1`, while Thread 2 reads
 
 > **Definition:** **WAW, RAW, WAR** stand for write-after-write, read-after-write, and write-after-read: pairs of unsynchronized accesses to the same location where at least one is a write. The epoch is a per-thread **scalar (logical) clock** that lets TSan order accesses and decide whether a happens-before relationship exists; if not, the two accesses race.
 
+> **Intuition:** A mutex provides a simple example of *happens-before*: one thread unlocks it after updating shared data, and another thread locks it before reading that data. The lock orders those operations. Without a synchronization relation like this, overlapping reads and writes can form a data race; TSan checks for such missing ordering.
+
 ### 3.3 MemorySanitizer (MSan)
 
 MemorySanitizer **finds uninitialized reads**: reading data that has not been initialized.
