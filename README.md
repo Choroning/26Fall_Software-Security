@@ -49,9 +49,7 @@ This course covers the core principles of software security and recent security 
 ### Instructor, TAs, and Research Lab
 
 - **Instructor:** Prof. Yuseok Jeon (전유석)
-- **Office:** Woo Jung Informatics Building (우정정보관), Room 504; office hours by appointment
 - **Research lab:** [Secure Software Lab (S2 Lab)](https://s2-lab.github.io/), focusing on enforcing software and system security, including type and memory safety in C/C++, Rust language security, and the security of autonomous vehicles, drones, web browsers, and AI
-- **Career:** Researcher at NSR (2010.02 ~ 2013.06), Researcher at Samsung Research (2013.12 ~ 2015.06), Ph.D. at Purdue University (2015.08 ~ 2020.08), Research Intern at NEC Laboratories America (2016.05 ~ 2016.08) and Intel (2018.05 ~ 2018.08), Assistant Professor at UNIST (2021.02 ~ 2025.02), and Associate Professor at Korea University (2025.03 ~ present)
 - **TAs:** Sumin Yang (양수민, Ph.D.), Ingyu Jang (장인규, Master's-Ph.D. integrated program), Changheon Lee (이창헌, Master's-Ph.D. integrated program)
 
 ### Schedule and Class Format
@@ -101,7 +99,6 @@ This course covers the core principles of software security and recent security 
 **AI-Generated Code**
 - Using ChatGPT, Copilot, Gemini, or any similar AI model is unacceptable for programming assignments and results in an F.
 - Submissions are checked with a third-party AI-generated code detection solution.
-- Students who rely on AI-generated code learn nothing and will not survive the exams.
 
 **Plagiarism**
 
@@ -138,7 +135,7 @@ This course covers the core principles of software security and recent security 
 |W16|12/15, 12/17|Final Exam||
 
 - The planned topics follow the syllabus, while the lecture decks are covered continuously as time allows.
-- The lecture deck roadmap presented in Lecture 03 is: 1 Introduction, 2 Basic principle, 3 Software Lifecycle, 4 Security Policies, 5 Software Bugs, 6 Exploitation, 7 Mitigations, 8 Advanced Mitigations, 9 Sanitization, 10 Fuzzing, 11 Symbolic Execution, 12 Network Security, 15~16 Cryptography, 17~18 Web Security, 19 Hardware Security, and 20 AI security.
+- The course topic sequence in Lecture 03 uses numbers that differ from this repository's `L##` note-directory labels: 1 Introduction, 2 Basic Principles, 3 Software Lifecycle, 4 Security Policies, 5 Software Bugs, 6 Exploitation, 7 Mitigations, 8 Advanced Mitigations, 9 Sanitization, 10 Fuzzing, 11 Symbolic Execution, 12 Network Security, 15–16 Cryptography, 17–18 Web Security, 19 Hardware Security, and 20 AI Security.
 
 - **📖 References**
 
@@ -146,7 +143,7 @@ This course covers the core principles of software security and recent security 
 |:----:|:---------|
 |Textbook|No designated textbook|
 |Reference Book|"Software Security: Principles, Policies, and Protection" by Mathias Payer ([free online](https://nebelwelt.net/SS3P/))|
-|Reference Course|[MIT 6.858: Computer Systems Security](https://css.csail.mit.edu/6.858/2024/schedule.html)|
+|Reference Course|[MIT 6.566: Computer Systems Security (2026)](https://css.csail.mit.edu/6.5660/2026/)|
 |Lecture Notes|Instructor's slides (LMS)|
 
 <br><a name="prerequisites"></a>

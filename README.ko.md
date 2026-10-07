@@ -49,9 +49,7 @@
 ### 교수자, 조교 및 연구실
 
 - **교수자:** 전유석 교수 (Prof. Yuseok Jeon)
-- **교수실:** 우정정보관(Woo Jung Informatics Building) 504호, 면담은 사전 약속 시 가능
 - **연구실:** [Secure Software Lab (S2 Lab)](https://s2-lab.github.io/), C/C++의 타입 및 메모리 안전성, Rust 언어 보안, 자율주행 차량, 드론, 웹 브라우저, AI 보안 등 소프트웨어 및 시스템 보안 강화 연구
-- **경력:** 국가보안기술연구소(NSR) 연구원(2010.02 ~ 2013.06), 삼성리서치 연구원(2013.12 ~ 2015.06), Purdue University 박사(2015.08 ~ 2020.08), NEC Laboratories America(2016.05 ~ 2016.08) 및 Intel(2018.05 ~ 2018.08) 연구 인턴, UNIST 조교수(2021.02 ~ 2025.02), 고려대학교 부교수(2025.03 ~ 현재)
 - **조교:** 양수민(Sumin Yang, 박사 과정), 장인규(Ingyu Jang, 석박사 통합 과정), 이창헌(Changheon Lee, 석박사 통합 과정)
 
 ### 수업 일정 및 형식
@@ -101,7 +99,6 @@
 **AI 생성 코드**
 - 프로그래밍 과제에 ChatGPT, Copilot, Gemini 또는 이와 유사한 AI 모델을 사용하는 것은 허용되지 않으며, 사용 시 F 학점을 받는다.
 - 제출물은 외부 AI 생성 코드 탐지 솔루션으로 검사한다.
-- AI 생성 코드에 의존하는 학생은 아무것도 배우지 못하며, 시험을 통과할 수 없다.
 
 **표절**
 
@@ -138,7 +135,7 @@
 |16주차|12/15, 12/17|기말고사||
 
 - 계획된 주제는 강의 계획을 따르며, 실제 강의자료는 시간이 되는 만큼 이어서 진행한다.
-- 강의 03에서 제시된 강의자료 로드맵은 1 Introduction, 2 Basic principle, 3 Software Lifecycle, 4 Security Policies, 5 Software Bugs, 6 Exploitation, 7 Mitigations, 8 Advanced Mitigations, 9 Sanitization, 10 Fuzzing, 11 Symbolic Execution, 12 Network Security, 15~16 Cryptography, 17~18 Web Security, 19 Hardware Security, 20 AI security이다.
+- 강의 03의 주제 순서 번호는 이 레포의 `L##` 강의 노트 디렉터리 번호와 다르며, 주제 순서는 다음과 같다: 1 Introduction, 2 Basic Principles, 3 Software Lifecycle, 4 Security Policies, 5 Software Bugs, 6 Exploitation, 7 Mitigations, 8 Advanced Mitigations, 9 Sanitization, 10 Fuzzing, 11 Symbolic Execution, 12 Network Security, 15–16 Cryptography, 17–18 Web Security, 19 Hardware Security, 20 AI Security.
 
 - **📖 참고 자료**
 
@@ -146,7 +143,7 @@
 |:----:|:---------|
 |교재|지정 교재 없음|
 |참고 도서|Software Security: Principles, Policies, and Protection (Mathias Payer) ([온라인 무료 공개](https://nebelwelt.net/SS3P/))|
-|참고 강의|[MIT 6.858: Computer Systems Security](https://css.csail.mit.edu/6.858/2024/schedule.html)|
+|참고 강의|[MIT 6.566: Computer Systems Security (2026)](https://css.csail.mit.edu/6.5660/2026/)|
 |강의자료|교수자 제공 슬라이드 (LMS)|
 
 <br><a name="prerequisites"></a>
