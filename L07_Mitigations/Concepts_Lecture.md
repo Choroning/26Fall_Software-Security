@@ -1,6 +1,6 @@
 # Lecture 07 — Mitigations
 
-> **Last Updated:** 2026-10-06
+> **Last Updated:** 2026-10-08
 >
 > Software Security: Principles, Policies, and Protection, Payer - Ch 6
 
@@ -87,9 +87,9 @@
 
 ### 2.2 DEP and the NX Bit
 
-![Lecture 07, Slide 8 — Process layout showing RWX regions](../images/L07_p08.png)
+![Figure 1. Process layout showing RWX regions (slide 8)](../images/L07_p08.png)
 
-*Lecture 07, Slide 8 — Process layout showing RWX regions*
+*Figure 1. Process layout showing RWX regions (slide 8)*
 
 **Data Execution Prevention (DEP)** is supported in hardware:
 
@@ -130,9 +130,9 @@ The lecture walks through a 12-step return-to-libc example against the familiar 
 2. The slot above it becomes the **return address that `system()` will use** when it finishes (often set to `&exit()` so the program exits cleanly).
 3. The next slot becomes the **first argument to `system()`** (the address of a `"/bin/sh"` string).
 
-![Lecture 07, Slide 32 — Code reuse violates memory safety, integrity, randomization, and flow integrity, ending in a control-flow hijack](../images/L07_p32.png)
+![Figure 2. Code reuse violates memory safety, integrity, randomization, and flow integrity, ending in a control-flow hijack (slide 32)](../images/L07_p32.png)
 
-*Lecture 07, Slide 32 — Code reuse violates memory safety, integrity, randomization, and flow integrity, ending in a control-flow hijack*
+*Figure 2. Code reuse violates memory safety, integrity, randomization, and flow integrity, ending in a control-flow hijack (slide 32)*
 
 As each step of the fake frame is filled in, a different security property is violated in turn: memory safety (the overflow), integrity (`*C`, the corrupted pointer), randomization (`&C`, the known address), and flow integrity (`*&C`, the hijacked code pointer), ending in a **control-flow hijack**.
 
@@ -186,9 +186,9 @@ Candidates for randomization trade off overhead, complexity, and security benefi
 
 ### 4.3 ASLR and DEP Combined
 
-![Lecture 07, Slide 42 — With DEP & ASLR, the stack and data are RW- (non-executable) and all base addresses are randomized](../images/L07_p42.png)
+![Figure 3. With DEP & ASLR, the stack and data are RW- (non-executable) and all base addresses are randomized (slide 42)](../images/L07_p42.png)
 
-*Lecture 07, Slide 42 — With DEP & ASLR, the stack and data are RW- (non-executable) and all base addresses are randomized*
+*Figure 3. With DEP & ASLR, the stack and data are RW- (non-executable) and all base addresses are randomized (slide 42)*
 
 With both defenses, the stack and data regions become **non-executable (RW-)** through DEP, and the base addresses of every region are **randomized** through ASLR. DEP stops code injection, and ASLR makes the addresses needed for code reuse hard to predict. They are complementary.
 
@@ -204,9 +204,9 @@ With both defenses, the stack and data regions become **non-executable (RW-)** t
 
 Early attacks overflowed stack-based buffers to inject code. Full memory safety would mitigate this but is infeasible due to high performance overhead. Instead of checking **every** pointer dereference, a stack canary checks **only before important data is accessed**.
 
-![Lecture 07, Slide 44 — A canary placed before the saved frame pointer and return address](../images/L07_p44.png)
+![Figure 4. A canary placed before the saved frame pointer and return address (slide 44)](../images/L07_p44.png)
 
-*Lecture 07, Slide 44 — A canary placed before the saved frame pointer and return address*
+*Figure 4. A canary placed before the saved frame pointer and return address (slide 44)*
 
 - **Key insight:** buffer overflows are only possible after pointer arithmetic, and a continuous overflow must cross the canary to reach the return address.
 - Place a **canary** after a potentially vulnerable buffer, and **check its integrity before the function returns**.
@@ -271,9 +271,9 @@ int main(int argc, char *argv[]) {
 
 ## Summary
 
-![Lecture 07, Slide 55 — Combined mitigations against the low-level attack hierarchy](../images/L07_p55.png)
+![Figure 5. Combined mitigations against the low-level attack hierarchy (slide 55)](../images/L07_p55.png)
 
-*Lecture 07, Slide 55 — Combined mitigations against the low-level attack hierarchy*
+*Figure 5. Combined mitigations against the low-level attack hierarchy (slide 55)*
 
 Several defense mechanisms have been adopted in practice; know their strengths and weaknesses.
 

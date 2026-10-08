@@ -1,6 +1,6 @@
 # Lecture 09 — Why Testing?
 
-> **Last Updated:** 2026-10-06
+> **Last Updated:** 2026-10-08
 >
 > Software Security: Principles, Policies, and Protection, Payer - Ch 6
 
@@ -199,9 +199,9 @@ The same idea applied to function pointers yields the **possible call targets**:
 - Target conditions must be defined.
 - It finds a **concrete input** that triggers an "interesting" condition.
 
-![Lecture 09, Slide 29 — A symbolic execution tree with a path condition for each leaf](../images/L09_p29.png)
+![Figure 1. A symbolic execution tree with a path condition for each leaf (slide 29)](../images/L09_p29.png)
 
-*Lecture 09, Slide 29 — A symbolic execution tree with a path condition for each leaf*
+*Figure 1. A symbolic execution tree with a path condition for each leaf (slide 29)*
 
 In the example, the inputs start as symbols (`x=0, y=0, z=0` with symbolic `a`, `b`, `c`). Each branch (`if (a)`, `if (b < 5)`, and so on) splits execution into a true and a false path, and each leaf collects a **path condition** (a conjunction such as `¬a ∧ (β < 5) ∧ γ`). Solving a path condition with a **SAT/SMT solver** yields a concrete input that reaches that leaf, for example the one that triggers the failing `assert(x+y+z != 3)`.
 

@@ -1,6 +1,6 @@
 # Lecture 03 — Software Lifecycle
 
-> **Last Updated:** 2026-10-06
+> **Last Updated:** 2026-10-08
 >
 > Software Security: Principles, Policies, and Protection, Payer - Ch 3
 
@@ -41,9 +41,9 @@
 - Software development, production, and maintenance are **cost and labor intensive**.
 - **Software life-time can outlive hardware.**
 
-![Lecture 03, Slide 3 — Windows releases from 1985 to the present](../images/L03_p03.png)
+![Figure 1. Windows releases from 1985 to the present (slide 3)](../images/L03_p03.png)
 
-*Lecture 03, Slide 3 — Windows releases from 1985 to the present*
+*Figure 1. Windows releases from 1985 to the present (slide 3)*
 
 The slide shows the history of Windows: Windows 1 (1985), Windows 3.1 (1992), Windows 95 (1995), Windows XP (2001), Windows Vista (2006), Windows 7 (2009), Windows 8 (2012), Windows 10 (2015), and Windows 11 (2021 to present). Windows 10 reached its end of support on October 14, 2025 (22H2 was the final version), yet paid Extended Security Updates (ESU) run until October 2027, and hundreds of millions of PCs still run it.
 
@@ -59,9 +59,9 @@ The slide shows the history of Windows: Windows 1 (1985), Windows 3.1 (1992), Wi
 
 **Software engineering** is defined as a process of analyzing user requirements and then designing, building, and testing a software application that will satisfy those requirements.
 
-![Lecture 03, Slide 4 — The software development cycle](../images/L03_p04.png)
+![Figure 2. The software development cycle (slide 4)](../images/L03_p04.png)
 
-*Lecture 03, Slide 4 — The software development cycle*
+*Figure 2. The software development cycle (slide 4)*
 
 The software development cycle consists of six phases: (1) planning, (2) analysis, (3) design, (4) implementation, (5) testing and integration, and (6) maintenance.
 
@@ -83,9 +83,9 @@ Secure software engineering **incorporates security throughout the software deve
 |:--|:--------------------------|:----------------------------------------|
 | Focus | Functionality, timeliness, deliverables | Limiting functionality, enforcing security policies, defining constraints |
 
-![Lecture 03, Slide 7 — DevOpsSec, DevSecOps, and SecDevOps](../images/L03_p07.png)
+![Figure 3. DevOpsSec, DevSecOps, and SecDevOps (slide 7)](../images/L03_p07.png)
 
-*Lecture 03, Slide 7 — DevOpsSec, DevSecOps, and SecDevOps*
+*Figure 3. DevOpsSec, DevSecOps, and SecDevOps (slide 7)*
 
 The three rings show the phases of a DevOps cycle (design, code, build, test, release, maintain, operate), and the highlighted segments mark where security is applied:
 
@@ -98,9 +98,9 @@ The three rings show the phases of a DevOps cycle (design, code, build, test, re
 - **Microsoft SDL** reported about 50% to 60% fewer security defects.
 - Shift-left security is no longer just best practice: **CISA's Secure by Design pledge** (2024) and the **EU Cyber Resilience Act** (obligations from 2026 to 2027) make it a legal expectation.
 
-![Lecture 03, Slide 8 — Relative cost to fix, based on time of detection](../images/L03_p08.png)
+![Figure 4. Relative cost to fix, based on time of detection (slide 8)](../images/L03_p08.png)
 
-*Lecture 03, Slide 8 — Relative cost to fix, based on time of detection*
+*Figure 4. Relative cost to fix, based on time of detection (slide 8)*
 
 | Phase in Which the Defect Is Detected | Relative Cost to Fix |
 |:--------------------------------------|:--------------------:|
@@ -122,9 +122,9 @@ Source: National Institute of Standards and Technology (NIST)
 
 A **secure SDLC** integrates security testing and other security activities into an existing development process.
 
-![Lecture 03, Slide 9 — Software/system development life cycle](../images/L03_p09.png)
+![Figure 5. Software/system development life cycle (slide 9)](../images/L03_p09.png)
 
-*Lecture 03, Slide 9 — Software/system development life cycle*
+*Figure 5. Software/system development life cycle (slide 9)*
 
 The cycle consists of requirement analysis, design, implementation, testing, and evolution, after which it starts again.
 

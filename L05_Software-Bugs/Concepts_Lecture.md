@@ -1,6 +1,6 @@
 # Lecture 05 — Software Bugs
 
-> **Last Updated:** 2026-10-06
+> **Last Updated:** 2026-10-08
 >
 > Software Security: Principles, Policies, and Protection, Payer - Ch 4, 5
 
@@ -234,9 +234,9 @@ Parent *p = static_cast<Parent*>(c);   // OK
 Child2 *d = static_cast<Child2*>(p);   // Fail!
 ```
 
-![Lecture 05, Slide 16 — Upcast to Parent (legal) and downcast to Child2 (illegal)](../images/L05_p16.png)
+![Figure 1. Upcast to Parent (legal) and downcast to Child2 (illegal) (slide 16)](../images/L05_p16.png)
 
-*Lecture 05, Slide 16 — Upcast to Parent (legal) and downcast to Child2 (illegal)*
+*Figure 1. Upcast to Parent (legal) and downcast to Child2 (illegal) (slide 16)*
 
 The upcast from `Child1` to `Parent` is always legal (green arrow). The downcast from `Parent` to `Child2` is illegal (red arrow), because the object is actually a `Child1`, and `static_cast` does not check this at run time.
 

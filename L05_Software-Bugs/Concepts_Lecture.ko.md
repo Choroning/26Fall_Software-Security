@@ -1,6 +1,6 @@
 # 강의 05 — 소프트웨어 버그
 
-> **최종 수정일:** 2026-10-06
+> **최종 수정일:** 2026-10-08
 >
 > Software Security: Principles, Policies, and Protection, Payer - Ch 4, 5
 
@@ -234,9 +234,9 @@ Parent *p = static_cast<Parent*>(c);   // OK
 Child2 *d = static_cast<Child2*>(p);   // Fail!
 ```
 
-![Lecture 05, Slide 16 — Parent로의 업캐스트(올바름)와 Child2로의 다운캐스트(잘못됨)](../images/L05_p16.png)
+![그림 1. Parent로의 업캐스트(올바름)와 Child2로의 다운캐스트(잘못됨) (슬라이드 16)](../images/L05_p16.png)
 
-*Lecture 05, Slide 16 — Parent로의 업캐스트(올바름)와 Child2로의 다운캐스트(잘못됨)*
+*그림 1. Parent로의 업캐스트(올바름)와 Child2로의 다운캐스트(잘못됨) (슬라이드 16)*
 
 `Child1`에서 `Parent`로의 업캐스트는 항상 올바르다(초록색 화살표). `Parent`에서 `Child2`로의 다운캐스트는 잘못된 것이다(빨간색 화살표). 객체가 실제로는 `Child1`이지만 `static_cast`는 이를 실행 시간에 검사하지 않기 때문이다.
 

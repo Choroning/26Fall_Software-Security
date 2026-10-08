@@ -1,6 +1,6 @@
 # Lecture 02 — Basic Principles
 
-> **Last Updated:** 2026-10-06
+> **Last Updated:** 2026-10-08
 >
 > Software Security: Principles, Policies, and Protection, Payer - Ch 2
 
@@ -175,15 +175,15 @@ The **principle of least privilege** ensures that a component has the **least pr
 - This property **constrains the privileges an attacker can obtain**.
 - **Example:** Rendering in Chromium executes in an encapsulated **sandbox** where only minimal system calls are allowed.
 
-![Lecture 02, Slide 14 — Temporal system call specialization for an Apache process](../images/L02_p14.png)
+![Figure 1. Temporal system call specialization for an Apache process (slide 14)](../images/L02_p14.png)
 
-*Lecture 02, Slide 14 — Temporal system call specialization for an Apache process*
+*Figure 1. Temporal system call specialization for an Apache process (slide 14)*
 
 The slide cites *Temporal System Call Specialization for Attack Surface Reduction* (USENIX Security 2020). A server such as Apache needs many system calls during its **initialization** phase (e.g., `bind`, `listen`, `fork`, `execve`, `setns`), but far fewer during its **serving** phase (e.g., `read`, `writev`, `mmap`). Unused libc functions and system calls that are only needed for initialization can therefore be blocked once the server starts serving requests, which applies least privilege over time.
 
-![Lecture 02, Slide 15 — POSIX capabilities](../images/L02_p15.png)
+![Figure 2. POSIX capabilities (slide 15)](../images/L02_p15.png)
 
-*Lecture 02, Slide 15 — POSIX capabilities*
+*Figure 2. POSIX capabilities (slide 15)*
 
 The table on Slide 15 lists **POSIX capabilities**: capabilities from the POSIX draft (e.g., `CAP_CHOWN`, `CAP_DAC_OVERRIDE`, `CAP_KILL`, `CAP_SETUID`) and Linux-specific extensions (e.g., `CAP_NET_BIND_SERVICE`, `CAP_NET_ADMIN`, `CAP_NET_RAW`, `CAP_SYS_MODULE`, `CAP_SYS_PTRACE`, `CAP_SYS_ADMIN`). Capabilities split the all-powerful root privilege into fine-grained units, so a process can receive only the privileges it needs. For example, a web server can be given `CAP_NET_BIND_SERVICE` to bind to port 80 without running as root.
 
@@ -208,9 +208,9 @@ There are two possible approaches:
 | **sendmail** | A typical Unix approach with a **large monolithic server** | Known for high complexity and previous security vulnerabilities |
 | **qmail** | A modern **least privilege** approach with a set of **communicating processes** | Each process runs with only the privileges it needs |
 
-![Lecture 02, Slide 19 — qmail components](../images/L02_p19.png)
+![Figure 3. qmail components (slide 19)](../images/L02_p19.png)
 
-*Lecture 02, Slide 19 — qmail components*
+*Figure 3. qmail components (slide 19)*
 
 | Component | Role |
 |:----------|:-----|
@@ -225,9 +225,9 @@ There are two possible approaches:
 
 ### 3.5 Example: Docker
 
-![Lecture 02, Slide 21 — Containers (Docker) versus virtual machines](../images/L02_p21.png)
+![Figure 4. Containers (Docker) versus virtual machines (slide 21)](../images/L02_p21.png)
 
-*Lecture 02, Slide 21 — Containers (Docker) versus virtual machines*
+*Figure 4. Containers (Docker) versus virtual machines (slide 21)*
 
 | | Containers (Docker) | Virtual Machines |
 |:--|:--------------------|:-----------------|
@@ -255,9 +255,9 @@ The way an operating system is layered determines how much isolation and compart
 
 ### 4.1 Single Domain OS
 
-![Lecture 02, Slide 23 — Single domain OS](../images/L02_p23.png)
+![Figure 5. Single domain OS (slide 23)](../images/L02_p23.png)
 
-*Lecture 02, Slide 23 — Single domain OS*
+*Figure 5. Single domain OS (slide 23)*
 
 - A **single layer** with no isolation or compartmentalization.
 - All code runs in the same domain: the application can directly call into operating system drivers.
@@ -265,9 +265,9 @@ The way an operating system is layered determines how much isolation and compart
 
 ### 4.2 Monolithic OS
 
-![Lecture 02, Slide 24 — Monolithic OS](../images/L02_p24.png)
+![Figure 6. Monolithic OS (slide 24)](../images/L02_p24.png)
 
-*Lecture 02, Slide 24 — Monolithic OS*
+*Figure 6. Monolithic OS (slide 24)*
 
 - **Two layers:** the operating system and applications.
 - The OS manages resources and orchestrates access.
@@ -276,9 +276,9 @@ The way an operating system is layered determines how much isolation and compart
 
 ### 4.3 Microkernel
 
-![Lecture 02, Slide 25 — Microkernel](../images/L02_p25.png)
+![Figure 7. Microkernel (slide 25)](../images/L02_p25.png)
 
-*Lecture 02, Slide 25 — Microkernel*
+*Figure 7. Microkernel (slide 25)*
 
 - **Many layers:** each component is a separate process.
 - Only essential parts are privileged:
@@ -286,9 +286,9 @@ The way an operating system is layered determines how much isolation and compart
   - Process management (scheduling)
   - Process communication (IPC)
 
-![Lecture 02, Slide 26 — Monolithic kernel versus microkernel based operating systems](../images/L02_p26.png)
+![Figure 8. Monolithic kernel versus microkernel based operating systems (slide 26)](../images/L02_p26.png)
 
-*Lecture 02, Slide 26 — Monolithic kernel versus microkernel based operating systems*
+*Figure 8. Monolithic kernel versus microkernel based operating systems (slide 26)*
 
 In a monolithic kernel, the VFS, IPC, file system, scheduler, virtual memory, and device drivers all run in kernel mode. In a microkernel, only basic IPC, virtual memory, and scheduling remain in kernel mode, while the file system, device drivers, and servers run in user mode.
 
@@ -370,17 +370,17 @@ Authorization answers the question "**who can access what information?**"
 
 **Bell-LaPadula**
 
-![Lecture 02, Slide 34 — Bell-LaPadula model](../images/L02_p34.png)
+![Figure 9. Bell-LaPadula model (slide 34)](../images/L02_p34.png)
 
-*Lecture 02, Slide 34 — Bell-LaPadula model*
+*Figure 9. Bell-LaPadula model (slide 34)*
 
 - Bell-LaPadula only enforces **confidentiality**.
 - A given clearance allows **reading objects of lower or equal clearance** and **writing files of equal or higher clearance**.
 - Summarized as **read-down, write-up** ("no read up, no write down"): information cannot flow down to a less secure level.
 
-![Lecture 02, Slide 35 — Bell-LaPadula rules](../images/L02_p35.png)
+![Figure 10. Bell-LaPadula rules (slide 35)](../images/L02_p35.png)
 
-*Lecture 02, Slide 35 — Bell-LaPadula rules*
+*Figure 10. Bell-LaPadula rules (slide 35)*
 
 | Rule | Meaning |
 |:-----|:--------|
@@ -392,9 +392,9 @@ Authorization answers the question "**who can access what information?**"
 
 **Biba**
 
-![Lecture 02, Slide 36 — Biba model](../images/L02_p36.png)
+![Figure 11. Biba model (slide 36)](../images/L02_p36.png)
 
-*Lecture 02, Slide 36 — Biba model*
+*Figure 11. Biba model (slide 36)*
 
 - Biba enforces **integrity**.
 - A given clearance allows **reading files of higher or equal clearance** and **writing files of lower or equal clearance**.
@@ -415,9 +415,9 @@ Authorization answers the question "**who can access what information?**"
 
 DAC is represented by an **access control matrix**: a table of subjects and objects indicating what actions individual subjects can take upon individual objects.
 
-![Lecture 02, Slide 38 — Access control matrix](../images/L02_p38.png)
+![Figure 12. Access control matrix (slide 38)](../images/L02_p38.png)
 
-*Lecture 02, Slide 38 — Access control matrix*
+*Figure 12. Access control matrix (slide 38)*
 
 | Subject | `/etc/passwd` | `/usr/bin/` | `/u/roberto/` | `/admin/` |
 |:--------|:--------------|:------------|:--------------|:----------|
@@ -436,9 +436,9 @@ The policy is defined in terms of **roles** (sets of permissions): individuals a
 - Users get assigned specific roles.
 - Administration privileges may be a role.
 
-![Lecture 02, Slide 39 — Role-based access control](../images/L02_p39.png)
+![Figure 13. Role-based access control (slide 39)](../images/L02_p39.png)
 
-*Lecture 02, Slide 39 — Role-based access control*
+*Figure 13. Role-based access control (slide 39)*
 
 In the figure, many users are mapped to a small number of roles (e.g., "Network Admin" and "Network Operator"), and each role is linked to sets of rules such as command rules, feature rules, VLAN policies, and interface policies. Changing a role's rules updates the permissions of every user assigned to it.
 

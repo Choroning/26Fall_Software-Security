@@ -1,6 +1,6 @@
 # Lecture 08 — Advanced Mitigations
 
-> **Last Updated:** 2026-10-06
+> **Last Updated:** 2026-10-08
 >
 > Software Security: Principles, Policies, and Protection, Payer - Ch 6
 
@@ -117,9 +117,9 @@ The advanced mitigations target the two remaining categories:
 
 A **shadow stack** is a second stack for each thread that keeps track of control data (e.g., the return instruction pointer, or the base pointer).
 
-![Lecture 08, Slide 14 — A shadow stack mirrors the return addresses of the main stack](../images/L08_p14.png)
+![Figure 1. A shadow stack mirrors the return addresses of the main stack (slide 14)](../images/L08_p14.png)
 
-*Lecture 08, Slide 14 — A shadow stack mirrors the return addresses of the main stack*
+*Figure 1. A shadow stack mirrors the return addresses of the main stack (slide 14)*
 
 - Not all implementations protect all types of data.
 - Data on the shadow stack is **integrity protected**:
@@ -133,9 +133,9 @@ A **shadow stack** is a second stack for each thread that keeps track of control
 
 A **safe stack** splits each function's frame into a safe part and an unsafe part.
 
-![Lecture 08, Slide 16 — Safe variables stay on the safe stack; the overflowable buffer goes to the regular stack](../images/L08_p16.png)
+![Figure 2. Safe variables stay on the safe stack; the overflowable buffer goes to the regular stack (slide 16)](../images/L08_p16.png)
 
-*Lecture 08, Slide 16 — Safe variables stay on the safe stack; the overflowable buffer goes to the regular stack*
+*Figure 2. Safe variables stay on the safe stack; the overflowable buffer goes to the regular stack (slide 16)*
 
 - The core idea is to decide, **for each variable in a stack frame, whether it is safe**.
 - Variables are **safe** if they are only used in a safe context: they do not escape the current function and are only used with bounded pointer arithmetic.
@@ -244,17 +244,17 @@ The overhead of existing memory safety solutions is the problem: SoftBound+CETS 
 - We can **over-approximate** and identify sensitive pointers through their **types**: all types of sensitive pointers are sensitive.
 - Over-approximation only affects performance, not security.
 
-![Lecture 08, Slide 31 — Sensitive pointers are identified transitively by type](../images/L08_p31.png)
+![Figure 3. Sensitive pointers are identified transitively by type (slide 31)](../images/L08_p31.png)
 
-*Lecture 08, Slide 31 — Sensitive pointers are identified transitively by type*
+*Figure 3. Sensitive pointers are identified transitively by type (slide 31)*
 
 In the figure, a struct that contains a function pointer is sensitive, and a pointer to that struct is also sensitive, so the "sensitive" marking propagates transitively through the type graph, while plain data (such as an `int`) is left unprotected.
 
 ### 4.4 Memory Layout
 
-![Lecture 08, Slide 32 — Memory is split into a protected safe plane and a regular plane](../images/L08_p32.png)
+![Figure 4. Memory is split into a protected safe plane and a regular plane (slide 32)](../images/L08_p32.png)
 
-*Lecture 08, Slide 32 — Memory is split into a protected safe plane and a regular plane*
+*Figure 4. Memory is split into a protected safe plane and a regular plane (slide 32)*
 
 - The memory view is split into two views: a **control plane** and a **data plane**.
   - The **control plane** contains only code pointers (and transitively all related pointers).

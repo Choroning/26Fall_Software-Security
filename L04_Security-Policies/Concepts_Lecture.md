@@ -1,6 +1,6 @@
 # Lecture 04 — Security Policies
 
-> **Last Updated:** 2026-10-06
+> **Last Updated:** 2026-10-08
 >
 > Software Security: Principles, Policies, and Protection, Payer - Ch 4
 
@@ -161,15 +161,15 @@ The slide also overlays a news article, "Firefox gets patch for critical 0-day t
 - It applies **optimizations to minimize the performance impact**.
 - It handles **object allocation patterns to maximize detection coverage**.
 
-![Lecture 04, Slide 11 — HexType overview](../images/L04_p11.png)
+![Figure 1. HexType overview (slide 11)](../images/L04_p11.png)
 
-*Lecture 04, Slide 11 — HexType overview*
+*Figure 1. HexType overview (slide 11)*
 
 HexType is built as an LLVM pass in Clang. The source code is instrumented for **type casting verification** and for **object tracking**, the type hierarchy information is extracted, and the result is linked with the **HexType runtime library** to produce a hardened binary.
 
-![Lecture 04, Slide 12 — Type casting verification in HexType](../images/L04_p12.png)
+![Figure 2. Type casting verification in HexType (slide 12)](../images/L04_p12.png)
 
-*Lecture 04, Slide 12 — Type casting verification in HexType*
+*Figure 2. Type casting verification in HexType (slide 12)*
 
 ```cpp
 // [Source code]
@@ -296,9 +296,9 @@ std::cout << *vptr;          // Bug (use-after-free)
 - There is **no way to free data**; memory is reused implicitly after **garbage collection**.
 - The language and the runtime system enforce safety. What about the **overhead**?
 
-![Lecture 04, Slide 23 — Normalized energy, time, and memory across programming languages](../images/L04_p23.png)
+![Figure 3. Normalized energy, time, and memory across programming languages (slide 23)](../images/L04_p23.png)
 
-*Lecture 04, Slide 23 — Normalized energy, time, and memory across programming languages*
+*Figure 3. Normalized energy, time, and memory across programming languages (slide 23)*
 
 The table from R. Pereira et al., "Energy Efficiency across Programming Languages" (ACM SLE 2017), normalizes the results to the best language ((c) compiled, (v) virtual machine, (i) interpreted):
 
@@ -329,21 +329,21 @@ if (something) {
 
 **Rust** is a multi-paradigm programming language designed for **performance and safety**.
 
-![Lecture 04, Slide 25 — Most loved languages in a developer survey](../images/L04_p25.png)
+![Figure 4. Most loved languages in a developer survey (slide 25)](../images/L04_p25.png)
 
-*Lecture 04, Slide 25 — Most loved languages in a developer survey*
+*Figure 4. Most loved languages in a developer survey (slide 25)*
 
 In the developer survey on the slide ("loved" means the percentage of developers who are developing with the language and want to continue), Rust ranks first with 79.1%, followed by Swift (72.1%), F# (70.7%), Scala (69.4%), Go (68.7%), Clojure (66.7%), React (66.0%), Haskell (64.7%), Python (62.5%), C# (62.0%), and Node.js (59.6%).
 
-![Lecture 04, Slide 26 — Why Rust?](../images/L04_p26.png)
+![Figure 5. Why Rust? (slide 26)](../images/L04_p26.png)
 
-*Lecture 04, Slide 26 — Why Rust?*
+*Figure 5. Why Rust? (slide 26)*
 
 C/C++ offer more control with less safety, and Java and Python offer more safety with less control. **Rust offers more control and more safety.**
 
-![Lecture 04, Slide 29 — Rust ownership](../images/L04_p29.png)
+![Figure 6. Rust ownership (slide 29)](../images/L04_p29.png)
 
-*Lecture 04, Slide 29 — Rust ownership*
+*Figure 6. Rust ownership (slide 29)*
 
 - All allocated memory is **"owned" by a unique owner**.
 - **Ownership can transfer** to another variable (`let x = v;`).
@@ -357,9 +357,9 @@ C/C++ offer more control with less safety, and Java and Python offer more safety
 
 ### 5.3 Rust in Production: Android
 
-![Lecture 04, Slide 27 — Memory safety bugs as a share of all Android vulnerabilities](../images/L04_p27.png)
+![Figure 7. Memory safety bugs as a share of all Android vulnerabilities (slide 27)](../images/L04_p27.png)
 
-*Lecture 04, Slide 27 — Memory safety bugs as a share of all Android vulnerabilities*
+*Figure 7. Memory safety bugs as a share of all Android vulnerabilities (slide 27)*
 
 | Year | Memory Safety Bugs (Share of All Android Vulnerabilities) |
 |:-----|:----------------------------------------------------------|
@@ -420,9 +420,9 @@ How can we enforce memory safety for C/C++, and what makes C/C++ memory unsafe? 
   - Normal, never-NULL, and **fat pointers** (a fat pointer consists of address, base, and size).
   - Focuses on both spatial and temporal memory safety.
 
-![Lecture 04, Slide 36 — Performance of C, Cyclone, and Java](../images/L04_p36.png)
+![Figure 8. Performance of C, Cyclone, and Java (slide 36)](../images/L04_p36.png)
 
-*Lecture 04, Slide 36 — Performance of C, Cyclone, and Java*
+*Figure 8. Performance of C, Cyclone, and Java (slide 36)*
 
 The chart (Great Programming Language Shootout, from the Cyclone paper) shows the elapsed time normalized to gcc. Cyclone is usually close to C, while Java is often several times slower. The cost of a dialect is therefore less about speed and more about **porting**: existing C code must be rewritten for the safe subset.
 
@@ -514,9 +514,9 @@ The original loop copies input into the 3-byte `acctID` until a zero byte is rea
 3. **Propagate** the version on pointer assignment.
 4. **Check** whether the versions of the pointer and the object match when dereferenced.
 
-![Lecture 04, Slide 46 — CETS per-pointer metadata](../images/L04_p46.png)
+![Figure 9. CETS per-pointer metadata (slide 46)](../images/L04_p46.png)
 
-*Lecture 04, Slide 46 — CETS per-pointer metadata*
+*Figure 9. CETS per-pointer metadata (slide 46)*
 
 Each pointer carries per-pointer metadata: a **key** and a **lock address**. The lock address points to a **lock** location that stores the key of the currently valid allocation.
 

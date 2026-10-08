@@ -1,6 +1,6 @@
 # 강의 04 — 보안 정책
 
-> **최종 수정일:** 2026-10-06
+> **최종 수정일:** 2026-10-08
 >
 > Software Security: Principles, Policies, and Protection, Payer - Ch 4
 
@@ -161,15 +161,15 @@ static_cast<C*>(pptr);   // shown on the slide as static_cast<cptr*>(pptr)
 - **성능 영향을 최소화하기 위한 최적화**를 적용한다.
 - **탐지 범위를 최대화하기 위해 객체 할당 패턴**을 처리한다.
 
-![Lecture 04, Slide 11 — HexType 개요](../images/L04_p11.png)
+![그림 1. HexType 개요 (슬라이드 11)](../images/L04_p11.png)
 
-*Lecture 04, Slide 11 — HexType 개요*
+*그림 1. HexType 개요 (슬라이드 11)*
 
 HexType은 Clang의 LLVM 패스로 구현된다. 소스 코드에 **타입 캐스팅 검증**과 **객체 추적**을 위한 계측 코드를 삽입하고, 타입 계층 정보를 추출한 뒤, **HexType 런타임 라이브러리**와 링크하여 강화된(hardened) 바이너리를 만든다.
 
-![Lecture 04, Slide 12 — HexType의 타입 캐스팅 검증](../images/L04_p12.png)
+![그림 2. HexType의 타입 캐스팅 검증 (슬라이드 12)](../images/L04_p12.png)
 
-*Lecture 04, Slide 12 — HexType의 타입 캐스팅 검증*
+*그림 2. HexType의 타입 캐스팅 검증 (슬라이드 12)*
 
 ```cpp
 // [Source code]
@@ -296,9 +296,9 @@ std::cout << *vptr;          // Bug (use-after-free)
 - **데이터를 해제할 방법이 없으며**, 메모리는 **가비지 컬렉션** 이후 암묵적으로 재사용된다.
 - 언어와 런타임 시스템이 안전성을 강제한다. 그렇다면 **오버헤드**는?
 
-![Lecture 04, Slide 23 — 프로그래밍 언어별 정규화된 에너지, 시간, 메모리](../images/L04_p23.png)
+![그림 3. 프로그래밍 언어별 정규화된 에너지, 시간, 메모리 (슬라이드 23)](../images/L04_p23.png)
 
-*Lecture 04, Slide 23 — 프로그래밍 언어별 정규화된 에너지, 시간, 메모리*
+*그림 3. 프로그래밍 언어별 정규화된 에너지, 시간, 메모리 (슬라이드 23)*
 
 R. Pereira 외, "Energy Efficiency across Programming Languages"(ACM SLE 2017)의 표는 결과를 가장 좋은 언어 기준으로 정규화한다((c) 컴파일, (v) 가상 머신, (i) 인터프리터).
 
@@ -329,21 +329,21 @@ if (something) {
 
 **Rust**는 **성능과 안전성**을 위해 설계된 다중 패러다임 프로그래밍 언어이다.
 
-![Lecture 04, Slide 25 — 개발자 설문의 가장 사랑받는 언어](../images/L04_p25.png)
+![그림 4. 개발자 설문의 가장 사랑받는 언어 (슬라이드 25)](../images/L04_p25.png)
 
-*Lecture 04, Slide 25 — 개발자 설문의 가장 사랑받는 언어*
+*그림 4. 개발자 설문의 가장 사랑받는 언어 (슬라이드 25)*
 
 슬라이드의 개발자 설문("loved"는 해당 언어로 개발 중이며 계속 사용하고 싶다고 답한 개발자의 비율)에서 Rust가 79.1%로 1위이고, 그 뒤를 Swift(72.1%), F#(70.7%), Scala(69.4%), Go(68.7%), Clojure(66.7%), React(66.0%), Haskell(64.7%), Python(62.5%), C#(62.0%), Node.js(59.6%)가 잇는다.
 
-![Lecture 04, Slide 26 — 왜 Rust인가?](../images/L04_p26.png)
+![그림 5. 왜 Rust인가? (슬라이드 26)](../images/L04_p26.png)
 
-*Lecture 04, Slide 26 — 왜 Rust인가?*
+*그림 5. 왜 Rust인가? (슬라이드 26)*
 
 C/C++는 제어 능력이 크지만 안전성이 낮고, Java와 Python은 안전성이 높지만 제어 능력이 작다. **Rust는 더 큰 제어 능력과 더 높은 안전성을 함께 제공한다.**
 
-![Lecture 04, Slide 29 — Rust의 소유권](../images/L04_p29.png)
+![그림 6. Rust의 소유권 (슬라이드 29)](../images/L04_p29.png)
 
-*Lecture 04, Slide 29 — Rust의 소유권*
+*그림 6. Rust의 소유권 (슬라이드 29)*
 
 - 할당된 모든 메모리는 **고유한 하나의 소유자에게 "소유"** 된다.
 - **소유권은 다른 변수로 이전될 수 있다**(`let x = v;`).
@@ -357,9 +357,9 @@ C/C++는 제어 능력이 크지만 안전성이 낮고, Java와 Python은 안�
 
 ### 5.3 실제 환경의 Rust: Android
 
-![Lecture 04, Slide 27 — 전체 Android 취약점 중 메모리 안전성 버그의 비율](../images/L04_p27.png)
+![그림 7. 전체 Android 취약점 중 메모리 안전성 버그의 비율 (슬라이드 27)](../images/L04_p27.png)
 
-*Lecture 04, Slide 27 — 전체 Android 취약점 중 메모리 안전성 버그의 비율*
+*그림 7. 전체 Android 취약점 중 메모리 안전성 버그의 비율 (슬라이드 27)*
 
 | 연도 | 메모리 안전성 버그 (전체 Android 취약점 중 비율) |
 |:-----|:----------------------------------------------------------|
@@ -420,9 +420,9 @@ C/C++에서 메모리 안전성을 어떻게 강제할 수 있으며, 무엇이 
   - 일반 포인터, 절대 NULL이 아닌 포인터, **팻 포인터(fat pointer)**(팻 포인터는 주소, 기준 주소, 크기로 구성된다).
   - 공간적, 시간적 메모리 안전성을 모두 다룬다.
 
-![Lecture 04, Slide 36 — C, Cyclone, Java의 성능](../images/L04_p36.png)
+![그림 8. C, Cyclone, Java의 성능 (슬라이드 36)](../images/L04_p36.png)
 
-*Lecture 04, Slide 36 — C, Cyclone, Java의 성능*
+*그림 8. C, Cyclone, Java의 성능 (슬라이드 36)*
 
 그래프(Cyclone 논문의 Great Programming Language Shootout)는 gcc 기준으로 정규화한 실행 시간을 보여 준다. Cyclone은 대체로 C에 가깝고, Java는 종종 몇 배 느리다. 따라서 방언의 비용은 속도보다는 **이식**에 있다. 기존 C 코드를 안전한 부분집합에 맞게 다시 작성해야 한다.
 
@@ -514,9 +514,9 @@ void acctInit() {
 3. 포인터 대입 시 버전을 **전파**한다.
 4. 역참조할 때 포인터와 객체의 버전이 일치하는지 **검사**한다.
 
-![Lecture 04, Slide 46 — CETS의 포인터별 메타데이터](../images/L04_p46.png)
+![그림 9. CETS의 포인터별 메타데이터 (슬라이드 46)](../images/L04_p46.png)
 
-*Lecture 04, Slide 46 — CETS의 포인터별 메타데이터*
+*그림 9. CETS의 포인터별 메타데이터 (슬라이드 46)*
 
 각 포인터는 포인터별 메타데이터로 **키(key)** 와 **락 주소(lock address)** 를 가진다. 락 주소는 현재 유효한 할당의 키를 저장하는 **락(lock)** 위치를 가리킨다.
 

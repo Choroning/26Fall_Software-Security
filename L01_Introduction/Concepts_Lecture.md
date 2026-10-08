@@ -1,6 +1,6 @@
 # Lecture 01 — Introduction
 
-> **Last Updated:** 2026-10-06
+> **Last Updated:** 2026-10-08
 >
 > Software Security: Principles, Policies, and Protection, Payer - Ch 1
 
@@ -149,9 +149,9 @@ Modern computer systems are **mainly implemented in C/C++**.
 
 ### 2.2 Vulnerabilities on the Rise
 
-![Lecture 01, Slide 16 — Number of published CVEs per year (2012 to 2025)](../images/L01_p16.png)
+![Figure 1. Number of published CVEs per year (2012 to 2025) (slide 16)](../images/L01_p16.png)
 
-*Lecture 01, Slide 16 — Number of published CVEs per year (2012 to 2025)*
+*Figure 1. Number of published CVEs per year (2012 to 2025) (slide 16)*
 
 | Year | Published CVEs (values labeled on the chart) |
 |:-----|:--------------------------------------------|
@@ -169,9 +169,9 @@ Modern computer systems are **mainly implemented in C/C++**.
 
 ### 2.3 Type and Memory Safety Violations Are Common
 
-![Lecture 01, Slide 17 — 63% of all Microsoft patches are memory and type safety violations](../images/L01_p17.png)
+![Figure 2. 63% of all Microsoft patches are memory and type safety violations (slide 17)](../images/L01_p17.png)
 
-*Lecture 01, Slide 17 — 63% of all Microsoft patches are memory and type safety violations*
+*Figure 2. 63% of all Microsoft patches are memory and type safety violations (slide 17)*
 
 - According to the slide, **63% of all Microsoft patches** address **memory and type safety violations**, and the remaining 37% address other vulnerability classes.
 - Data source: ZDNet, "Microsoft: 70 percent of all security bugs are memory safety issues"
@@ -182,9 +182,9 @@ Modern computer systems are **mainly implemented in C/C++**.
 
 C/C++ **trade type and memory safety for performance**.
 
-![Lecture 01, Slide 18 — Type safety violation (top) and memory safety violation (bottom)](../images/L01_p18.png)
+![Figure 3. Type safety violation (top) and memory safety violation (bottom) (slide 18)](../images/L01_p18.png)
 
-*Lecture 01, Slide 18 — Type safety violation (top) and memory safety violation (bottom)*
+*Figure 3. Type safety violation (top) and memory safety violation (bottom) (slide 18)*
 
 | Violation | Definition | Illustration on the Slide |
 |:----------|:-----------|:--------------------------|
@@ -253,9 +253,9 @@ The commented "equivalent" loop explains both restrictions. The copy proceeds by
 
 ### 3.4 Use After Free
 
-![Lecture 01, Slide 22 — Use after free: a dangling pointer ends up pointing to a new object](../images/L01_p22.png)
+![Figure 4. Use after free: a dangling pointer ends up pointing to a new object (slide 22)](../images/L01_p22.png)
 
-*Lecture 01, Slide 22 — Use after free: a dangling pointer ends up pointing to a new object*
+*Figure 4. Use after free: a dangling pointer ends up pointing to a new object (slide 22)*
 
 | Time | Event |
 |:-----|:------|
@@ -301,9 +301,9 @@ Address Sanitizer is the **most widely used sanitizer**.
 - It uses **shadow memory** to record whether each byte is accessible.
 - It has detected **over 10,000 memory safety violations**.
 
-![Lecture 01, Slide 24 — ASan checks `IsAccessible(p)` in shadow memory before each access; touching a redzone reports a bug](../images/L01_p24.png)
+![Figure 5. ASan checks `IsAccessible(p)` in shadow memory before each access; touching a redzone reports a bug (slide 24)](../images/L01_p24.png)
 
-*Lecture 01, Slide 24 — ASan checks `IsAccessible(p)` in shadow memory before each access; touching a redzone reports a bug*
+*Figure 5. ASan checks `IsAccessible(p)` in shadow memory before each access; touching a redzone reports a bug (slide 24)*
 
 The detection works in three steps:
 
@@ -319,9 +319,9 @@ The detection works in three steps:
 - To **detect** triggered bugs, fuzzers **leverage sanitizers**.
 - **Fuzzer + Sanitizer** is a popular and effective combination.
 
-![Lecture 01, Slide 25 — The fuzzer sends random inputs to a sanitizer-instrumented target (e.g., Chrome built with LLVM or GCC) and uses feedback to find bugs](../images/L01_p25.png)
+![Figure 6. The fuzzer sends random inputs to a sanitizer-instrumented target (e.g., Chrome built with LLVM or GCC) and uses feedback to find bugs (slide 25)](../images/L01_p25.png)
 
-*Lecture 01, Slide 25 — The fuzzer sends random inputs to a sanitizer-instrumented target (e.g., Chrome built with LLVM or GCC) and uses feedback to find bugs*
+*Figure 6. The fuzzer sends random inputs to a sanitizer-instrumented target (e.g., Chrome built with LLVM or GCC) and uses feedback to find bugs (slide 25)*
 
 The two tools complement each other. The fuzzer is good at *reaching* buggy states but is bad at *noticing* silent memory corruption. The sanitizer is good at *noticing* corruption the moment it happens but cannot generate inputs. Combined, a silent out-of-bounds write that would otherwise go unnoticed becomes an immediate, reproducible crash report.
 
@@ -379,9 +379,9 @@ The first area focuses on **developing advanced sanitizers and fuzzers**. The wo
 
 ### 6.1 Why Rust
 
-![Lecture 01, Slide 30 — Languages positioned by control/performance and safety (left) and "love for programming language" over time (right)](../images/L01_p30.png)
+![Figure 7. Languages positioned by control/performance and safety (left) and "love for programming language" over time (right) (slide 30)](../images/L01_p30.png)
 
-*Lecture 01, Slide 30 — Languages positioned by control/performance and safety (left) and "love for programming language" over time (right)*
+*Figure 7. Languages positioned by control/performance and safety (left) and "love for programming language" over time (right) (slide 30)*
 
 - **Left chart:** C and C++ offer high control and performance but low safety. Go, Java, and ML trade some control for more safety, and Haskell offers high safety with less control. **Rust** is positioned at the top right, offering **both** control/performance **and** safety.
 - **Right chart:** In the developer preference survey from 2015 to 2019 (Rust, Kotlin, Python, Go, and Swift), Rust is consistently the most loved language.
@@ -391,17 +391,17 @@ The first area focuses on **developing advanced sanitizers and fuzzers**. The wo
 - **Government policy:** A news article titled "White House urges software developers to use memory-safe programming languages" (February 2024) reports that a number of headline-making cyberattacks started with memory safety flaws, according to a White House cyber official.
 - **Firefox:** The share of C/C++ lines in Firefox steadily decreased while the share of Rust lines increased.
 
-![Lecture 01, Slide 32 — C/C++ and Rust usage in Firefox (2019 to 2020)](../images/L01_p32.png)
+![Figure 8. C/C++ and Rust usage in Firefox (2019 to 2020) (slide 32)](../images/L01_p32.png)
 
-*Lecture 01, Slide 32 — C/C++ and Rust usage in Firefox (2019 to 2020)*
+*Figure 8. C/C++ and Rust usage in Firefox (2019 to 2020) (slide 32)*
 
 > **Note:** In the chart, the C/C++ share (blue) drops from about 94% to about 88% within roughly a year and a half, and the Rust share (red) grows correspondingly. Mozilla created Rust in the first place to write a safer browser engine, and rewrote components such as the CSS engine (Stylo) in Rust.
 
 ### 6.3 Ownership
 
-![Lecture 01, Slide 33 — In `let x = v;`, the variable `x` owns the value `v`](../images/L01_p33.png)
+![Figure 9. In `let x = v;`, the variable `x` owns the value `v` (slide 33)](../images/L01_p33.png)
 
-*Lecture 01, Slide 33 — In `let x = v;`, the variable `x` owns the value `v`*
+*Figure 9. In `let x = v;`, the variable `x` owns the value `v` (slide 33)*
 
 - All allocated memory is **"owned" by a unique owner**.
 - **Ownership can transfer** to another variable.
@@ -441,9 +441,9 @@ Rust contains **a second language hidden inside it** that does not enforce these
 
 ## 7. Research Area 3: Autonomous Vehicle and Drone Security
 
-![Lecture 01, Slide 37 — DriveFuzz (ACM CCS 2022) mutates driving scenarios, and AdversarialSwarm (IEEE S&P 2022) tests drone swarms](../images/L01_p37.png)
+![Figure 10. DriveFuzz (ACM CCS 2022) mutates driving scenarios, and AdversarialSwarm (IEEE S&P 2022) tests drone swarms (slide 37)](../images/L01_p37.png)
 
-*Lecture 01, Slide 37 — DriveFuzz (ACM CCS 2022) mutates driving scenarios, and AdversarialSwarm (IEEE S&P 2022) tests drone swarms*
+*Figure 10. DriveFuzz (ACM CCS 2022) mutates driving scenarios, and AdversarialSwarm (IEEE S&P 2022) tests drone swarms (slide 37)*
 
 The third area applies security testing to **cyber-physical systems** such as autonomous vehicles and drone swarms.
 
@@ -464,9 +464,9 @@ Therefore, we need **(1) an end-to-end testing framework for autonomous driving 
 
 ### 7.3 Background: Fuzzing
 
-![Lecture 01, Slide 44 — A fuzzer feeds mutated inputs to the target system and uses the bug monitor and coverage map as feedback](../images/L01_p44.png)
+![Figure 11. A fuzzer feeds mutated inputs to the target system and uses the bug monitor and coverage map as feedback (slide 44)](../images/L01_p44.png)
 
-*Lecture 01, Slide 44 — A fuzzer feeds mutated inputs to the target system and uses the bug monitor and coverage map as feedback*
+*Figure 11. A fuzzer feeds mutated inputs to the target system and uses the bug monitor and coverage map as feedback (slide 44)*
 
 Fuzzing is an automated software testing technique that works in a loop:
 
@@ -480,17 +480,17 @@ Fuzzing is an automated software testing technique that works in a loop:
 
 ### 7.4 AutoFuzzer: Input Mutation
 
-![Lecture 01, Slide 46 — The input is a driving scene in a simulator, with a goal that the autopilot vehicle must reach](../images/L01_p46.png)
+![Figure 12. The input is a driving scene in a simulator, with a goal that the autopilot vehicle must reach (slide 46)](../images/L01_p46.png)
 
-*Lecture 01, Slide 46 — The input is a driving scene in a simulator, with a goal that the autopilot vehicle must reach*
+*Figure 12. The input is a driving scene in a simulator, with a goal that the autopilot vehicle must reach (slide 46)*
 
 The input of the fuzzer (called **AutoFuzzer** on the slides) is a **driving scene** whose **weather, puddles, and actors** are mutated.
 
 **Mutating weather:**
 
-![Lecture 01, Slide 47 — The same scene with different cloud and rain parameters](../images/L01_p47.png)
+![Figure 13. The same scene with different cloud and rain parameters (slide 47)](../images/L01_p47.png)
 
-*Lecture 01, Slide 47 — The same scene with different cloud and rain parameters*
+*Figure 13. The same scene with different cloud and rain parameters (slide 47)*
 
 | Scene | `sun_angle` | `cloud` | `rain` |
 |:------|:-----------:|:-------:|:------:|
@@ -500,9 +500,9 @@ The input of the fuzzer (called **AutoFuzzer** on the slides) is a **driving sce
 
 **Mutating actors:**
 
-![Lecture 01, Slide 48 — Adding other vehicles and pedestrians to the scene](../images/L01_p48.png)
+![Figure 14. Adding other vehicles and pedestrians to the scene (slide 48)](../images/L01_p48.png)
 
-*Lecture 01, Slide 48 — Adding other vehicles and pedestrians to the scene*
+*Figure 14. Adding other vehicles and pedestrians to the scene (slide 48)*
 
 - Scene 1: one moving vehicle and one stationary vehicle
 - Scene 2: one walking pedestrian and one stationary vehicle
@@ -511,9 +511,9 @@ The input of the fuzzer (called **AutoFuzzer** on the slides) is a **driving sce
 
 **AutoFuzzer found 20 critical bugs!**
 
-![Lecture 01, Slide 49 — The 20 critical bugs, classified by layer, component, impact, and root cause](../images/L01_p49.png)
+![Figure 15. The 20 critical bugs, classified by layer, component, impact, and root cause (slide 49)](../images/L01_p49.png)
 
-*Lecture 01, Slide 49 — The 20 critical bugs, classified by layer, component, impact, and root cause*
+*Figure 15. The 20 critical bugs, classified by layer, component, impact, and root cause (slide 49)*
 
 | Layer | Bugs | Examples |
 |:------|:----:|:---------|

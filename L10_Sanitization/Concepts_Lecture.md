@@ -1,6 +1,6 @@
 # Lecture 10 — Sanitization
 
-> **Last Updated:** 2026-10-06
+> **Last Updated:** 2026-10-08
 >
 > Software Security: Principles, Policies, and Protection, Payer - Ch 6
 
@@ -91,9 +91,9 @@ To use it, compile with `-fsanitize=address` (e.g., `gcc test.c -fsanitize=addre
 
 ASan is the most widely used sanitizer. It **inserts a redzone around objects** and uses **shadow memory** to record whether each byte is accessible. It has detected over 10,000 memory safety violations.
 
-![Lecture 10, Slide 8 — ASan checks shadow memory before each access; touching a redzone reports a bug](../images/L10_p08.png)
+![Figure 1. ASan checks shadow memory before each access; touching a redzone reports a bug (slide 8)](../images/L10_p08.png)
 
-*Lecture 10, Slide 8 — ASan checks shadow memory before each access; touching a redzone reports a bug*
+*Figure 1. ASan checks shadow memory before each access; touching a redzone reports a bug (slide 8)*
 
 Before every access to an address `p`, ASan checks `IsAccessible(p)` in shadow memory. Objects are surrounded by **redzones** marked inaccessible, so an out-of-bounds access lands in a redzone and is reported as a **bug**.
 
@@ -105,9 +105,9 @@ The idea is to store the **accessible state of each word** in shadow memory.
 - An **8-byte aligned word** has only **9 states**: 0 to 8 of its bytes may be accessible.
 - The encoding assumes that **only the first k bytes** of a word are accessible, so each shadow entry stores the number `k` for its word (a negative value marks a fully poisoned word).
 
-![Lecture 10, Slide 15 — ASan reserves a shadow region mapped from the whole address space](../images/L10_p15.png)
+![Figure 2. ASan reserves a shadow region mapped from the whole address space (slide 15)](../images/L10_p15.png)
 
-*Lecture 10, Slide 15 — ASan reserves a shadow region mapped from the whole address space*
+*Figure 2. ASan reserves a shadow region mapped from the whole address space (slide 15)*
 
 ASan maps a real address to its shadow address with a shift and an add:
 
@@ -181,9 +181,9 @@ LeakSanitizer detects **run-time memory leaks**. It can be combined with Address
 
 Multiple threads share an address space, so accessing the same variable requires a protocol: accesses must be ordered if at least one thread writes. A **data race** happens if a variable is accessed concurrently without synchronization, and data races are **undefined behavior** in C/C++.
 
-![Lecture 10, Slide 29 — A race condition: two threads read and write the shared Y without synchronization](../images/L10_p29.png)
+![Figure 3. A race condition: two threads read and write the shared Y without synchronization (slide 29)](../images/L10_p29.png)
 
-*Lecture 10, Slide 29 — A race condition: two threads read and write the shared Y without synchronization*
+*Figure 3. A race condition: two threads read and write the shared Y without synchronization (slide 29)*
 
 In the figure, Thread 1 reads `Y = 5` and computes `5 + 1`, while Thread 2 reads the same `5` and computes `5 x 2`. Because of a context switch between the read and the write, the two threads' updates interleave, so the final value of `Y` depends on timing (10 and then 6, instead of a well-defined result).
 

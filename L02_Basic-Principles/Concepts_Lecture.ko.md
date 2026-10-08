@@ -1,6 +1,6 @@
 # 강의 02 — 기본 원칙
 
-> **최종 수정일:** 2026-10-06
+> **최종 수정일:** 2026-10-08
 >
 > Software Security: Principles, Policies, and Protection, Payer - Ch 2
 
@@ -175,15 +175,15 @@ ISO/IEC 7498-2는 컴퓨터 보안의 속성으로 두 가지를 추가한다.
 - 이 속성은 **공격자가 얻을 수 있는 권한을 제한**한다.
 - **예시:** Chromium의 렌더링은 최소한의 시스템 콜만 허용되는 캡슐화된 **샌드박스** 안에서 실행된다.
 
-![Lecture 02, Slide 14 — Apache 프로세스의 시간적 시스템 콜 특화](../images/L02_p14.png)
+![그림 1. Apache 프로세스의 시간적 시스템 콜 특화 (슬라이드 14)](../images/L02_p14.png)
 
-*Lecture 02, Slide 14 — Apache 프로세스의 시간적 시스템 콜 특화*
+*그림 1. Apache 프로세스의 시간적 시스템 콜 특화 (슬라이드 14)*
 
 슬라이드는 *Temporal System Call Specialization for Attack Surface Reduction*(USENIX Security 2020)을 인용한다. Apache와 같은 서버는 **초기화** 단계에서는 많은 시스템 콜(예: `bind`, `listen`, `fork`, `execve`, `setns`)이 필요하지만, **서비스** 단계에서는 훨씬 적은 시스템 콜(예: `read`, `writev`, `mmap`)만 필요하다. 따라서 사용하지 않는 libc 함수와 초기화에만 필요한 시스템 콜은 서버가 요청 처리를 시작한 뒤 차단할 수 있으며, 이는 시간에 따라 최소 권한을 적용하는 것이다.
 
-![Lecture 02, Slide 15 — POSIX capabilities](../images/L02_p15.png)
+![그림 2. POSIX capabilities (슬라이드 15)](../images/L02_p15.png)
 
-*Lecture 02, Slide 15 — POSIX capabilities*
+*그림 2. POSIX capabilities (슬라이드 15)*
 
 15번 슬라이드의 표는 **POSIX capabilities**를 나열한다. POSIX 초안에 정의된 capability(예: `CAP_CHOWN`, `CAP_DAC_OVERRIDE`, `CAP_KILL`, `CAP_SETUID`)와 Linux 고유 확장(예: `CAP_NET_BIND_SERVICE`, `CAP_NET_ADMIN`, `CAP_NET_RAW`, `CAP_SYS_MODULE`, `CAP_SYS_PTRACE`, `CAP_SYS_ADMIN`)이 있다. Capability는 모든 것을 할 수 있는 root 권한을 세분화된 단위로 나누므로, 프로세스는 필요한 권한만 받을 수 있다. 예를 들어 웹 서버는 root로 실행하지 않고도 `CAP_NET_BIND_SERVICE`만 받아 80번 포트에 바인딩할 수 있다.
 
@@ -208,9 +208,9 @@ ISO/IEC 7498-2는 컴퓨터 보안의 속성으로 두 가지를 추가한다.
 | **sendmail** | **거대한 모놀리식 서버**를 사용하는 전형적인 Unix 방식 | 높은 복잡도와 과거의 보안 취약점으로 알려져 있다 |
 | **qmail** | **서로 통신하는 프로세스들**로 구성된 현대적인 **최소 권한** 방식 | 각 프로세스가 필요한 권한만으로 실행된다 |
 
-![Lecture 02, Slide 19 — qmail 구성 요소](../images/L02_p19.png)
+![그림 3. qmail 구성 요소 (슬라이드 19)](../images/L02_p19.png)
 
-*Lecture 02, Slide 19 — qmail 구성 요소*
+*그림 3. qmail 구성 요소 (슬라이드 19)*
 
 | 구성 요소 | 역할 |
 |:----------|:-----|
@@ -225,9 +225,9 @@ ISO/IEC 7498-2는 컴퓨터 보안의 속성으로 두 가지를 추가한다.
 
 ### 3.5 예시: Docker
 
-![Lecture 02, Slide 21 — 컨테이너(Docker)와 가상 머신](../images/L02_p21.png)
+![그림 4. 컨테이너(Docker)와 가상 머신 (슬라이드 21)](../images/L02_p21.png)
 
-*Lecture 02, Slide 21 — 컨테이너(Docker)와 가상 머신*
+*그림 4. 컨테이너(Docker)와 가상 머신 (슬라이드 21)*
 
 | | 컨테이너 (Docker) | 가상 머신 |
 |:--|:--------------------|:-----------------|
@@ -255,9 +255,9 @@ ISO/IEC 7498-2는 컴퓨터 보안의 속성으로 두 가지를 추가한다.
 
 ### 4.1 단일 도메인 OS
 
-![Lecture 02, Slide 23 — 단일 도메인 OS](../images/L02_p23.png)
+![그림 5. 단일 도메인 OS (슬라이드 23)](../images/L02_p23.png)
 
-*Lecture 02, Slide 23 — 단일 도메인 OS*
+*그림 5. 단일 도메인 OS (슬라이드 23)*
 
 - 격리나 구획화가 없는 **단일 계층**이다.
 - 모든 코드가 같은 도메인에서 실행되므로, 애플리케이션이 운영체제 드라이버를 직접 호출할 수 있다.
@@ -265,9 +265,9 @@ ISO/IEC 7498-2는 컴퓨터 보안의 속성으로 두 가지를 추가한다.
 
 ### 4.2 모놀리식 OS
 
-![Lecture 02, Slide 24 — 모놀리식 OS](../images/L02_p24.png)
+![그림 6. 모놀리식 OS (슬라이드 24)](../images/L02_p24.png)
 
-*Lecture 02, Slide 24 — 모놀리식 OS*
+*그림 6. 모놀리식 OS (슬라이드 24)*
 
 - **두 계층:** 운영체제와 애플리케이션.
 - OS가 자원을 관리하고 접근을 조율한다.
@@ -276,9 +276,9 @@ ISO/IEC 7498-2는 컴퓨터 보안의 속성으로 두 가지를 추가한다.
 
 ### 4.3 마이크로커널
 
-![Lecture 02, Slide 25 — 마이크로커널](../images/L02_p25.png)
+![그림 7. 마이크로커널 (슬라이드 25)](../images/L02_p25.png)
 
-*Lecture 02, Slide 25 — 마이크로커널*
+*그림 7. 마이크로커널 (슬라이드 25)*
 
 - **여러 계층:** 각 구성 요소가 별도의 프로세스이다.
 - 필수적인 부분만 특권을 가진다.
@@ -286,9 +286,9 @@ ISO/IEC 7498-2는 컴퓨터 보안의 속성으로 두 가지를 추가한다.
   - 프로세스 관리(스케줄링)
   - 프로세스 간 통신(IPC)
 
-![Lecture 02, Slide 26 — 모놀리식 커널 기반과 마이크로커널 기반 운영체제](../images/L02_p26.png)
+![그림 8. 모놀리식 커널 기반과 마이크로커널 기반 운영체제 (슬라이드 26)](../images/L02_p26.png)
 
-*Lecture 02, Slide 26 — 모놀리식 커널 기반과 마이크로커널 기반 운영체제*
+*그림 8. 모놀리식 커널 기반과 마이크로커널 기반 운영체제 (슬라이드 26)*
 
 모놀리식 커널에서는 VFS, IPC, 파일 시스템, 스케줄러, 가상 메모리, 장치 드라이버가 모두 커널 모드에서 실행된다. 마이크로커널에서는 기본 IPC, 가상 메모리, 스케줄링만 커널 모드에 남고, 파일 시스템, 장치 드라이버, 서버는 사용자 모드에서 실행된다.
 
@@ -370,17 +370,17 @@ ISO/IEC 7498-2는 컴퓨터 보안의 속성으로 두 가지를 추가한다.
 
 **Bell-LaPadula**
 
-![Lecture 02, Slide 34 — Bell-LaPadula 모델](../images/L02_p34.png)
+![그림 9. Bell-LaPadula 모델 (슬라이드 34)](../images/L02_p34.png)
 
-*Lecture 02, Slide 34 — Bell-LaPadula 모델*
+*그림 9. Bell-LaPadula 모델 (슬라이드 34)*
 
 - Bell-LaPadula는 **기밀성**만 강제한다.
 - 주어진 인가 등급은 **같거나 낮은 등급의 객체 읽기**와 **같거나 높은 등급의 파일 쓰기**를 허용한다.
 - **read-down, write-up**("no read up, no write down")으로 요약된다. 정보는 덜 안전한 등급으로 흘러내려갈 수 없다.
 
-![Lecture 02, Slide 35 — Bell-LaPadula 규칙](../images/L02_p35.png)
+![그림 10. Bell-LaPadula 규칙 (슬라이드 35)](../images/L02_p35.png)
 
-*Lecture 02, Slide 35 — Bell-LaPadula 규칙*
+*그림 10. Bell-LaPadula 규칙 (슬라이드 35)*
 
 | 규칙 | 의미 |
 |:-----|:--------|
@@ -392,9 +392,9 @@ ISO/IEC 7498-2는 컴퓨터 보안의 속성으로 두 가지를 추가한다.
 
 **Biba**
 
-![Lecture 02, Slide 36 — Biba 모델](../images/L02_p36.png)
+![그림 11. Biba 모델 (슬라이드 36)](../images/L02_p36.png)
 
-*Lecture 02, Slide 36 — Biba 모델*
+*그림 11. Biba 모델 (슬라이드 36)*
 
 - Biba는 **무결성**을 강제한다.
 - 주어진 인가 등급은 **같거나 높은 등급의 파일 읽기**와 **같거나 낮은 등급의 파일 쓰기**를 허용한다.
@@ -415,9 +415,9 @@ ISO/IEC 7498-2는 컴퓨터 보안의 속성으로 두 가지를 추가한다.
 
 DAC는 **접근 제어 행렬(access control matrix)** 로 표현된다. 이는 각 주체가 각 객체에 대해 어떤 동작을 할 수 있는지 나타내는 주체와 객체의 표이다.
 
-![Lecture 02, Slide 38 — 접근 제어 행렬](../images/L02_p38.png)
+![그림 12. 접근 제어 행렬 (슬라이드 38)](../images/L02_p38.png)
 
-*Lecture 02, Slide 38 — 접근 제어 행렬*
+*그림 12. 접근 제어 행렬 (슬라이드 38)*
 
 | 주체 | `/etc/passwd` | `/usr/bin/` | `/u/roberto/` | `/admin/` |
 |:--------|:--------------|:------------|:--------------|:----------|
@@ -436,9 +436,9 @@ DAC는 **접근 제어 행렬(access control matrix)** 로 표현된다. 이는 
 - 사용자에게 특정 역할이 할당된다.
 - 관리자 권한도 하나의 역할일 수 있다.
 
-![Lecture 02, Slide 39 — 역할 기반 접근 제어](../images/L02_p39.png)
+![그림 13. 역할 기반 접근 제어 (슬라이드 39)](../images/L02_p39.png)
 
-*Lecture 02, Slide 39 — 역할 기반 접근 제어*
+*그림 13. 역할 기반 접근 제어 (슬라이드 39)*
 
 그림에서 많은 사용자가 소수의 역할(예: "Network Admin", "Network Operator")에 연결되고, 각 역할은 명령 규칙, 기능 규칙, VLAN 정책, 인터페이스 정책과 같은 규칙 집합에 연결된다. 역할의 규칙을 바꾸면 그 역할이 할당된 모든 사용자의 권한이 함께 바뀐다.
 
