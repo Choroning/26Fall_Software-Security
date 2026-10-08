@@ -1,4 +1,4 @@
-# Lecture 08 — Advanced Mitigations
+# L08 Advanced Mitigations
 
 > **Last Updated:** 2026-10-08
 >
@@ -36,6 +36,7 @@
   - [4.3 What Data Must Be Protected](#43-what-data-must-be-protected)
   - [4.4 Memory Layout](#44-memory-layout)
   - [4.5 Summary](#45-summary)
+- [Concept Applications](#concept-applications)
 - [Summary](#summary)
 - [Self-Check Questions](#self-check-questions)
 
@@ -81,6 +82,8 @@ There are four types of code pointers:
 - **Returns** are the classic target, with **indirect calls** the alternative.
 - Due to stack canaries, returns are harder to exploit, so there is a (non-conclusive) paradigm shift to indirect calls.
 
+> **Scope:** Bounds checked switch tables and write protected loader structures restrict corruption of their indirect jumps. It does not establish that every indirect jump in arbitrary software is safe. Forward edge CFI checks targets of indirect calls and related transfers. Returns require separate stack integrity protection.
+
 ### 1.4 Overview
 
 The advanced mitigations target the two remaining categories:
@@ -117,9 +120,9 @@ The advanced mitigations target the two remaining categories:
 
 A **shadow stack** is a second stack for each thread that keeps track of control data (e.g., the return instruction pointer, or the base pointer).
 
-![Figure 1. A shadow stack mirrors the return addresses of the main stack (slide 14)](../images/L08_p14.png)
+![Figure 1. A shadow stack mirrors the return addresses of the main stack](../images/L08_p14.png)
 
-*Figure 1. A shadow stack mirrors the return addresses of the main stack (slide 14)*
+*Figure 1. A shadow stack mirrors the return addresses of the main stack*
 
 - Not all implementations protect all types of data.
 - Data on the shadow stack is **integrity protected**:
@@ -133,9 +136,9 @@ A **shadow stack** is a second stack for each thread that keeps track of control
 
 A **safe stack** splits each function's frame into a safe part and an unsafe part.
 
-![Figure 2. Safe variables stay on the safe stack; the overflowable buffer goes to the regular stack (slide 16)](../images/L08_p16.png)
+![Figure 2. Safe variables stay on the safe stack; the overflowable buffer goes to the regular stack](../images/L08_p16.png)
 
-*Figure 2. Safe variables stay on the safe stack; the overflowable buffer goes to the regular stack (slide 16)*
+*Figure 2. Safe variables stay on the safe stack; the overflowable buffer goes to the regular stack*
 
 - The core idea is to decide, **for each variable in a stack frame, whether it is safe**.
 - Variables are **safe** if they are only used in a safe context: they do not escape the current function and are only used with bounded pointer arithmetic.
@@ -145,9 +148,11 @@ A **safe stack** splits each function's frame into a safe part and an unsafe par
 
 In the example `int foo() { char buf[16]; int r; r = scanf("%s", buf); return r; }`, the return value `r` and the return address stay on the safe stack, while the overflowable `buf` goes to the regular stack, so an overflow of `buf` cannot reach the return address.
 
+> **Protection boundary:** Shadow and safe stacks protect the return path, assuming the protected stack and its metadata cannot be corrupted. They do not by themselves protect every function pointer in the heap or prevent attacks that modify ordinary data.
+
 ### 2.4 Summary of Stack Integrity
 
-| Mechanism | Protects Against CF Hijacking | Protects Data | Overhead |
+| Mechanism | Protects Returns | Protects Data | Overhead |
 |:----------|:-----------------------------:|:-------------:|:---------|
 | Stack canaries | Continuous overflows only | No | Negligible |
 | SW shadow stack | Yes | No (data corruption allowed) | High |
@@ -244,17 +249,17 @@ The overhead of existing memory safety solutions is the problem: SoftBound+CETS 
 - We can **over-approximate** and identify sensitive pointers through their **types**: all types of sensitive pointers are sensitive.
 - Over-approximation only affects performance, not security.
 
-![Figure 3. Sensitive pointers are identified transitively by type (slide 31)](../images/L08_p31.png)
+![Figure 3. Sensitive pointers are identified transitively by type](../images/L08_p31.png)
 
-*Figure 3. Sensitive pointers are identified transitively by type (slide 31)*
+*Figure 3. Sensitive pointers are identified transitively by type*
 
 In the figure, a struct that contains a function pointer is sensitive, and a pointer to that struct is also sensitive, so the "sensitive" marking propagates transitively through the type graph, while plain data (such as an `int`) is left unprotected.
 
 ### 4.4 Memory Layout
 
-![Figure 4. Memory is split into a protected safe plane and a regular plane (slide 32)](../images/L08_p32.png)
+![Figure 4. Memory is split into a protected safe plane and a regular plane](../images/L08_p32.png)
 
-*Figure 4. Memory is split into a protected safe plane and a regular plane (slide 32)*
+*Figure 4. Memory is split into a protected safe plane and a regular plane*
 
 - The memory view is split into two views: a **control plane** and a **data plane**.
   - The **control plane** contains only code pointers (and transitively all related pointers).
@@ -266,6 +271,39 @@ In the figure, a struct that contains a function pointer is sensitive, and a poi
 - CPI protects code pointers and sensitive pointers by enforcing memory safety for **select data**.
 - CPI prohibits control-flow hijacking.
 - The overhead of **6% to 8%** is still too high for general deployment.
+
+---
+
+<br>
+
+## Concept Applications
+
+**CFI Missing Parts:**
+
+```c
+void (*target)(int) = fn;          // capture the value to be checked
+if (!contains(____, ____))        // A, B
+  abort();
+____(12);                        // C
+```
+
+> **Answer:** A is this call site’s `targetset`; B and C are `target`. The called value must be the checked value. Checking `fn` and then reloading it can introduce a change between checking and dispatch. This pseudocode illustrates value preservation; the implementation must also protect the checked value and target set.
+
+**Comparing Overapproximation:**
+
+| Mechanism | Approximated Set | Effect |
+|:----------|:-----------------|:-------|
+| CFI | Permitted targets for an indirect call | More targets give the attacker more permitted paths, weakening security. |
+| CPI | Sensitive pointers to protect | Protecting unnecessary pointers increases cost. Under the model that includes all necessary pointers and preserves the protected region, this does not weaken security. |
+
+**T/F Practice:**
+
+| Statement | Answer and Reason |
+|:----------|:------------------|
+| CFI always stops an overflow at the corrupting write. | **F.** Forward edge CFI checks the target primarily when using a pointer for an indirect call. |
+| Forward edge CFI alone protects every return. | **F.** Separate stack integrity is assumed. |
+| CPI must transitively protect pointers used to access code pointers. | **T.** Otherwise an attacker could redirect access to the protected pointers. |
+| A privilege escalation that changes only ordinary data may remain possible with CFI or CPI. | **T.** Protecting code pointers does not guarantee all data integrity. |
 
 ---
 
@@ -294,7 +332,7 @@ In the figure, a struct that contains a function pointer is sensitive, and a poi
 
 2. **Code Pointers:** Name the four types of code pointers and explain why indirect jumps are no longer a target.
 
-   > **Answer:** Function returns, switch statements, function pointers, and virtual dispatch. Indirect jumps (switch statements) are no longer a target because the compiler bound-checks them and jumps in loader data structures are write-protected, leaving returns and indirect calls as the main targets.
+   > **Answer:** Function returns, switch statements, function pointers, and virtual dispatch. Bounds checking of switch table indices and write protection of loader structures restrict corruption of those indirect jumps. Returns and indirect calls require their own protection. This does not prove that all indirect jumps are universally protected.
 
 3. **Shadow vs. Safe Stack:** How do a shadow stack and a safe stack each protect the return address, and what is the limitation of each?
 

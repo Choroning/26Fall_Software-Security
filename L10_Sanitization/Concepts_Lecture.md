@@ -1,4 +1,4 @@
-# Lecture 10 — Sanitization
+# L10 Sanitization
 
 > **Last Updated:** 2026-10-08
 >
@@ -9,7 +9,7 @@
 > 2. Describe how AddressSanitizer uses redzones and shadow memory to detect memory errors
 > 3. Explain the shadow memory encoding and the address-to-shadow mapping
 > 4. Compare the main sanitizers (ASan, LSan, TSan, MSan, HexType, UBSan) and their targets and overheads
-> 5. Explain why only UBSan is suitable for production and how Valgrind differs
+> 5. Explain the production runtime tradeoff and how Valgrind differs
 
 ---
 
@@ -33,6 +33,7 @@
   - [3.4 HexType](#34-hextype)
   - [3.5 UndefinedBehaviorSanitizer (UBSan)](#35-undefinedbehaviorsanitizer-ubsan)
   - [3.6 Valgrind Memcheck](#36-valgrind-memcheck)
+- [Concept Applications](#concept-applications)
 - [Summary](#summary)
 - [Self-Check Questions](#self-check-questions)
 
@@ -56,7 +57,7 @@ Fault detection through dynamic testing requires **two components**:
 1. A mechanism that **triggers** faults.
 2. A mechanism that makes faults **detectable**.
 
-This lecture focuses on the latter: detecting faults as they are triggered. (Triggering inputs are the job of fuzzing and symbolic execution.)
+Fuzzing and symbolic execution explore inputs that trigger faults; sanitizers detect violations during execution.
 
 ### 1.3 What Is a Sanitizer
 
@@ -76,7 +77,7 @@ The design questions for any sanitizer are: **what policy** to enforce, **what m
 
 ### 2.1 Overview
 
-AddressSanitizer **finds memory address bugs**, focusing on buffer overflows (heap, stack, globals) with limited support for use-after-free. It detects some spatial and some temporal memory safety violations.
+AddressSanitizer **finds memory address bugs**, including buffer overflows and some temporal violations. Its accessibility map is not a complete record of which object each pointer originally referred to. An access that skips a redzone and lands in another accessible object, or a stale pointer to memory already reused for a new object, can escape detection.
 
 **Implementation:**
 
@@ -91,9 +92,9 @@ To use it, compile with `-fsanitize=address` (e.g., `gcc test.c -fsanitize=addre
 
 ASan is the most widely used sanitizer. It **inserts a redzone around objects** and uses **shadow memory** to record whether each byte is accessible. It has detected over 10,000 memory safety violations.
 
-![Figure 1. ASan checks shadow memory before each access; touching a redzone reports a bug (slide 8)](../images/L10_p08.png)
+![Figure 1. ASan checks shadow memory before each access; touching a redzone reports a bug](../images/L10_p08.png)
 
-*Figure 1. ASan checks shadow memory before each access; touching a redzone reports a bug (slide 8)*
+*Figure 1. ASan checks shadow memory before each access; touching a redzone reports a bug*
 
 Before every access to an address `p`, ASan checks `IsAccessible(p)` in shadow memory. Objects are surrounded by **redzones** marked inaccessible, so an out-of-bounds access lands in a redzone and is reported as a **bug**.
 
@@ -101,13 +102,13 @@ Before every access to an address `p`, ASan checks `IsAccessible(p)` in shadow m
 
 The idea is to store the **accessible state of each word** in shadow memory.
 
-- Encoding each byte as one bit would be expensive.
+- An arbitrary accessibility bitmap for 8 bytes has 256 patterns; ASan uses the restricted prefix patterns described below.
 - An **8-byte aligned word** has only **9 states**: 0 to 8 of its bytes may be accessible.
-- The encoding assumes that **only the first k bytes** of a word are accessible, so each shadow entry stores the number `k` for its word (a negative value marks a fully poisoned word).
+- Only a prefix of the 8-byte block can be accessible. **Shadow 0 means all 8 bytes are accessible**, values **1 through 7** mean that only that many initial bytes are accessible, and a **negative signed value** denotes a poisoned block. Do not interpret shadow 0 as zero accessible bytes.
 
-![Figure 2. ASan reserves a shadow region mapped from the whole address space (slide 15)](../images/L10_p15.png)
+![Figure 2. ASan reserves a shadow region mapped from the whole address space](../images/L10_p15.png)
 
-*Figure 2. ASan reserves a shadow region mapped from the whole address space (slide 15)*
+*Figure 2. ASan reserves a shadow region mapped from the whole address space*
 
 ASan maps a real address to its shadow address with a shift and an add:
 
@@ -127,7 +128,8 @@ long getData(long *addr) {
 }
 // becomes:
 long getData(long *addr) {
-  char *shadow = (addr>>3) + shadowbse;
+  uintptr_t a = (uintptr_t)addr;
+  signed char *shadow = (signed char *)((a >> 3) + shadowbase);
   if (*shadow)
     ReportError(addr);
   return *addr;
@@ -138,9 +140,12 @@ long getData(long *addr) {
 
 ```c
 // N-byte access instead:
-if (*shadow && *shadow <= ((addr&7)+N-1))
-  ReportError(a);
+int last = (int)(addr & 7) + N - 1;
+if (*shadow != 0 && (int)*shadow <= last)
+  ReportError(addr);
 ```
+
+> **Pseudocode assumptions:** Here `addr` in the partial access check is an integer address, `shadow` points to a signed byte, and the access stays within one 8-byte block. An aligned 8-byte access accepts only shadow 0. An unaligned access crossing blocks needs the additional shadow checks; a single entry does not describe all touched bytes.
 
 **Stack:** redzones are inserted around objects on the stack and poisoned when entering a stack frame. Each time a function runs, the redzones are initialized in the prologue and removed in the epilogue.
 
@@ -165,7 +170,9 @@ AddressSanitizer detects memory errors by placing redzones around objects and ch
 - Double-free, invalid free
 - Memory leaks
 
-The typical slowdown is about **2x** (and 1.5x to 3x memory overhead). In three years, ASan found over 3,000 bugs in Chrome, over 3,000 in Google server software, and over 1,000 in open-source software.
+Representative ASan measurements report about **2x** runtime and **1.5x to 3x** memory usage. These are measured total ratios, not extra percentages or guarantees for every workload. Leak detection is provided through integration with LSan and depends on the build and runtime configuration.
+
+Early ASan deployments reported over 3,000 bugs found in Chrome in three years, over 3,000 in Google server software, and over 1,000 in open-source software.
 
 ---
 
@@ -175,19 +182,19 @@ The typical slowdown is about **2x** (and 1.5x to 3x memory overhead). In three 
 
 ### 3.1 LeakSanitizer (LSan)
 
-LeakSanitizer detects **run-time memory leaks**. It can be combined with AddressSanitizer or used stand-alone. It adds almost no performance overhead until process termination, when the extra leak detection phase runs: at `exit()`, LSan iterates through allocated heap objects and prints errors at the sites where they were allocated.
+LeakSanitizer detects **run-time memory leaks**. It can be combined with AddressSanitizer or used stand-alone. It adds almost no performance overhead until process termination, when the extra leak detection phase runs. It examines allocated heap objects and their reachability, then reports leaks with their allocation sites. An object that remains allocated at exit is not automatically a reported leak. See the [LSan design](https://github.com/google/sanitizers/wiki/AddressSanitizerLeakSanitizerDesignDocument).
 
 ### 3.2 ThreadSanitizer (TSan)
 
-Multiple threads share an address space, so accessing the same variable requires a protocol: accesses must be ordered if at least one thread writes. A **data race** happens if a variable is accessed concurrently without synchronization, and data races are **undefined behavior** in C/C++.
+Multiple threads share an address space, so conflicting accesses to the same memory location need ordering. A **data race** occurs when accesses from different threads include at least one write and at least one non-atomic access, without a happens-before ordering. Data races are **undefined behavior** in C/C++. Using only atomic accesses still does not eliminate every larger logical race.
 
-![Figure 3. A race condition: two threads read and write the shared Y without synchronization (slide 29)](../images/L10_p29.png)
+![Figure 3. A race condition: two threads read and write the shared Y without synchronization](../images/L10_p29.png)
 
-*Figure 3. A race condition: two threads read and write the shared Y without synchronization (slide 29)*
+*Figure 3. A race condition: two threads read and write the shared Y without synchronization*
 
 In the figure, Thread 1 reads `Y = 5` and computes `5 + 1`, while Thread 2 reads the same `5` and computes `5 x 2`. Because of a context switch between the read and the write, the two threads' updates interleave, so the final value of `Y` depends on timing (10 and then 6, instead of a well-defined result).
 
-**TSan** detects data races between threads. It instruments writes to global and heap variables and records which thread wrote the value last, which allows it to detect **WAW, RAW, and WAR** data races.
+**TSan** detects data races between threads. It instruments **loads and stores**, atomic operations, and relevant synchronization operations. Detecting RAW and WAR races requires recording reads as well as writes.
 
 - **Metadata:** each 8-byte word maps to a shadow area that stores the last {2, 4, 8} accesses, each recording a 16-bit thread ID, a 42-bit epoch (scalar clock), a 2-bit access size, a 3-bit access offset, and 1 bit for whether it was a write. It is mapped similarly to ASan.
 - **Policy:** instrument every single access and check the metadata. The checks are reasonably fast, but the memory overhead is massive (5x to 8x) and it is still slow (4x to 10x).
@@ -200,8 +207,8 @@ In the figure, Thread 1 reads `Y = 5` and computes `5 + 1`, while Thread 2 reads
 
 MemorySanitizer **finds uninitialized reads**: reading data that has not been initialized.
 
-- **Metadata:** simple, one bit per byte (initialized or not).
-- **Instrumentation:** taint stack areas on entry and untaint on return or write; taint data on allocation and untaint on free or write.
+- **Metadata:** MSan tracks initialization at bit granularity using shadow values of the corresponding bit width, equivalent to one shadow byte per application byte before origin metadata. See the [MSan implementation](https://github.com/llvm/llvm-project/blob/main/llvm/lib/Transforms/Instrumentation/MemorySanitizer.cpp).
+- **Instrumentation:** mark newly allocated uninitialized data as tainted, propagate initialization state through copies and operations, and check uses such as conditional branches and pointer dereferences. A write clears taint only if the written value is initialized. Simply copying uninitialized data need not immediately produce a report. See the [MSan explanation](https://github.com/google/sanitizers/wiki/MemorySanitizer).
 - Typical slowdown is **2.5x to 4x** with 2x to 3x memory overhead.
 
 > **Note:** Do not confuse MemorySanitizer (uninitialized reads) with AddressSanitizer (out-of-bounds and use-after-free). They target different bug classes and generally cannot be enabled at the same time.
@@ -212,19 +219,19 @@ HexType **finds type cast violations** (type confusion).
 
 - **Implementation:** a clang extension that instruments all casts (static cast, dynamic cast, placement new, C-style cast) and the `new` operation, with a runtime module for bookkeeping and explicit cast checking.
 - It records the **true type** of allocated objects and makes all type casts explicit.
-- Typical slowdown is about **0.5x** (that is, roughly 1.5x total run time).
+- Representative runtime overhead is about **50%**, or roughly **1.5x total run time**.
 
 ### 3.5 UndefinedBehaviorSanitizer (UBSan)
 
 UBSan detects **undefined behavior** by instrumenting code to trap on typical UB in C/C++ programs, such as:
 
-- Unsigned/misaligned pointers
+- Misaligned pointer dereferences
 - Signed integer overflow
 - Floating-point conversions leading to overflow
 - Illegal use of NULL pointers
 - Illegal pointer arithmetic
 
-The slowdown depends on the amount and frequency of checks. **UBSan is the only sanitizer that can be used in production**; for production use, a special **minimal runtime library** with minimal attack surface is used.
+The slowdown depends on the amount and frequency of checks. UBSan’s **minimal runtime** reduces attack surface and diagnostic costs for production use. Sampling detectors such as GWP-ASan also operate in production. Each approach makes a different tradeoff between overhead and detection coverage. Modular unsigned integer overflow is not itself undefined behavior.
 
 ### 3.6 Valgrind Memcheck
 
@@ -239,6 +246,55 @@ Valgrind is a memory debugging, leak detection, and profiling tool. Unlike the c
 
 <br>
 
+## Concept Applications
+
+**ASan Calculations and Missing Parts:** Assume an access stays within one 8-byte block and `s` is a signed shadow value.
+
+```c
+shadow_addr = (addr >> ____) + shadowbase;       // A
+int last = (int)(addr & ____) + N - 1;           // B
+if (s != 0 && s <= ____)                        // C
+  ReportError(addr);
+```
+
+> **Answer:** A is `3`, B is `7`, and C is `last`. `addr & 7` gives the start offset within the block; `last` gives the final accessed byte’s offset. For a positive shadow value `k`, the last offset must be less than `k`. Preserve signedness so negative poisoned values also fail the check.
+
+| Shadow Value | Start Offset and Size | Result |
+|:-------------|:----------------------|:-------|
+| 0 | Offset 0, 8 bytes | Allowed; the whole block is accessible. |
+| 5 | Offset 3, 2 bytes | Allowed; last offset 4 is less than 5. |
+| 5 | Offset 4, 2 bytes | Error; last offset 5 lies outside the accessible prefix. |
+| Negative | Offset 0, 1 byte | Error; the block is poisoned. |
+
+**Choosing a Sanitizer and Understanding Limits:**
+
+| Situation | Choice and Explanation |
+|:----------|:-----------------------|
+| Access outside a buffer or into freed memory | **ASan.** Detects accesses marked inaccessible, not a proof of all spatial and temporal safety. |
+| Branching on an uninitialized value | **MSan.** A valid address does not imply an initialized value. |
+| Unordered conflicting accesses by different threads | **TSan.** Tracks reads, writes, and synchronization. |
+| Casting to a class incompatible with the actual object | **HexType.** Checks actual type metadata and type relationships. |
+| Signed integer overflow | **UBSan.** Instruments the relevant undefined operation. |
+| Finding allocations not reclaimed at exit | **LSan.** Considers reachability; it does not simply report every still allocated object as a leak. |
+| Inspecting a binary that cannot be rebuilt | **Valgrind Memcheck.** Binary translation provides checks at substantial cost. |
+
+**Combining Checks and Interpreting Execution:** Enabling ASan together with UBSan related checks detects address errors and undefined operations in the same execution. Read the report to distinguish address errors from undefined operations. Neither a normal run without a crash nor a sanitizer run without a report proves absence of bugs.
+
+For example, a test that expects SIGSEGV for a null argument may behave differently in normal and sanitizer binaries. If a sanitizer terminates before the expected signal, Check does not receive that signal. With `CK_FORK=no`, the same signal may terminate the entire test process. Interpret the specification together with the execution environment introduced by the tools.
+
+**T/F Practice:**
+
+| Statement | Answer and Reason |
+|:----------|:------------------|
+| ASan shadow 0 means all eight bytes are inaccessible. | **F.** It means all eight bytes are accessible. |
+| ASan detects every uninitialized read. | **F.** Initialization state is MSan’s primary target. |
+| One shadow byte per eight application bytes means total process memory necessarily increases by only 12.5%. | **F.** Redzones, allocators, and quarantine add other costs. |
+| Sanitizers remove the need to generate bug triggering inputs. | **F.** Detection and input exploration are separate components. |
+
+---
+
+<br>
+
 ## Summary
 
 | Sanitizer | Finds | Metadata | Typical Slowdown |
@@ -246,7 +302,7 @@ Valgrind is a memory debugging, leak detection, and profiling tool. Unlike the c
 | **ASan** | Out-of-bounds, use-after-free/return/scope, double/invalid free, leaks | Shadow memory (1 byte per 8 bytes) + redzones | 2x |
 | **LSan** | Memory leaks | Allocated-object tracking | Almost none until exit |
 | **TSan** | Data races (WAW, RAW, WAR) | Shadow area with last accesses (thread ID, epoch) | 4x to 10x |
-| **MSan** | Uninitialized reads | 1 bit per byte | 2.5x to 4x |
+| **MSan** | Uninitialized reads | Bit-level initialization shadow, one byte per byte | 2.5x to 4x |
 | **HexType** | Type confusion | True type of allocated objects | ~1.5x |
 | **UBSan** | Undefined behavior | Inline checks | Depends (production-capable) |
 | **Valgrind memcheck** | Memory errors (binary, no recompile) | Binary translation | 20x to 30x |
@@ -262,9 +318,9 @@ Valgrind is a memory debugging, leak detection, and profiling tool. Unlike the c
 
 ## Self-Check Questions
 
-1. **Two Components:** What two components does dynamic fault detection require, and which does this lecture address?
+1. **Two Components:** What two components does dynamic fault detection require, and what is the role of sanitizers?
 
-   > **Answer:** It requires a mechanism that triggers faults (the job of fuzzing and symbolic execution) and a mechanism that makes faults detectable. This lecture focuses on the latter: sanitizers that detect faults as they are triggered.
+   > **Answer:** It requires a mechanism that triggers faults (the job of fuzzing and symbolic execution) and a mechanism that makes faults detectable. Sanitizers provide the latter by detecting faults as they are triggered.
 
 2. **Shadow Memory:** How does ASan use shadow memory and redzones to detect an out-of-bounds access?
 
@@ -272,7 +328,7 @@ Valgrind is a memory debugging, leak detection, and profiling tool. Unlike the c
 
 3. **Metadata Encoding:** Why does an 8-byte word have only 9 states, and how is this encoded?
 
-   > **Answer:** An 8-byte aligned word can have 0, 1, 2, ..., or 8 of its bytes accessible, which is nine possibilities. ASan assumes the accessible bytes are the first `k`, so each shadow byte stores that number `k` (with a negative value marking a fully poisoned word), which is far cheaper than one bit per byte.
+   > **Answer:** With accessible bytes restricted to a prefix, there are nine states: no bytes accessible, one through seven accessible, and all eight accessible. They are encoded as a negative poison value, 1 through 7, and 0 respectively. A shadow byte therefore describes eight application bytes. This is an encoding and checking choice, not a claim that one byte uses less space than an eight bit bitmap.
 
 4. **ASan Bug Classes:** List four bug classes ASan detects and state its typical slowdown.
 
@@ -280,11 +336,11 @@ Valgrind is a memory debugging, leak detection, and profiling tool. Unlike the c
 
 5. **TSan:** What is a data race, and how does ThreadSanitizer detect one?
 
-   > **Answer:** A data race is a concurrent access to the same variable without synchronization where at least one access is a write; it is undefined behavior in C/C++. TSan instruments writes to global and heap variables and records, in a shadow area, which thread accessed the value last along with its epoch (logical clock), so it can detect WAW, RAW, and WAR races when accesses are not ordered by a happens-before relationship.
+   > **Answer:** A data race involves conflicting accesses by different threads, at least one a write, with no required synchronization ordering; atomic accesses must be distinguished. TSan records reads and writes with thread and clock metadata, and observes synchronization to detect conflicting accesses without a happens before relation. A scalar epoch alone is not the entire synchronization model.
 
 6. **Choosing a Sanitizer:** Which sanitizer targets uninitialized reads, which targets type confusion, and which can run in production?
 
-   > **Answer:** MemorySanitizer targets uninitialized reads (one bit per byte), HexType targets type confusion (recording the true type of each object and checking casts), and UndefinedBehaviorSanitizer is the only one suitable for production, using a minimal runtime library with minimal attack surface.
+   > **Answer:** MSan targets uninitialized reads, and HexType targets type confusion. UBSan’s minimal runtime and sampling detectors such as GWP-ASan can operate in production. Sampling detectors check a subset of allocations to balance detection coverage and overhead.
 
 7. **Valgrind vs. Compiler Sanitizers:** How does Valgrind differ from the compiler-based sanitizers, and what is the trade-off?
 

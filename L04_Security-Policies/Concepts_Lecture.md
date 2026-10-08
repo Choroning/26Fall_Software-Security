@@ -1,4 +1,4 @@
-# Lecture 04 — Security Policies
+# L04 Security Policies
 
 > **Last Updated:** 2026-10-08
 >
@@ -50,6 +50,7 @@
   - [7.1 Hardware-Enforced Memory Safety](#71-hardware-enforced-memory-safety)
   - [7.2 Defense in Depth at Runtime](#72-defense-in-depth-at-runtime)
   - [7.3 Industry and Policy Trends](#73-industry-and-policy-trends)
+- [Concept Applications](#concept-applications)
 - [Summary](#summary)
 - [Self-Check Questions](#self-check-questions)
 
@@ -121,7 +122,7 @@
 | Cast | Check | Runtime Type Information | Use |
 |:-----|:------|:-------------------------|:----|
 | `static_cast<ToClass>(Object)` | Compile-time check | Not used | Common, fast |
-| `dynamic_cast<ToClass>(Object)` | Runtime check | Requires RTTI (Runtime Type Information) | Not used in performance-critical code |
+| `dynamic_cast<ToClass>(Object)` | Runtime check | Requires RTTI (Runtime Type Information) | Runtime cost must be considered |
 
 ### 3.3 Type Casting and Illegal Downcasting
 
@@ -135,10 +136,10 @@
 P *pptr;
 C *cptr;
 ...
-static_cast<C*>(pptr);   // shown on the slide as static_cast<cptr*>(pptr)
+static_cast<C*>(pptr);
 ```
 
-With the class hierarchy P → C → K, downcasting `pptr` to `C*` is **legal** if `pptr` actually points to a `C` (or `K`) object, but **illegal** if it points to a plain `P` object. Because `static_cast` performs no runtime check, the illegal cast silently succeeds, and later accesses to `C`'s members read memory beyond the `P` object, which is a **type confusion**.
+With the class hierarchy P → C → K, casting `pptr` to `C*` is valid when it points to the appropriate base subobject of a `C` or `K` object. If it points to a plain `P`, the base to derived `static_cast` has undefined behavior. It may compile because no runtime type check is inserted; compilation does not establish that the actual object has the requested type.
 
 Downcasting is extremely frequent in real C++ programs:
 
@@ -152,7 +153,7 @@ Downcasting is extremely frequent in real C++ programs:
 | Firefox Drom-JS | 4,229,000,000 |
 | Firefox Drom-dom | 10,786,000,000 |
 
-The slide also overlays a news article, "Firefox gets patch for critical 0-day that's being actively exploited" (January 8, 2020), with the flaw that "allows attackers to access sensitive memory locations that are normally off-limits." The corresponding advisory (CVE-2019-17026) describes a **type confusion** in Firefox's IonMonkey JIT compiler.
+**CVE-2019-17026** is a type confusion vulnerability in Firefox's IonMonkey JIT compiler. Incorrect type interpretation can enable unauthorized memory access.
 
 ### 3.4 HexType
 
@@ -161,22 +162,22 @@ The slide also overlays a news article, "Firefox gets patch for critical 0-day t
 - It applies **optimizations to minimize the performance impact**.
 - It handles **object allocation patterns to maximize detection coverage**.
 
-![Figure 1. HexType overview (slide 11)](../images/L04_p11.png)
+![Figure 1. HexType overview](../images/L04_p11.png)
 
-*Figure 1. HexType overview (slide 11)*
+*Figure 1. HexType overview*
 
 HexType is built as an LLVM pass in Clang. The source code is instrumented for **type casting verification** and for **object tracking**, the type hierarchy information is extracted, and the result is linked with the **HexType runtime library** to produce a hardened binary.
 
-![Figure 2. Type casting verification in HexType (slide 12)](../images/L04_p12.png)
+![Figure 2. Type casting verification in HexType](../images/L04_p12.png)
 
-*Figure 2. Type casting verification in HexType (slide 12)*
+*Figure 2. Type casting verification in HexType*
 
 ```cpp
 // [Source code]
 B *pB = new B;
 Update_objTypeMap(pB, B);              // record: object pB has type B
+Verify_type_casting(pB, C);            // check before using the cast result
 C *pC = static_cast<C*>(pB);
-Verify_type_casting(pB, C);            // check the cast at run time
 
 // [Runtime library]
 Verify_type_casting(Ptr *SrcPtr, TypeInfo Dst) {
@@ -247,7 +248,7 @@ From the C/C++ point of view, memory safety violations rely on **two conditions*
 
 - An object's bounds are defined when the object is allocated.
 - Any computed pointer to that object inherits the bounds of the object.
-- Any pointer arithmetic can only result in a pointer inside the same object.
+- Pointer arithmetic must stay within the same array object or one past its last element. The one-past pointer may be formed, but it must not be dereferenced.
 - Pointers that point outside of their associated object may not be dereferenced. Dereferencing such illegal pointers results in a **spatial memory safety error** and undefined behavior.
 
 **Spatial memory safety violation:**
@@ -282,7 +283,7 @@ v.push_back(12);
 std::cout << *vptr;          // Bug (use-after-free)
 ```
 
-> **Note:** In the C++ example, `push_back` may need more capacity than `v` has, so the vector allocates a larger buffer, moves its elements, and frees the old buffer. `vptr` still points into the freed old buffer, so the use-after-free happens without any explicit `free` in the code.
+> **Note:** If `push_back` needs more than the current capacity, the vector allocates a larger buffer, moves its elements, and frees the old buffer. In that case, dereferencing `vptr` accesses the freed buffer even without an explicit `free`. Without reallocation, pointers to existing elements remain valid.
 
 ---
 
@@ -296,9 +297,9 @@ std::cout << *vptr;          // Bug (use-after-free)
 - There is **no way to free data**; memory is reused implicitly after **garbage collection**.
 - The language and the runtime system enforce safety. What about the **overhead**?
 
-![Figure 3. Normalized energy, time, and memory across programming languages (slide 23)](../images/L04_p23.png)
+![Figure 3. Normalized energy, time, and memory across programming languages](../images/L04_p23.png)
 
-*Figure 3. Normalized energy, time, and memory across programming languages (slide 23)*
+*Figure 3. Normalized energy, time, and memory across programming languages*
 
 The table from R. Pereira et al., "Energy Efficiency across Programming Languages" (ACM SLE 2017), normalizes the results to the best language ((c) compiled, (v) virtual machine, (i) interpreted):
 
@@ -329,21 +330,21 @@ if (something) {
 
 **Rust** is a multi-paradigm programming language designed for **performance and safety**.
 
-![Figure 4. Most loved languages in a developer survey (slide 25)](../images/L04_p25.png)
+![Figure 4. Most loved languages in a developer survey](../images/L04_p25.png)
 
-*Figure 4. Most loved languages in a developer survey (slide 25)*
+*Figure 4. Most loved languages in a developer survey*
 
-In the developer survey on the slide ("loved" means the percentage of developers who are developing with the language and want to continue), Rust ranks first with 79.1%, followed by Swift (72.1%), F# (70.7%), Scala (69.4%), Go (68.7%), Clojure (66.7%), React (66.0%), Haskell (64.7%), Python (62.5%), C# (62.0%), and Node.js (59.6%).
+In a developer survey example ("loved" means the percentage of developers who are developing with the language and want to continue), Rust ranks first with 79.1%, followed by Swift (72.1%), F# (70.7%), Scala (69.4%), Go (68.7%), Clojure (66.7%), React (66.0%), Haskell (64.7%), Python (62.5%), C# (62.0%), and Node.js (59.6%).
 
-![Figure 5. Why Rust? (slide 26)](../images/L04_p26.png)
+![Figure 5. Why Rust?](../images/L04_p26.png)
 
-*Figure 5. Why Rust? (slide 26)*
+*Figure 5. Why Rust?*
 
 C/C++ offer more control with less safety, and Java and Python offer more safety with less control. **Rust offers more control and more safety.**
 
-![Figure 6. Rust ownership (slide 29)](../images/L04_p29.png)
+![Figure 6. Rust ownership](../images/L04_p29.png)
 
-*Figure 6. Rust ownership (slide 29)*
+*Figure 6. Rust ownership*
 
 - All allocated memory is **"owned" by a unique owner**.
 - **Ownership can transfer** to another variable (`let x = v;`).
@@ -357,9 +358,9 @@ C/C++ offer more control with less safety, and Java and Python offer more safety
 
 ### 5.3 Rust in Production: Android
 
-![Figure 7. Memory safety bugs as a share of all Android vulnerabilities (slide 27)](../images/L04_p27.png)
+![Figure 7. Memory safety bugs as a share of all Android vulnerabilities](../images/L04_p27.png)
 
-*Figure 7. Memory safety bugs as a share of all Android vulnerabilities (slide 27)*
+*Figure 7. Memory safety bugs as a share of all Android vulnerabilities*
 
 | Year | Memory Safety Bugs (Share of All Android Vulnerabilities) |
 |:-----|:----------------------------------------------------------|
@@ -420,9 +421,9 @@ How can we enforce memory safety for C/C++, and what makes C/C++ memory unsafe? 
   - Normal, never-NULL, and **fat pointers** (a fat pointer consists of address, base, and size).
   - Focuses on both spatial and temporal memory safety.
 
-![Figure 8. Performance of C, Cyclone, and Java (slide 36)](../images/L04_p36.png)
+![Figure 8. Performance of C, Cyclone, and Java](../images/L04_p36.png)
 
-*Figure 8. Performance of C, Cyclone, and Java (slide 36)*
+*Figure 8. Performance of C, Cyclone, and Java*
 
 The chart (Great Programming Language Shootout, from the Cyclone paper) shows the elapsed time normalized to gcc. Cyclone is usually close to C, while Java is often several times slower. The cost of a dialect is therefore less about speed and more about **porting**: existing C code must be rewritten for the safe subset.
 
@@ -434,11 +435,11 @@ The chart (Great Programming Language Shootout, from the Cyclone paper) shows th
 | Policy | Metadata | Strength | Weakness |
 |:-------|:---------|:---------|:---------|
 | **Object-based** | Metadata (size, location) for each allocated object (none for pointers) | Metadata is disjoint, so compatibility is good | Cannot detect sub-object overflows; overhead for large lookups |
-| **Pointer-based** (fat pointers) | Metadata for each pointer | Can detect sub-object overflows | Low compatibility due to inline metadata |
+| **Pointer based** (fat pointer example) | Metadata for each pointer | Can detect sub-object overflows | Low compatibility due to inline metadata |
 
 Pointer-based schemes allow you to verify whether each access is correct for each pointer. Object-based schemes allow you to check whether an access targets a valid object, but they cannot distinguish between different pointers. **Object-based schemes trade lower security for lower overhead.**
 
-> **Note:** A **sub-object overflow** stays inside one allocated object but crosses a field boundary, for example overflowing `char name[8]` into the next field of the same `struct`. An object-based scheme sees a valid object and allows it, whereas a pointer-based scheme knows that the pointer was derived from `name` and rejects it.
+> **Note:** A subobject overflow crosses a field boundary while staying inside a larger allocation. Pointer metadata can enforce the narrower bounds if those bounds are tracked. Per pointer metadata does not have to be inline: SoftBound stores it separately. Therefore, pointer based tracking and fat pointer representation are distinct choices.
 
 ### 6.5 SoftBound
 
@@ -458,13 +459,14 @@ SoftBound is **compiler-based instrumentation to enforce spatial memory safety**
 
 ```c
 char acctID[3];
-char *id = &(acctID);
+char *id = acctID;
 
 void acctInit() {
   char *p = id;    // local, remains in register
 
+  char ch;
   do {
-    char ch = readchar();
+    ch = readchar();
     *p = ch;
     p++;
   } while (ch);
@@ -475,15 +477,16 @@ void acctInit() {
 
 ```c
 char acctID[3];
-char *id = &(acctID);
-lookup(&id)->bse = &(acctID);      // store bounds
-lookup(&id)->bnd = &(acctID)+3;
+char *id = acctID;
+lookup(&id)->bse = acctID;      // store bounds
+lookup(&id)->bnd = acctID + sizeof(acctID);
 void acctInit() {
   char *p = id;                     // local, remains in register
   char *p_bse = lookup(&id)->bse;   // propagate
   char *p_bnd = lookup(&id)->bnd;
+  char ch;
   do {
-    char ch = readchar();
+    ch = readchar();
     check(p, p_bse, p_bnd);         // check
     *p = ch;
     p++;
@@ -514,9 +517,9 @@ The original loop copies input into the 3-byte `acctID` until a zero byte is rea
 3. **Propagate** the version on pointer assignment.
 4. **Check** whether the versions of the pointer and the object match when dereferenced.
 
-![Figure 9. CETS per-pointer metadata (slide 46)](../images/L04_p46.png)
+![Figure 9. CETS per-pointer metadata](../images/L04_p46.png)
 
-*Figure 9. CETS per-pointer metadata (slide 46)*
+*Figure 9. CETS per-pointer metadata*
 
 Each pointer carries per-pointer metadata: a **key** and a **lock address**. The lock address points to a **lock** location that stores the key of the currently valid allocation.
 
@@ -597,7 +600,7 @@ Software instrumentation is expensive; **hardware can enforce the same policies 
 - **A safe language is not enough:** unsafe blocks, FFI, and legacy C/C++ still need runtime defenses.
 - **Hardened allocators:** Scudo (the Android default), PartitionAlloc, MiraclePtr.
   - Scudo guard pages made CVE-2025-48530 non-exploitable in practice.
-- **Production-grade sampling detectors:** GWP-ASan, HWASan (see the Sanitization lecture).
+- **Production memory error detection:** GWP-ASan samples allocations, while HWASan uses memory tags.
 - **Library and compiler hardening:** hardened libc++ and glibc assertions, `_FORTIFY_SOURCE`, Clang `-fbounds-safety`.
 - **Layered approach:** a safe language for new code, and hardening plus instrumentation for the rest.
 
@@ -609,6 +612,52 @@ Software instrumentation is expensive; **hardware can enforce the same policies 
 - **Safe languages in production systems:** the Linux kernel (Rust support since 6.1), Windows kernel components, Chromium parsers.
 - **C/C++ is hardening rather than disappearing:** `-fbounds-safety`, hardened standard libraries, C++ safety profile proposals.
 - **Takeaway:** policies stay the same, but enforcement is moving into **languages, hardware, and regulation**.
+
+---
+
+<br>
+
+## Concept Applications
+
+**Illegal downcasting can cause type confusion.** A downcast is valid only when the actual object is compatible with the destination type.
+
+**SoftBound Missing Parts:** The following conceptual code uses a disjoint metadata table and an exclusive upper bound.
+
+```c
+char acctID[3];
+char *id = acctID;
+lookup(&id)->bse = ____;                 // A
+lookup(&id)->bnd = ____;                 // B
+
+char *p = id;
+char *p_bse = lookup(&id)->____;          // C
+char *p_bnd = lookup(&id)->____;          // D
+check(p, p_bse, p_bnd);                  // before *p = ch
+```
+
+> **Answer:** A is `acctID`, B is `acctID + sizeof(acctID)`, C is `bse`, and D is `bnd`. A one byte write requires `p_bse <= p` and `p < p_bnd`; actual instrumentation checks addresses and access sizes. A `char *` obtained from `acctID` advances one byte at a time, whereas `&acctID` points to the entire array and advances three bytes at a time. A variable used in `while (ch)` after a `do` body must be declared in a scope visible to that condition.
+
+**CETS Missing Parts:**
+
+```c
+newptr = ptr + offset;
+newptr_key = ____;                       // A
+newptr_lock_addr = ____;                 // B
+if (newptr_key != *newptr_lock_addr)
+  abort();
+// On free, the lock value is set to ____ before lock recycling.  // C
+```
+
+> **Answer:** A is `ptr_key`, B is `ptr_lock_addr`, and C is `INVALID_KEY`. Pointer arithmetic does not create a new allocation, so it does not issue a new key. Reusing an address gives the new allocation a new key that does not match the stale pointer. The lock location is managed metadata, not an ordinary object that is freed and then read without a metadata lifetime protocol.
+
+**T/F Practice:**
+
+| Statement | Answer and Reason |
+|:----------|:------------------|
+| A compiling `static_cast` rules out runtime type confusion. | **F.** It does not check the actual object’s type at runtime. |
+| SoftBound alone always distinguishes a new allocation at a freed address. | **F.** It checks spatial bounds; allocation lifetime requires temporal checking such as CETS. |
+| Per pointer metadata must be stored inside the pointer. | **F.** SoftBound uses disjoint metadata. |
+| A pointer one past an array may be formed but not dereferenced. | **T.** Pointer computation and memory access are distinct. |
 
 ---
 
@@ -643,7 +692,7 @@ Software instrumentation is expensive; **hardware can enforce the same policies 
 
 2. **Illegal Downcasting:** In the hierarchy P → C → K, when is `static_cast<C*>(pptr)` illegal, and why does C++ not catch it?
 
-   > **Answer:** It is illegal when `pptr` actually points to a plain `P` object rather than a `C` or `K` object. `static_cast` is checked only at compile time and uses no runtime type information, so the cast succeeds, and later accesses to `C`'s members read beyond the `P` object, which is type confusion. `dynamic_cast` would catch it with RTTI, but it is too slow for performance-critical code.
+   > **Answer:** If `pptr` points to a plain `P` rather than a suitable base subobject of `C` or `K`, the downcast has undefined behavior. `static_cast` can compile without a runtime check. A checked `dynamic_cast` downcast requires an appropriate polymorphic base; failure gives `nullptr` for a pointer cast and throws `std::bad_cast` for a reference cast. The runtime cost is a performance tradeoff, not a rule that it can never be used.
 
 3. **HexType:** How does HexType detect type confusion?
 
@@ -651,11 +700,11 @@ Software instrumentation is expensive; **hardware can enforce the same policies 
 
 4. **Spatial vs. Temporal:** Define spatial and temporal memory safety, and classify the `std::vector` example.
 
-   > **Answer:** Spatial memory safety ensures that every dereference stays within the bounds of the pointer's object; temporal memory safety ensures that the object is still valid (not freed or reallocated) at the time of the dereference. In the vector example, `push_back` reallocates the buffer and frees the old one, so `*vptr` reads freed memory, which is a temporal violation (use-after-free).
+   > **Answer:** Spatial safety checks object bounds; temporal safety checks that the original object is still valid. In the vector example, `push_back` invalidates `vptr` if it reallocates the buffer. Dereferencing it then causes a temporal violation. Without reallocation, this example does not itself establish a dangling pointer.
 
 5. **Object-Based vs. Pointer-Based:** Compare the two instrumentation policies.
 
-   > **Answer:** Object-based policies keep metadata per allocated object and check that an access targets a valid object; they are compatible because the metadata is disjoint, but they cannot detect sub-object overflows or distinguish between pointers. Pointer-based policies keep metadata per pointer and can verify every access for each pointer, including sub-object overflows, but inline metadata (fat pointers) hurts compatibility. Object-based schemes trade lower security for lower overhead.
+   > **Answer:** Object based policies keep metadata per allocation and check whether an address falls in a valid object. Pointer based policies retain bounds or validity for each pointer, so they can distinguish pointers into different objects or subobjects when those bounds are tracked. Inline fat pointers can affect compatibility, but per pointer metadata can also be disjoint, as in SoftBound.
 
 6. **SoftBound and CETS:** Which property does each enforce, and how?
 

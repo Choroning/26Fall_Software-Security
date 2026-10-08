@@ -1,4 +1,4 @@
-# Lecture 07 — Mitigations
+# L07 Mitigations
 
 > **Last Updated:** 2026-10-08
 >
@@ -34,6 +34,7 @@
   - [5.1 Stack Canaries](#51-stack-canaries)
   - [5.2 Stack Protector in the Compiler](#52-stack-protector-in-the-compiler)
   - [5.3 Fortify Source](#53-fortify-source)
+- [Concept Applications](#concept-applications)
 - [Summary](#summary)
 - [Self-Check Questions](#self-check-questions)
 
@@ -87,9 +88,9 @@
 
 ### 2.2 DEP and the NX Bit
 
-![Figure 1. Process layout showing RWX regions (slide 8)](../images/L07_p08.png)
+![Figure 1. Process layout showing RWX regions](../images/L07_p08.png)
 
-*Figure 1. Process layout showing RWX regions (slide 8)*
+*Figure 1. Process layout showing RWX regions*
 
 **Data Execution Prevention (DEP)** is supported in hardware:
 
@@ -100,12 +101,14 @@
 
 > **[Operating Systems]** On old x86 (32-bit, non-PAE) page tables, a page table entry had no bit to distinguish code from data, so any readable page was also executable. The NX bit was added with PAE and is standard in x86-64 page table entries (bit 63). This is why DEP needs hardware support and was not available on the earliest processors.
 
+> **Policy and mechanism:** W^X forbids a page from being writable and executable at the same time. A page may also be neither writable nor executable. The NX bit controls execution permission; the OS must set page permissions to enforce W^X. NX support alone does not imply that all writable pages lack execute permission.
+
 ### 2.3 DEP Summary
 
 - DEP is now enabled **widely by default** (whenever hardware support is available, such as on x86 and ARM).
-- It **stops all code injection**.
+- Under W^X, it blocks execution of injected machine code in writable data pages.
 - You can check for DEP with `checksec.sh` (`https://github.com/slimm609/checksec.sh`).
-- DEP may be disabled through the gcc flag `-z execstack`.
+- The linker option `-z execstack` requests an executable stack; it does not by itself disable every NX protection in the process.
 
 ---
 
@@ -124,31 +127,33 @@ In **code reuse**, the attacker overwrites a code pointer (a function pointer, a
 
 ### 3.2 Return-to-libc Step by Step
 
-The lecture walks through a 12-step return-to-libc example against the familiar `strcpy` overflow. Conceptually, the attacker builds a fake stack frame so that when the vulnerable function returns, it "returns" into `system()`:
+Return-to-libc uses an overflow, such as an unchecked `strcpy`, to construct a fake stack frame that redirects a vulnerable function’s return into an existing function such as `system()`:
 
 1. The overflow overwrites the **saved return address** so that it **points to `&system()`** instead of the caller.
 2. The slot above it becomes the **return address that `system()` will use** when it finishes (often set to `&exit()` so the program exits cleanly).
 3. The next slot becomes the **first argument to `system()`** (the address of a `"/bin/sh"` string).
 
-![Figure 2. Code reuse violates memory safety, integrity, randomization, and flow integrity, ending in a control-flow hijack (slide 32)](../images/L07_p32.png)
+![Figure 2. Code reuse violates memory safety, integrity, randomization, and flow integrity, ending in a control-flow hijack](../images/L07_p32.png)
 
-*Figure 2. Code reuse violates memory safety, integrity, randomization, and flow integrity, ending in a control-flow hijack (slide 32)*
+*Figure 2. Code reuse violates memory safety, integrity, randomization, and flow integrity, ending in a control-flow hijack*
 
 As each step of the fake frame is filled in, a different security property is violated in turn: memory safety (the overflow), integrity (`*C`, the corrupted pointer), randomization (`&C`, the known address), and flow integrity (`*&C`, the hijacked code pointer), ending in a **control-flow hijack**.
+
+> **Architecture:** The three stack words above describe a 32-bit x86 calling convention. On x86-64 System V, the first argument must be prepared in `rdi`. DEP bypass relies on executing existing code in either case.
 
 ### 3.3 What Is ROP
 
 **Return-Oriented Programming (ROP)** generalizes return-to-libc from whole functions to small snippets.
 
-- A **gadget** is a sequence of assembly code that ends with a jump instruction.
+- A **gadget** is a short sequence of existing instructions ending in a control transfer. ROP usually uses `ret`; sequences ending in indirect `jmp` or `call` belong to related forms of code reuse.
   - For example, `pop rax; ret;`.
   - Jump instructions include `ret`, `jmp`, `call`, and so on.
   - Gadgets exist extensively in the vulnerable binary executable.
 - The attacker exploits a vulnerability to execute a chain of useful gadgets.
 
-Tools such as **ROPgadget** (`ROPgadget --binary /bin/bash`) find thousands of gadgets in a single binary (the lecture reports 11,699 unique gadgets in one binary). Gadgets can store to memory (`mov [eax], ecx; ret`), do arithmetic (`add eax, 0x0b; ret`), or invoke a system call (`int 0x80; ret`), so a long enough chain is Turing-complete.
+Tools such as **ROPgadget** (`ROPgadget --binary /bin/bash`) find thousands of gadgets in a single binary. Gadgets can store to memory (`mov [eax], ecx; ret`), do arithmetic (`add eax, 0x0b; ret`), or invoke a system call (`int 0x80; ret`), so a long enough chain is Turing-complete.
 
-> **Key Point:** Because every gadget already lives in an executable page, ROP never needs an executable stack or heap. This is why DEP alone cannot stop code reuse, and why the question "how do we stop code reuse?" leads to **control-flow integrity (CFI)**, covered in the next lecture.
+> **Key Point:** Because every gadget already lives in an executable page, ROP never needs an executable stack or heap. DEP alone cannot stop code reuse. **Control-flow integrity (CFI)** checks permitted branch targets to restrict the control transfers required by code reuse.
 
 ---
 
@@ -186,13 +191,13 @@ Candidates for randomization trade off overhead, complexity, and security benefi
 
 ### 4.3 ASLR and DEP Combined
 
-![Figure 3. With DEP & ASLR, the stack and data are RW- (non-executable) and all base addresses are randomized (slide 42)](../images/L07_p42.png)
+![Figure 3. With DEP & ASLR, the stack and data are RW- (non-executable) and all base addresses are randomized](../images/L07_p42.png)
 
-*Figure 3. With DEP & ASLR, the stack and data are RW- (non-executable) and all base addresses are randomized (slide 42)*
+*Figure 3. With DEP & ASLR, the stack and data are RW- (non-executable) and all base addresses are randomized*
 
 With both defenses, the stack and data regions become **non-executable (RW-)** through DEP, and the base addresses of every region are **randomized** through ASLR. DEP stops code injection, and ASLR makes the addresses needed for code reuse hard to predict. They are complementary.
 
-> **Key Point:** ASLR is **probabilistic**. If any **information leak** reveals one real address, the attacker can compute the others (because a library is randomized as one block), which defeats the randomization. This is why ASLR and leak-prevention go together.
+> **Key Point:** ASLR is probabilistic. If a leaked address belongs to a known library version, subtracting its known offset recovers that library’s base. Other addresses in the same library can then be computed from their offsets. This does not automatically reveal independently randomized mappings.
 
 ---
 
@@ -204,9 +209,9 @@ With both defenses, the stack and data regions become **non-executable (RW-)** t
 
 Early attacks overflowed stack-based buffers to inject code. Full memory safety would mitigate this but is infeasible due to high performance overhead. Instead of checking **every** pointer dereference, a stack canary checks **only before important data is accessed**.
 
-![Figure 4. A canary placed before the saved frame pointer and return address (slide 44)](../images/L07_p44.png)
+![Figure 4. A canary placed before the saved frame pointer and return address](../images/L07_p44.png)
 
-*Figure 4. A canary placed before the saved frame pointer and return address (slide 44)*
+*Figure 4. A canary placed before the saved frame pointer and return address*
 
 - **Key insight:** buffer overflows are only possible after pointer arithmetic, and a continuous overflow must cross the canary to reach the return address.
 - Place a **canary** after a potentially vulnerable buffer, and **check its integrity before the function returns**.
@@ -269,11 +274,49 @@ int main(int argc, char *argv[]) {
 
 <br>
 
+## Concept Applications
+
+**DEP and Code Reuse:** DEP uses hardware support such as the NX bit to make data pages, including stack and heap pages, nonexecutable. Under W^X, a page cannot be writable and executable simultaneously, so jumping into machine code injected into a writable data page traps. However, the overflow and corruption of the saved return address can still occur. An attacker can redirect the return to an existing libc function with prepared arguments, or chain existing executable gadgets through ROP. The instructions are fetched from executable code pages, bypassing the restriction on executing data pages.
+
+**Stack Canary Assembly Missing Parts:** The following x86-64 code saves a canary on function entry and checks it before returning.
+
+```asm
+# Prologue
+mov %fs:0x28, %rax
+mov %rax, -0x8(%rbp)
+
+# Epilogue
+mov -0x8(%rbp), %rcx
+xor %fs:0x28, %rcx
+____ out                         # A
+call ____                        # B
+out:
+leaveq
+retq
+```
+
+> **Answer:** A is `je` or its synonym `jz`; B is `__stack_chk_fail@plt`. Equal stored and original canaries produce zero after XOR, so execution takes the normal return path. A mismatch calls the failure handler. This check occurs before returning, not at every buffer copy.
+
+**T/F Practice:**
+
+| Statement | Answer and Reason |
+|:----------|:------------------|
+| Enabling DEP prevents the out of bounds write itself. | **F.** Execution permission is not a bounds check. |
+| One leaked ASLR address automatically reveals every independently randomized mapping. | **F.** Known offsets first recover addresses in the same module. |
+| An arbitrary write directly to the return address can skip the canary. | **T.** A targeted write differs from a continuous buffer overflow. |
+| `_FORTIFY_SOURCE` checks every copy even when the destination size is unknown. | **F.** A checkable size is required. |
+
+> **Key Point:** State the conditions of a defense’s protection. DEP restricts instruction fetches from data pages, ASLR obscures addresses, canaries detect continuous overwrites checked before return, and Fortify checks eligible buffer operations.
+
+---
+
+<br>
+
 ## Summary
 
-![Figure 5. Combined mitigations against the low-level attack hierarchy (slide 55)](../images/L07_p55.png)
+![Figure 5. Combined mitigations against the low-level attack hierarchy](../images/L07_p55.png)
 
-*Figure 5. Combined mitigations against the low-level attack hierarchy (slide 55)*
+*Figure 5. Combined mitigations against the low-level attack hierarchy*
 
 Several defense mechanisms have been adopted in practice; know their strengths and weaknesses.
 
@@ -282,7 +325,7 @@ Several defense mechanisms have been adopted in practice; know their strengths a
 | **DEP / NX (W^X)** | Code injection | Does not stop code reuse (ROP, return-to-libc) |
 | **ASR / ASLR** | Reuse of code at known addresses | Probabilistic; defeated by information leaks; needs full randomization and high entropy |
 | **Stack canaries** | Continuous stack overflows that reach the return address | Probabilistic; no protection against direct (non-continuous) overwrites; defeated by leaking the canary |
-| **Fortify Source** | Overflows of buffers whose size the compiler knows | Protects only static, checkable buffers |
+| **Fortify Source** | Overflows of buffers whose size the compiler knows | Requires a checkable destination size; unknown sizes may remain unprotected |
 
 ---
 
@@ -296,7 +339,7 @@ Several defense mechanisms have been adopted in practice; know their strengths a
 
 2. **DEP:** What does DEP enforce, what does it stop, and what does it not stop?
 
-   > **Answer:** DEP uses the hardware NX bit to enforce W^X, so each page is either writable or executable but not both. It stops all code injection, because injected code sits on a writable (hence non-executable) page and the CPU traps if control flow reaches it. It does not stop code reuse, because reused code already lives on executable pages.
+   > **Answer:** DEP marks data pages nonexecutable using hardware such as the NX bit. Under W^X, writable pages cannot also be executable, so a jump into injected machine code on such a page traps. It does not repair the overflow or prevent corruption of a return address. Return to libc and ROP bypass this restriction by executing instructions that already reside in executable pages, with the required arguments or register state prepared by the attacker.
 
 3. **Code Reuse:** Explain how return-to-libc bypasses DEP.
 

@@ -1,4 +1,4 @@
-# Lecture 03 — Software Lifecycle
+# L03 Software Lifecycle
 
 > **Last Updated:** 2026-10-08
 >
@@ -28,6 +28,7 @@
   - [3.5 Release](#35-release)
   - [3.6 Maintenance](#36-maintenance)
   - [3.7 Supply Chain](#37-supply-chain)
+- [Concept Applications](#concept-applications)
 - [Summary](#summary)
 - [Self-Check Questions](#self-check-questions)
 
@@ -41,11 +42,11 @@
 - Software development, production, and maintenance are **cost and labor intensive**.
 - **Software life-time can outlive hardware.**
 
-![Figure 1. Windows releases from 1985 to the present (slide 3)](../images/L03_p03.png)
+![Figure 1. Windows releases from 1985 to the present](../images/L03_p03.png)
 
-*Figure 1. Windows releases from 1985 to the present (slide 3)*
+*Figure 1. Windows releases from 1985 to the present*
 
-The slide shows the history of Windows: Windows 1 (1985), Windows 3.1 (1992), Windows 95 (1995), Windows XP (2001), Windows Vista (2006), Windows 7 (2009), Windows 8 (2012), Windows 10 (2015), and Windows 11 (2021 to present). Windows 10 reached its end of support on October 14, 2025 (22H2 was the final version), yet paid Extended Security Updates (ESU) run until October 2027, and hundreds of millions of PCs still run it.
+Major Windows releases have evolved as follows: Windows 1 (1985), Windows 3.1 (1992), Windows 95 (1995), Windows XP (2001), Windows Vista (2006), Windows 7 (2009), Windows 8 (2012), Windows 10 (2015), and Windows 11 (2021 to present). Windows 10 reached its end of support on October 14, 2025 (22H2 was the final version), yet paid Extended Security Updates (ESU) run until October 2027, and hundreds of millions of PCs still run it.
 
 > **Key Point:** Because software lives for decades, a security flaw introduced today must be maintained, patched, and supported for many years. Security therefore cannot be added once at the end; it has to be part of every phase of the software's life.
 
@@ -59,9 +60,9 @@ The slide shows the history of Windows: Windows 1 (1985), Windows 3.1 (1992), Wi
 
 **Software engineering** is defined as a process of analyzing user requirements and then designing, building, and testing a software application that will satisfy those requirements.
 
-![Figure 2. The software development cycle (slide 4)](../images/L03_p04.png)
+![Figure 2. The software development cycle](../images/L03_p04.png)
 
-*Figure 2. The software development cycle (slide 4)*
+*Figure 2. The software development cycle*
 
 The software development cycle consists of six phases: (1) planning, (2) analysis, (3) design, (4) implementation, (5) testing and integration, and (6) maintenance.
 
@@ -83,9 +84,9 @@ Secure software engineering **incorporates security throughout the software deve
 |:--|:--------------------------|:----------------------------------------|
 | Focus | Functionality, timeliness, deliverables | Limiting functionality, enforcing security policies, defining constraints |
 
-![Figure 3. DevOpsSec, DevSecOps, and SecDevOps (slide 7)](../images/L03_p07.png)
+![Figure 3. DevOpsSec, DevSecOps, and SecDevOps](../images/L03_p07.png)
 
-*Figure 3. DevOpsSec, DevSecOps, and SecDevOps (slide 7)*
+*Figure 3. DevOpsSec, DevSecOps, and SecDevOps*
 
 The three rings show the phases of a DevOps cycle (design, code, build, test, release, maintain, operate), and the highlighted segments mark where security is applied:
 
@@ -98,9 +99,9 @@ The three rings show the phases of a DevOps cycle (design, code, build, test, re
 - **Microsoft SDL** reported about 50% to 60% fewer security defects.
 - Shift-left security is no longer just best practice: **CISA's Secure by Design pledge** (2024) and the **EU Cyber Resilience Act** (obligations from 2026 to 2027) make it a legal expectation.
 
-![Figure 4. Relative cost to fix, based on time of detection (slide 8)](../images/L03_p08.png)
+![Figure 4. Relative cost to fix, based on time of detection](../images/L03_p08.png)
 
-*Figure 4. Relative cost to fix, based on time of detection (slide 8)*
+*Figure 4. Relative cost to fix, based on time of detection*
 
 | Phase in Which the Defect Is Detected | Relative Cost to Fix |
 |:--------------------------------------|:--------------------:|
@@ -122,9 +123,9 @@ Source: National Institute of Standards and Technology (NIST)
 
 A **secure SDLC** integrates security testing and other security activities into an existing development process.
 
-![Figure 5. Software/system development life cycle (slide 9)](../images/L03_p09.png)
+![Figure 5. Software/system development life cycle](../images/L03_p09.png)
 
-*Figure 5. Software/system development life cycle (slide 9)*
+*Figure 5. Software/system development life cycle*
 
 The cycle consists of requirement analysis, design, implementation, testing, and evolution, after which it starts again.
 
@@ -202,6 +203,32 @@ Most of today's risk enters through **code you did not write**, so supply chain 
 | **Regulation** | CISA Secure by Design (2024), EU Cyber Resilience Act (obligations from 2026 to 2027) |
 
 > **Note:** In the **xz utils** incident (CVE-2024-3094), a contributor spent about two years earning maintainer trust in the xz compression project and then hid a backdoor in its release tarballs. On some Linux distributions, the compromised `liblzma` was loaded by the SSH server, which would have allowed remote code execution. It was discovered by chance because SSH logins became slightly slower. **SLSA** (Supply-chain Levels for Software Artifacts) defines levels of build integrity, and **reproducible builds** let anyone check that a binary was built from the published source.
+
+---
+
+<br>
+
+## Concept Applications
+
+Security work continues from requirements analysis through maintenance. Activities relate to lifecycle phases according to their purpose.
+
+| Situation | Phase and Reason |
+|:----------|:-----------------|
+| Identify private data and attacker inputs; require an SBOM. | **Requirement analysis.** Establish assets, boundaries, and deliverables. |
+| A new feature adds an external input path. | **Design.** Update the threat model and review the design. Changes during implementation also require updated documents and reviews. |
+| A commit contains an API key or a dependency has a known vulnerability. | **Implementation.** Integrate secret and dependency checks into development. |
+| Explore boundary inputs with fuzzing or obtain an external penetration test. | **Testing.** Check security requirements as well as functionality. |
+| Check security, privacy, and licensing immediately before shipping. | **Release.** Revisit assumptions and release conditions. |
+| Patch a library and recheck existing behavior and security requirements. | **Maintenance.** Update dependencies and run regression checks. |
+
+**T/F Practice:**
+
+| Statement | Answer and Reason |
+|:----------|:------------------|
+| Security checks are needed only immediately before release. | **F.** Security spans requirements through maintenance. |
+| An SBOM proves that every dependency is safe. | **F.** An inventory supports tracking and review, not proof of absence of vulnerabilities. |
+| Regression testing checks whether a patch broke existing functionality or security requirements. | **T.** Behavior must be checked again after changes. |
+| Supply chain security belongs only to requirement analysis. | **F.** It also covers dependency selection, builds, deployment, and updates. |
 
 ---
 

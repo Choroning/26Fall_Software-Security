@@ -1,4 +1,4 @@
-# Lecture 02 — Basic Principles
+# L02 Basic Principles
 
 > **Last Updated:** 2026-10-08
 >
@@ -44,6 +44,7 @@
   - [5.6 Mandatory Access Control (MAC)](#56-mandatory-access-control-mac)
   - [5.7 Discretionary Access Control (DAC)](#57-discretionary-access-control-dac)
   - [5.8 Role-Based Access Control (RBAC)](#58-role-based-access-control-rbac)
+- [Concept Applications](#concept-applications)
 - [Summary](#summary)
 - [Self-Check Questions](#self-check-questions)
 
@@ -68,7 +69,7 @@
 | **Integrity** | An attacker cannot modify protected data. |
 | **Availability** | An attacker cannot stop or hinder computation. |
 
-The slide draws the three properties as the corners of a triangle with **security** at its center: a system is secure only when all three are maintained.
+Confidentiality, integrity, and availability are complementary security goals. They must be protected together according to the system's security requirements.
 
 > **[Operating Systems]** These goals describe *what* protection should achieve; operating-system mechanisms help enforce them. File permissions can protect confidentiality and integrity, while process scheduling and resource limits help preserve availability. One mechanism can support several goals, and none of these mechanisms alone guarantees a secure system.
 
@@ -175,23 +176,23 @@ The **principle of least privilege** ensures that a component has the **least pr
 - This property **constrains the privileges an attacker can obtain**.
 - **Example:** Rendering in Chromium executes in an encapsulated **sandbox** where only minimal system calls are allowed.
 
-![Figure 1. Temporal system call specialization for an Apache process (slide 14)](../images/L02_p14.png)
+![Figure 1. Temporal system call specialization for an Apache process](../images/L02_p14.png)
 
-*Figure 1. Temporal system call specialization for an Apache process (slide 14)*
+*Figure 1. Temporal system call specialization for an Apache process*
 
-The slide cites *Temporal System Call Specialization for Attack Surface Reduction* (USENIX Security 2020). A server such as Apache needs many system calls during its **initialization** phase (e.g., `bind`, `listen`, `fork`, `execve`, `setns`), but far fewer during its **serving** phase (e.g., `read`, `writev`, `mmap`). Unused libc functions and system calls that are only needed for initialization can therefore be blocked once the server starts serving requests, which applies least privilege over time.
+A server such as Apache needs many system calls during its **initialization** phase (e.g., `bind`, `listen`, `fork`, `execve`, `setns`), but far fewer during its **serving** phase (e.g., `read`, `writev`, `mmap`). Unused libc functions and system calls that are only needed for initialization can therefore be blocked once the server starts serving requests, which applies least privilege over time through **temporal system call specialization**.
 
-![Figure 2. POSIX capabilities (slide 15)](../images/L02_p15.png)
+![Figure 2. POSIX capabilities](../images/L02_p15.png)
 
-*Figure 2. POSIX capabilities (slide 15)*
+*Figure 2. POSIX capabilities*
 
-The table on Slide 15 lists **POSIX capabilities**: capabilities from the POSIX draft (e.g., `CAP_CHOWN`, `CAP_DAC_OVERRIDE`, `CAP_KILL`, `CAP_SETUID`) and Linux-specific extensions (e.g., `CAP_NET_BIND_SERVICE`, `CAP_NET_ADMIN`, `CAP_NET_RAW`, `CAP_SYS_MODULE`, `CAP_SYS_PTRACE`, `CAP_SYS_ADMIN`). Capabilities split the all-powerful root privilege into fine-grained units, so a process can receive only the privileges it needs. For example, a web server can be given `CAP_NET_BIND_SERVICE` to bind to port 80 without running as root.
+**Capabilities** divide privilege into smaller units. They include capabilities from the POSIX draft (e.g., `CAP_CHOWN`, `CAP_DAC_OVERRIDE`, `CAP_KILL`, `CAP_SETUID`) and Linux-specific extensions (e.g., `CAP_NET_BIND_SERVICE`, `CAP_NET_ADMIN`, `CAP_NET_RAW`, `CAP_SYS_MODULE`, `CAP_SYS_PTRACE`, `CAP_SYS_ADMIN`). Capabilities split the all-powerful root privilege into fine-grained units, so a process can receive only the privileges it needs. For example, a web server can be given `CAP_NET_BIND_SERVICE` to bind to port 80 without running as root.
 
 ### 3.3 Fault Compartments
 
 **Fault compartments** build on least privilege and isolation. Both properties are most effective in combination: **many small components that are running and interacting with least privileges**.
 
-The slide illustrates the idea with a photograph of a ship's hull divided into watertight compartments: if one compartment floods, the bulkheads stop the water from sinking the whole ship. Likewise, a compromise of one software component should not spread to the others.
+**Fault compartmentalization** establishes boundaries so that a compromise of one software component does not spread to others.
 
 ### 3.4 Example: Mail Server (sendmail vs. qmail)
 
@@ -208,9 +209,9 @@ There are two possible approaches:
 | **sendmail** | A typical Unix approach with a **large monolithic server** | Known for high complexity and previous security vulnerabilities |
 | **qmail** | A modern **least privilege** approach with a set of **communicating processes** | Each process runs with only the privileges it needs |
 
-![Figure 3. qmail components (slide 19)](../images/L02_p19.png)
+![Figure 3. qmail components](../images/L02_p19.png)
 
-*Figure 3. qmail components (slide 19)*
+*Figure 3. qmail components*
 
 | Component | Role |
 |:----------|:-----|
@@ -225,9 +226,9 @@ There are two possible approaches:
 
 ### 3.5 Example: Docker
 
-![Figure 4. Containers (Docker) versus virtual machines (slide 21)](../images/L02_p21.png)
+![Figure 4. Containers (Docker) versus virtual machines](../images/L02_p21.png)
 
-*Figure 4. Containers (Docker) versus virtual machines (slide 21)*
+*Figure 4. Containers (Docker) versus virtual machines*
 
 | | Containers (Docker) | Virtual Machines |
 |:--|:--------------------|:-----------------|
@@ -255,9 +256,9 @@ The way an operating system is layered determines how much isolation and compart
 
 ### 4.1 Single Domain OS
 
-![Figure 5. Single domain OS (slide 23)](../images/L02_p23.png)
+![Figure 5. Single domain OS](../images/L02_p23.png)
 
-*Figure 5. Single domain OS (slide 23)*
+*Figure 5. Single domain OS*
 
 - A **single layer** with no isolation or compartmentalization.
 - All code runs in the same domain: the application can directly call into operating system drivers.
@@ -265,9 +266,9 @@ The way an operating system is layered determines how much isolation and compart
 
 ### 4.2 Monolithic OS
 
-![Figure 6. Monolithic OS (slide 24)](../images/L02_p24.png)
+![Figure 6. Monolithic OS](../images/L02_p24.png)
 
-*Figure 6. Monolithic OS (slide 24)*
+*Figure 6. Monolithic OS*
 
 - **Two layers:** the operating system and applications.
 - The OS manages resources and orchestrates access.
@@ -276,9 +277,9 @@ The way an operating system is layered determines how much isolation and compart
 
 ### 4.3 Microkernel
 
-![Figure 7. Microkernel (slide 25)](../images/L02_p25.png)
+![Figure 7. Microkernel](../images/L02_p25.png)
 
-*Figure 7. Microkernel (slide 25)*
+*Figure 7. Microkernel*
 
 - **Many layers:** each component is a separate process.
 - Only essential parts are privileged:
@@ -286,9 +287,9 @@ The way an operating system is layered determines how much isolation and compart
   - Process management (scheduling)
   - Process communication (IPC)
 
-![Figure 8. Monolithic kernel versus microkernel based operating systems (slide 26)](../images/L02_p26.png)
+![Figure 8. Monolithic kernel versus microkernel based operating systems](../images/L02_p26.png)
 
-*Figure 8. Monolithic kernel versus microkernel based operating systems (slide 26)*
+*Figure 8. Monolithic kernel versus microkernel based operating systems*
 
 In a monolithic kernel, the VFS, IPC, file system, scheduler, virtual memory, and device drivers all run in kernel mode. In a microkernel, only basic IPC, virtual memory, and scheduling remain in kernel mode, while the file system, device drivers, and servers run in user mode.
 
@@ -370,35 +371,35 @@ Authorization answers the question "**who can access what information?**"
 
 **Bell-LaPadula**
 
-![Figure 9. Bell-LaPadula model (slide 34)](../images/L02_p34.png)
+![Figure 9. Bell-LaPadula model](../images/L02_p34.png)
 
-*Figure 9. Bell-LaPadula model (slide 34)*
+*Figure 9. Bell-LaPadula model*
 
 - Bell-LaPadula only enforces **confidentiality**.
 - A given clearance allows **reading objects of lower or equal clearance** and **writing files of equal or higher clearance**.
 - Summarized as **read-down, write-up** ("no read up, no write down"): information cannot flow down to a less secure level.
 
-![Figure 10. Bell-LaPadula rules (slide 35)](../images/L02_p35.png)
+![Figure 10. Bell-LaPadula rules](../images/L02_p35.png)
 
-*Figure 10. Bell-LaPadula rules (slide 35)*
+*Figure 10. Bell-LaPadula rules*
 
 | Rule | Meaning |
 |:-----|:--------|
 | Simple confidentiality rule (simple property) | No read up: a subject reads only at its level or below. |
 | Star confidentiality rule (\* property) | No write down: a subject writes only at its level or above. |
-| Strong star confidentiality rule | No read up and no write down: reading and writing only at the subject's own level. |
+| Strong star confidentiality rule | No reading or writing at a different level: both operations are restricted to the subject's own level. |
 
 **If implemented naively, an attacker may overwrite confidential files.**
 
 **Biba**
 
-![Figure 11. Biba model (slide 36)](../images/L02_p36.png)
+![Figure 11. Biba model](../images/L02_p36.png)
 
-*Figure 11. Biba model (slide 36)*
+*Figure 11. Biba model*
 
 - Biba enforces **integrity**.
 - A given clearance allows **reading files of higher or equal clearance** and **writing files of lower or equal clearance**.
-- Summary: **read-up, write-down** (simple integrity rule: no read down; star integrity rule: no write up; strong star integrity rule: no read up and no write down).
+- Summary: **read-up, write-down** (simple integrity rule: no read down; star integrity rule: no write up; strong star integrity rule: neither reading nor writing across levels).
 
 **If implemented naively, an attacker may leak privileged information.**
 
@@ -415,9 +416,9 @@ Authorization answers the question "**who can access what information?**"
 
 DAC is represented by an **access control matrix**: a table of subjects and objects indicating what actions individual subjects can take upon individual objects.
 
-![Figure 12. Access control matrix (slide 38)](../images/L02_p38.png)
+![Figure 12. Access control matrix](../images/L02_p38.png)
 
-*Figure 12. Access control matrix (slide 38)*
+*Figure 12. Access control matrix*
 
 | Subject | `/etc/passwd` | `/usr/bin/` | `/u/roberto/` | `/admin/` |
 |:--------|:--------------|:------------|:--------------|:----------|
@@ -436,9 +437,9 @@ The policy is defined in terms of **roles** (sets of permissions): individuals a
 - Users get assigned specific roles.
 - Administration privileges may be a role.
 
-![Figure 13. Role-based access control (slide 39)](../images/L02_p39.png)
+![Figure 13. Role-based access control](../images/L02_p39.png)
 
-*Figure 13. Role-based access control (slide 39)*
+*Figure 13. Role-based access control*
 
 In the figure, many users are mapped to a small number of roles (e.g., "Network Admin" and "Network Operator"), and each role is linked to sets of rules such as command rules, feature rules, VLAN policies, and interface policies. Changing a role's rules updates the permissions of every user assigned to it.
 
@@ -447,6 +448,37 @@ In the figure, many users are mapped to a small number of roles (e.g., "Network 
 | **MAC** | A central authority | Bell-LaPadula, Biba |
 | **DAC** | The owner of the object | Unix permissions |
 | **RBAC** | Administrators, through roles | Network device roles |
+
+---
+
+<br>
+
+## Concept Applications
+
+Access control defines both the **protected property and the permitted direction**. Assume the linear ordering `High > Medium > Low` and a subject at Medium.
+
+| Access | Bell-LaPadula | Biba |
+|:-------|:--------------|:-----|
+| Read a Low object | Allowed | Forbidden |
+| Read a High object | Forbidden | Allowed |
+| Write a Low object | Forbidden | Allowed |
+| Write a High object | Allowed | Forbidden |
+| Read and write a Medium object | Allowed | Allowed |
+
+> **Note:** This table applies the basic read and write rules only. Additional access permissions or strong star rules can change the result. Combining the two basic Bell-LaPadula rules does not restrict both reads and writes to the subject’s own level.
+
+**T/F Practice:**
+
+| Statement | Answer and Reason |
+|:----------|:------------------|
+| Successful authentication authorizes access to every object. | **F.** Authentication checks identity; authorization checks access rights. |
+| Bell-LaPadula guarantees both confidentiality and integrity. | **F.** It protects confidentiality; writing up can damage integrity. |
+| Biba restricts contamination of high integrity objects by low integrity input. | **T.** It restricts reading down and writing up. |
+| Fault compartments combine isolation and least privilege. | **T.** Boundaries and limited permissions reduce the spread of a compromise. |
+
+**Subjective Practice:** Why should a threat model be defined before evaluating a defense?
+
+> **Answer:** A defense’s effectiveness depends on the assumed attacker’s capabilities and resources. Identify the assets, attacker controlled inputs, possible attacks, and excluded attacks before judging which policy and mechanism are appropriate.
 
 ---
 
@@ -483,7 +515,7 @@ In the figure, many users are mapped to a small number of roles (e.g., "Network 
 
    > **Answer:** A threat model defines the abilities and resources of the attacker: the class of attacks to stop, the attacker's capability, the impact of an attack, and which attacks are out of scope. A defense is only meaningful relative to a threat model. For example, a lock is sufficient against a lock picker in a weak threat model, but useless if the attacker can copy the key.
 
-3. **Least Privilege:** State the principle of least privilege and give two examples from the lecture.
+3. **Least Privilege:** State the principle of least privilege and give two concrete applications.
 
    > **Answer:** A component should have only the privileges needed to function: removing any privilege reduces functionality, and adding any privilege does not increase functionality. Examples are the Chromium renderer sandbox, which allows only minimal system calls, and temporal system call specialization, which blocks system calls such as `execve` once a server moves from initialization to serving. POSIX capabilities are a third example.
 

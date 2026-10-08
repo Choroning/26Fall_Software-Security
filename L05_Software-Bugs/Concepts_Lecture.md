@@ -1,4 +1,4 @@
-# Lecture 05 — Software Bugs
+# L05 Software Bugs
 
 > **Last Updated:** 2026-10-08
 >
@@ -28,6 +28,7 @@
   - [2.7 Use-After-Free](#27-use-after-free)
   - [2.8 Undefined Behavior](#28-undefined-behavior)
   - [2.9 Type Confusion](#29-type-confusion)
+- [Concept Applications](#concept-applications)
 - [Summary](#summary)
 - [Self-Check Questions](#self-check-questions)
 
@@ -65,18 +66,18 @@ void set(int idx, int val) {
 }
 ```
 
-An attacker with control of `idx` and `val` can set **any 4-byte location within ±2 GB around `global`** to an arbitrary value.
+Control of `idx` and `val` allows the attacker to **select an out of bounds location and store a 4-byte value**. The byte offset is `idx * sizeof(int)`.
 
 ### 1.3 Arbitrary Write, Limited Location
 
 ```c
-void vuln(char *u1) {
+int vuln(char *u1) {
   /* assert(strlen(u1) < MAX); */
   char tmp[MAX];
   strcpy(tmp, u1);
   /* equivalent:
-     while (*u1 != 0)
-       *(tmp++) = *u1++;
+     char *out = tmp;
+     while ((*out++ = *u1++) != '\0') {}
    */
   return strcmp(tmp, "foo");
 }
@@ -94,7 +95,7 @@ int get(int idx) {
 }
 ```
 
-An attacker with control over `idx` and access to the return value can **read arbitrary 4-byte values within ±2 GB of `global`'s address**.
+Control of `idx` and observation of the return value allow the attacker to **read a 4-byte value outside the array**. As in the write example, the actual range depends on address arithmetic and mappings.
 
 | Primitive | Attacker Controls | Capability |
 |:----------|:------------------|:-----------|
@@ -110,7 +111,7 @@ An attacker with control over `idx` and access to the return value can **read ar
 
 ## 2. Common Bug Types
 
-Not all bugs map as clearly to primitives as the earlier examples. **C/C++ provides many different opportunities for failure.** The slide illustrates this with a photograph titled "Maximum Security Entrance": a gate on a path whose surrounding lawn is covered with tire tracks that simply drive around it. A single check is useless if there are many other ways around it.
+Not every bug directly yields an attack primitive. C/C++ errors can arise from initialization, expression evaluation, control flow, object lifetime, and type conversions. A defense that checks only one error class can miss other paths to failure.
 
 ### 2.1 Improper Initialization
 
@@ -126,7 +127,7 @@ int getmin(int *arr, uint len) {
 
 `min` is **not initialized** and may have an arbitrary value. (Would `-Wuninitialized` catch it?)
 
-> **Note:** If the stale stack value in `min` happens to be smaller than every element, the function returns that garbage value, and if `len` is 0, it always does. The fix is to initialize `min` with `arr[0]` (after checking `len > 0`) or with `INT_MAX`. `-Wuninitialized` (enabled by `-Wall`) warns about such cases, but compilers cannot catch every path.
+> **Note:** Reading uninitialized `min` must not be treated as a guaranteed return of a particular garbage value; this example can have undefined behavior. Check `len > 0`, initialize with `arr[0]`, and start at the second element, or define the empty input behavior and initialize with `INT_MAX`. Compiler warnings do not catch every path.
 
 ### 2.2 Side Effects
 
@@ -135,9 +136,9 @@ if (foo == 12 || (bar = 13))
   baz = 12;
 ```
 
-According to the slide, **`bar` is set if `foo != 12`, while `baz` is never set.** Watch out when calling functions in an expression; their side effects will linger.
+**`bar = 13` executes only when `foo != 12`, while `baz = 12` executes in both cases.** If the left operand is true, `||` skips the assignment. Otherwise, the assignment evaluates to 13, which is true, so the body still runs.
 
-> **Note:** Because `||` short-circuits, the assignment `bar = 13` is only evaluated when `foo != 12`, which is the side effect the slide warns about. Strictly speaking, as written, `bar = 13` evaluates to 13 (true), so `baz` is set in both cases; the point to remember is that an assignment or function call inside a condition may or may not run depending on the other operands.
+> **Short Circuit Evaluation:** An assignment or function call inside a condition may run or be skipped according to the preceding operand. Since the assignment evaluates to 13, the complete condition in this example is true in both cases.
 
 > **[Programming Languages]** In C, `=` assigns a value and the assignment expression itself evaluates to that value; any nonzero value is true in a condition. By contrast, `==` compares two values. Thus `(bar = 13)` is true, and short-circuit evaluation determines whether that assignment runs at all. Keeping assignment and comparison distinct makes this example much easier to trace.
 
@@ -234,11 +235,54 @@ Parent *p = static_cast<Parent*>(c);   // OK
 Child2 *d = static_cast<Child2*>(p);   // Fail!
 ```
 
-![Figure 1. Upcast to Parent (legal) and downcast to Child2 (illegal) (slide 16)](../images/L05_p16.png)
+![Figure 1. Upcast to Parent (legal) and downcast to Child2 (illegal)](../images/L05_p16.png)
 
-*Figure 1. Upcast to Parent (legal) and downcast to Child2 (illegal) (slide 16)*
+*Figure 1. Upcast to Parent (legal) and downcast to Child2 (illegal)*
 
 The upcast from `Child1` to `Parent` is always legal (green arrow). The downcast from `Parent` to `Child2` is illegal (red arrow), because the object is actually a `Child1`, and `static_cast` does not check this at run time.
+
+---
+
+<br>
+
+## Concept Applications
+
+**Code Tracing and Missing Parts:**
+
+| Code or Situation | Interpretation and Repair |
+|:------------------|:--------------------------|
+| `foo == 12 \|\| (bar = 13)` | If `foo == 12`, `bar` stays unchanged and `baz = 12` runs. Otherwise both `bar = 13` and `baz = 12` run. |
+| `*curr->val` with `curr` of type `node **` | The intended access is `(*curr)->val` because `->` binds before `*`. |
+| A stray `;` after the inner `for` | The empty loops finish before the single write. Trace statement and brace boundaries, not indentation. |
+| Uninitialized `min` | Initialize before reading and specify the empty array case. |
+| `search(ptr)` after freeing the object | The pointer refers to an object whose lifetime ended, causing a temporal safety violation. |
+
+```c
+void set(int idx, int val) {
+  if (____ || ____) return;
+  global[idx] = val;                     // global has 10 elements
+}
+```
+
+> **Answer:** `idx < 0` and `idx >= 10`. Using `idx > 10` incorrectly accepts index 10. Checking only the upper bound misses negative signed indices.
+
+**Bug Classification:** Bugs can be classified by their cause and location. A single error may belong to more than one category.
+
+| Bug Category | Concept to Check |
+|:-------------|:-----------------|
+| Unchecked system call returning code | Is a failure return checked before subsequent operations? |
+| Stack buffer overflow/underflow | Does an access exceed a local buffer’s upper or lower bound? |
+| Command injection | Can external input become command syntax? |
+| Arithmetic overflow/underflow | Does a size or index exceed its representation? Signed overflow is undefined behavior; unsigned arithmetic wraps modulo its range but can still create an unsafe size. |
+| Heap overflow/underflow | Does an access precede or exceed a dynamic allocation? |
+| Temporal safety violation | Is a freed or invalidated object used? |
+| Local persisting pointers | Is a local object’s address used after its lifetime ends? |
+| String vulnerability | Are length, capacity, and termination requirements satisfied? |
+| Iteration errors | Do loop bounds visit exactly the intended valid elements? |
+| Wrong operators | Are assignment, comparison, logical, bitwise, or precedence rules confused? |
+| Type error | Are pointer types, conversions, and value ranges compatible with the actual data? |
+
+> **Key Point:** Type errors include inappropriate pointer types and value conversions as well as illegal C++ downcasts. Connect the bug’s cause, attacker controlled input, read or write capability, and security consequence.
 
 ---
 
@@ -249,9 +293,9 @@ The upcast from `Child1` to `Parent` is always legal (green arrow). The downcast
 | Concept | Key Summary |
 |:--------|:------------|
 | Attack primitives | Bugs map to primitives; a chain of primitives forms an exploit, and the underlying bugs become vulnerabilities. |
-| Arbitrary write / read | An unchecked index lets an attacker write or read any 4-byte value within ±2 GB of `global`. |
+| Arbitrary write / read | An unchecked index selects a 4-byte value near the array; the element size determines the byte offset. |
 | Limited-location write | `strcpy` overwrites non-zero bytes above `tmp` on the stack, ending with `\0`. |
-| Improper initialization | Uninitialized variables (e.g., `min`) hold arbitrary values. |
+| Improper initialization | Reading an uninitialized variable such as `min` can have undefined behavior. |
 | Side effects | Assignments or calls inside conditions run only depending on short-circuit evaluation. |
 | Scoping | A local variable shadows a global variable of the same name. |
 | Operator precedence | `->` and `.` bind more tightly than `*`; write `(*curr)->`. |
@@ -273,7 +317,7 @@ The upcast from `Child1` to `Parent` is always legal (green arrow). The downcast
 
 2. **Arbitrary Read:** In `int get(int idx) { return global[idx]; }`, what can an attacker do, and why is this useful in an exploit?
 
-   > **Answer:** By controlling `idx` and observing the return value, the attacker can read any 4-byte value within about ±2 GB of `global`. Such a read primitive is typically used to leak secrets, such as addresses or canaries, which are then used together with a write primitive to build a reliable exploit.
+   > **Answer:** Controlling `idx` and observing the result can disclose values outside the array, including addresses or canaries. A subsequent write primitive can corrupt a code pointer and complete an exploit. Reachable addresses depend on the `idx * sizeof(int)` address calculation and actual memory mappings.
 
 3. **Operator Precedence:** What is wrong with `*curr->val` in the `find` function, and how is it fixed?
 
@@ -289,6 +333,6 @@ The upcast from `Child1` to `Parent` is always legal (green arrow). The downcast
 
 6. **Type Confusion:** Why does `static_cast<Child2*>(p)` fail when `p` was obtained from a `Child1` object?
 
-   > **Answer:** `p` points to an object that is actually a `Child1`. Casting it down to `Child2*` is illegal because the object is not a `Child2`, but `static_cast` performs no runtime check, so the cast succeeds and any access through `d` interprets `Child1`'s memory as a `Child2`, which is type confusion.
+   > **Answer:** `p` points to a `Child1`, so the downcast to `Child2*` has undefined behavior. `static_cast` inserts no runtime check of the actual object and may compile. Compilation does not establish a safe cast; interpreting fields or virtual functions through the incompatible type can cause type confusion.
 
 ---

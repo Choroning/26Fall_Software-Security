@@ -1,4 +1,4 @@
-# Lecture 09 — Why Testing?
+# L09 Why Testing?
 
 > **Last Updated:** 2026-10-08
 >
@@ -32,6 +32,7 @@
 - [4. Dynamic Analysis and Symbolic Execution](#4-dynamic-analysis-and-symbolic-execution)
   - [4.1 Dynamic Analysis](#41-dynamic-analysis)
   - [4.2 Symbolic Execution](#42-symbolic-execution)
+- [Concept Applications](#concept-applications)
 - [Summary](#summary)
 - [Self-Check Questions](#self-check-questions)
 
@@ -77,7 +78,7 @@ Test cases detect bugs through:
 | Uncaught exceptions | |
 | Mitigations triggering termination | |
 
-How can you increase the chances of detecting a bug? The **Sanitization** lecture covers fault detection environments.
+**Sanitizers** check violations during execution and improve detection of errors that may remain invisible in a normal run.
 
 ---
 
@@ -99,7 +100,9 @@ How can you increase the chances of detecting a bug? The **Sanitization** lectur
 |:-----|:---------|
 | **Manual testing** | "Debug by printf", unit tests, integration tests |
 | **Static analysis** | Compiler warnings (`-Wall -Wextra -Wpedantic`), fast checkers (linters), heavy-weight static analysis (clang checker) |
-| **Dynamic analysis** | Whitebox testing (aware of the specification), greybox testing (partially aware), blackbox testing (unaware) |
+| **Dynamic analysis** | Whitebox testing (uses internals), greybox testing (uses partial feedback), blackbox testing (observes inputs and outputs) |
+
+> **Classification:** Whitebox, greybox, and blackbox describe access to program internals and feedback. A blackbox test can still have a precise input and output specification. Unit and integration tests can be designed manually and executed automatically.
 
 ### 2.3 Manual Testing
 
@@ -122,9 +125,11 @@ A static analysis **reasons about the code instead of executing it**. The line b
 
 | Advantages | Disadvantages |
 |:-----------|:--------------|
-| Absolute coverage (no need for complete test cases) | Computation depends on data, resulting in **undecidability** |
-| Complete (test cases may miss edge cases) | **Over-approximation** due to imprecision and aliasing |
+| Can reason about paths without supplying a test input for each | Computation depends on data, resulting in **undecidability** |
+| Can include edge cases that chosen tests do not execute | **Over-approximation** due to imprecision and aliasing |
 | Abstract interpretation (no runtime environment needed) | May have large amounts of **false positives** |
+
+> **Precision and Coverage:** Static analysis abstracts multiple possible executions, but practical coverage depends on its model, approximations, and resource limits. Reporting correct code as faulty is a false positive; missing an actual bug is a false negative.
 
 ### 3.2 Laws of Static Analysis
 
@@ -199,9 +204,9 @@ The same idea applied to function pointers yields the **possible call targets**:
 - Target conditions must be defined.
 - It finds a **concrete input** that triggers an "interesting" condition.
 
-![Figure 1. A symbolic execution tree with a path condition for each leaf (slide 29)](../images/L09_p29.png)
+![Figure 1. A symbolic execution tree with a path condition for each leaf](../images/L09_p29.png)
 
-*Figure 1. A symbolic execution tree with a path condition for each leaf (slide 29)*
+*Figure 1. A symbolic execution tree with a path condition for each leaf*
 
 In the example, the inputs start as symbols (`x=0, y=0, z=0` with symbolic `a`, `b`, `c`). Each branch (`if (a)`, `if (b < 5)`, and so on) splits execution into a true and a false path, and each leaf collects a **path condition** (a conjunction such as `¬a ∧ (β < 5) ∧ γ`). Solving a path condition with a **SAT/SMT solver** yields a concrete input that reaches that leaf, for example the one that triggers the failing `assert(x+y+z != 3)`.
 
@@ -223,13 +228,66 @@ In the example, the inputs start as symbols (`x=0, y=0, z=0` with symbolic `a`, 
 
 <br>
 
+## Concept Applications
+
+**Value Sets and CFI Targets:** Merge possible branch outcomes when conditions are unknown, but remove values overwritten by later assignments. In the main function pointer example, final `p` is `{F5, F2, F3}`. Neither `F1` nor `F4` survives either branch of the last conditional.
+
+**Symbolic Execution Practice:**
+
+```c
+int x = 0, y = 0, z = 0;          // a, b, c are symbolic inputs
+if (a)
+  x = -2;
+if (b < 5) {
+  if (!a && c)
+    y = 1;
+  z = 2;
+}
+assert(x + y + z != 3);
+```
+
+> **Answer:** The assertion fails under `a == 0 && b < 5 && c != 0`. For example, `a = 0, b = 0, c = 1` gives `x = 0, y = 1, z = 2` and a sum of 3. Distinguish a path condition from a concrete input satisfying it.
+
+**Unit Test Design:** Unit tests can inspect a small function’s state and outputs, but cover only the selected inputs and checks. Connect normal inputs, empty inputs, boundaries, and error paths to the specification.
+
+| Topic | Explanation |
+|:------|:------------|
+| Test oracle | An expected result or property against which observed behavior is compared. Absence of a crash alone does not establish correct results. |
+| Result checks | Check pixels as well as size and alpha values that the specification requires preserving. |
+| Object lifetime | If a filter may replace its buffer, reread current `img.px` after the call. Keeping the old pointer can create a temporal error in the test. |
+| Signals and failures | Distinguish assertion failures, unexpected signals, timeouts, and specified expected signals. Check treats these differently. |
+| Regression checks | After a repair, check existing behavior and boundary inputs again. |
+
+Assume `sum` implements integer addition. The following test compares its actual result with an expected value.
+
+```c
+START_TEST(addition_test) {
+  ____(sum(1, 2), 3);
+}
+END_TEST
+```
+
+> **Answer:** `ck_assert_int_eq`. A test must compare the result against the specification; simply calling the function is insufficient.
+
+**T/F Practice:**
+
+| Statement | Answer and Reason |
+|:----------|:------------------|
+| Static analysis has no false negatives because it does not execute the program. | **F.** Models, supported code, and resource limits can cause missed bugs. |
+| A false positive misses a real bug, while a false negative reports correct code as buggy. | **F.** These definitions are reversed. |
+| Blackbox testing cannot know the specification. | **F.** It can use input and expected output requirements without inspecting the implementation. |
+
+---
+
+<br>
+
 ## Summary
 
 | Concept | Key Summary |
 |:--------|:------------|
 | Testing | Finds bugs before an attacker can exploit them; shows the presence of bugs, never their absence. |
 | Specification | Testing requires a specification or policy; without it, there is nothing to test. |
-| Three forms | Manual testing, static analysis (no execution, complete but imprecise), dynamic analysis (concrete run, precise but incomplete). |
+| Three forms | Manual testing, static analysis (no concrete execution, coverage depends on its model), dynamic analysis (concrete run, precise but incomplete). |
 | Laws of static analysis | Check all code, parse it, handle other languages, give context, rank bugs, and balance false positives and negatives. |
 | Levels of static analysis | Compiler warnings, clang-tidy (per-unit linter), clang static analyzer (whole-system). |
 | Symbolic execution | Abstract interpretation with symbolic values; collects path conditions and solves them with a SAT/SMT solver; limited by state explosion. |
@@ -250,7 +308,7 @@ In the example, the inputs start as symbols (`x=0, y=0, z=0` with symbolic `a`, 
 
 3. **Three Forms:** Compare static analysis and dynamic analysis in terms of coverage and precision.
 
-   > **Answer:** Static analysis reasons about the code without executing it, so it abstracts across all possible executions (complete coverage) but is imprecise and over-approximates, which causes false positives and undecidability. Dynamic analysis observes a single concrete run, so it is precise about that run but incomplete, because it only sees the paths that were actually executed.
+   > **Answer:** Static analysis abstracts possible executions without running each concrete input. It can explore beyond chosen tests, but models, approximations, unsupported code, and resource limits affect coverage and precision. Real tools may report both false positives and false negatives. Dynamic analysis observes concrete executions precisely, but does not cover paths that were never run.
 
 4. **Laws of Static Analysis:** Why do both false positives and false negatives matter, and why is ranking crucial?
 

@@ -1,4 +1,4 @@
-# Lecture 01 — Introduction
+# L01 Introduction
 
 > **Last Updated:** 2026-10-08
 >
@@ -52,6 +52,7 @@
   - [7.3 Background: Fuzzing](#73-background-fuzzing)
   - [7.4 AutoFuzzer: Input Mutation](#74-autofuzzer-input-mutation)
   - [7.5 AutoFuzzer: Detected Bugs](#75-autofuzzer-detected-bugs)
+- [Concept Applications](#concept-applications)
 - [Summary](#summary)
 - [Self-Check Questions](#self-check-questions)
 
@@ -67,13 +68,13 @@ Computers and software are no longer limited to desktop machines. They control *
 
 ### 1.2 Vulnerabilities, Hackers, and Critical Attacks
 
-The lecture summarizes the threat with a simple equation:
+Developer mistakes can introduce vulnerabilities that attackers exploit to compromise a system:
 
 $$\text{Developers' mistakes} \rightarrow \text{Vulnerabilities in software}, \qquad \text{Vulnerabilities} + \text{Hackers} = \text{Critical attacks}$$
 
 Developers inevitably make mistakes, and some of those mistakes become **vulnerabilities**. When an attacker discovers and abuses a vulnerability, the result is a critical attack.
 
-> **Definition:** Three terms are often confused. A **bug** is any deviation of a program from its intended behavior. A **vulnerability** is a bug that an attacker can use to violate a security property (confidentiality, integrity, or availability). An **exploit** is a concrete input or program that triggers a vulnerability to achieve the attacker's goal. Therefore, every vulnerability is a bug, but not every bug is a vulnerability. This distinction is treated formally in Lecture 02.
+> **Definition:** Three terms are often confused. A **bug** is any deviation of a program from its intended behavior. A **vulnerability** is a bug that an attacker can use to violate a security property (confidentiality, integrity, or availability). An **exploit** is a concrete input or program that triggers a vulnerability to achieve the attacker's goal. Therefore, every vulnerability is a bug, but not every bug is a vulnerability.
 
 ```mermaid
 graph LR
@@ -88,9 +89,9 @@ graph LR
 
 ### 1.3 Real-World Incidents
 
-The lecture presents several news headlines that show the impact of software vulnerabilities.
+Software vulnerabilities can cause information disclosure, service outages, and disruption of critical infrastructure.
 
-| Headline on the Slide | Consequence |
+| Security Incident | Consequence |
 |:----------------------|:------------|
 | Critical flaws in Amcrest HDSeries cameras allow complete takeover | **Someone can spy on you.** |
 | A virus shuts down TSMC factories and impacts chip production | **Factories are shut down.** |
@@ -118,13 +119,13 @@ The lecture presents several news headlines that show the impact of software vul
 
 ### 1.5 Emerging Targets: AI, Robots, and Autonomous Systems
 
-Software now drives **AI systems, IoT devices, autonomous vehicles, and humanoid robots**. The slides illustrate this trend with images of robotaxis and robots, followed by images of the *Terminator*. The message is that as software gains direct control over the physical world, a compromised system can cause physical harm, so security must be considered from the design stage of these systems.
+Software drives **AI systems, IoT devices, autonomous vehicles, and humanoid robots**. In systems that directly control the physical world, a security compromise can cause physical harm. Security therefore needs to be considered from the design stage.
 
 ### 1.6 Demand for Security Researchers
 
 Most organizations, including **companies, research laboratories, and governments**, need security researchers.
 
-| Region | Examples Shown on the Slide |
+| Region | Examples of Security Workforce Demand |
 |:-------|:----------------------------|
 | **South Korea** | NAVER, Kakao, Samsung, Hyundai, Samsung Research, NSR (National Security Research Institute), ETRI, and others |
 | **Global** | Google, Microsoft Research, Facebook (Meta), Amazon, IBM Research, Intel |
@@ -149,9 +150,9 @@ Modern computer systems are **mainly implemented in C/C++**.
 
 ### 2.2 Vulnerabilities on the Rise
 
-![Figure 1. Number of published CVEs per year (2012 to 2025) (slide 16)](../images/L01_p16.png)
+![Figure 1. Number of published CVEs per year (2012 to 2025)](../images/L01_p16.png)
 
-*Figure 1. Number of published CVEs per year (2012 to 2025) (slide 16)*
+*Figure 1. Number of published CVEs per year (2012 to 2025)*
 
 | Year | Published CVEs (values labeled on the chart) |
 |:-----|:--------------------------------------------|
@@ -169,11 +170,11 @@ Modern computer systems are **mainly implemented in C/C++**.
 
 ### 2.3 Type and Memory Safety Violations Are Common
 
-![Figure 2. 63% of all Microsoft patches are memory and type safety violations (slide 17)](../images/L01_p17.png)
+![Figure 2. 63% of all Microsoft patches are memory and type safety violations](../images/L01_p17.png)
 
-*Figure 2. 63% of all Microsoft patches are memory and type safety violations (slide 17)*
+*Figure 2. 63% of all Microsoft patches are memory and type safety violations*
 
-- According to the slide, **63% of all Microsoft patches** address **memory and type safety violations**, and the remaining 37% address other vulnerability classes.
+- In a Microsoft patch classification example, **63% of patches** address **memory and type safety violations**, and the remaining 37% address other vulnerability classes.
 - Data source: ZDNet, "Microsoft: 70 percent of all security bugs are memory safety issues"
 
 > **Note:** The cited article reports Microsoft's own analysis that roughly **70%** of the CVEs it assigns each year are memory safety issues. Google has reported a similar proportion for Chrome. Regardless of the exact figure, the consistent conclusion is that the majority of severe vulnerabilities in large C/C++ code bases fall into this single category.
@@ -182,18 +183,18 @@ Modern computer systems are **mainly implemented in C/C++**.
 
 C/C++ **trade type and memory safety for performance**.
 
-![Figure 3. Type safety violation (top) and memory safety violation (bottom) (slide 18)](../images/L01_p18.png)
+![Figure 3. Type safety violation (top) and memory safety violation (bottom)](../images/L01_p18.png)
 
-*Figure 3. Type safety violation (top) and memory safety violation (bottom) (slide 18)*
+*Figure 3. Type safety violation (top) and memory safety violation (bottom)*
 
-| Violation | Definition | Illustration on the Slide |
+| Violation | Definition | Violation Example |
 |:----------|:-----------|:--------------------------|
 | **Type safety violation** | Data is used with its **incorrect type**. | Memory holding a `Password` object is interpreted as a different type (the attacker asks, "Is this a chat?"). |
 | **Memory safety violation** | **Out-of-bounds (or deleted) memory** is accessed. | An access that starts in the allocated data runs out of bounds into the adjacent `Password` (the attacker accesses out-of-bound data). |
 
 > **Key Point:** Memory safety violations are usually divided into two classes. A **spatial** violation accesses memory *outside the bounds* of an object (e.g., a buffer overflow). A **temporal** violation accesses an object *outside its lifetime*, that is, after it has been freed (e.g., use-after-free, double free). A **type safety** violation, often called **type confusion**, accesses a valid object through a pointer of an incompatible type. In C++, a typical case is an unchecked downcast with `static_cast` from a base class pointer to the wrong derived class, after which fields and virtual functions are read at the wrong offsets.
 
-> **Exam Tip:** When asked to compare the two violations, state *what* is wrong in each case. In a memory safety violation, the **location or lifetime** of the access is wrong. In a type safety violation, the location may be valid, but the **interpretation** of the data is wrong.
+> **Distinction:** A memory safety violation concerns the **location or lifetime** of an access. A type safety violation concerns the **interpretation** of data, even when its location is valid.
 
 ---
 
@@ -203,9 +204,9 @@ C/C++ **trade type and memory safety for performance**.
 
 ### 3.1 Buffer Overflow
 
-The slide on buffer overflow shows a photograph of water overflowing a well. The analogy is direct: when more data is written into a buffer than it can hold, the excess spills into the adjacent memory and overwrites whatever is stored there.
+A **buffer overflow** writes beyond the bounds of a buffer and can corrupt values stored in adjacent memory.
 
-> **[Computer Architecture]** On most architectures, the stack grows toward **lower** addresses, while writes into a local array proceed toward **higher** addresses. In a typical stack frame, a local buffer lies *below* the saved frame pointer and the **return address** of the function. Therefore, writing past the end of a local buffer overwrites the saved frame pointer and then the return address. When the function returns, the CPU jumps to the overwritten address, which gives the attacker control of the execution flow. This is the classic **stack-based buffer overflow**, covered in detail in the Exploitation lecture.
+> **[Computer Architecture]** On most architectures, the stack grows toward **lower** addresses, while writes into a local array proceed toward **higher** addresses. In a typical stack frame, a local buffer lies *below* the saved frame pointer and the **return address** of the function. Therefore, writing past the end of a local buffer overwrites the saved frame pointer and then the return address. When the function returns, the CPU jumps to the overwritten address, which gives the attacker control of the execution flow. This is the classic **stack-based buffer overflow**.
 
 ### 3.2 Attack Primitive: Arbitrary Writing
 
@@ -218,22 +219,22 @@ void set(int idx, int val) {
 ```
 
 - `set()` never checks whether `idx` lies in the range `0` to `9`.
-- An attacker who controls both `idx` and `val` can set **any 4-byte location within about ±2 GB around `global`** to an **arbitrary value**.
+- An attacker who controls both `idx` and `val` can **select an out of bounds location and write a 4-byte value**. The reachable range depends on index width, address arithmetic, and memory mappings.
 
 > **Definition:** An **attack primitive** is a basic capability that an attacker gains from a bug, such as "write any value to any address" (an **arbitrary write**) or "read any address" (an **arbitrary read**). Real exploits are built by chaining such primitives. An arbitrary write is one of the strongest primitives, because overwriting a function pointer or a return address immediately leads to control-flow hijacking.
 
-> **Note:** The ±2 GB figure comes from the range of the index itself: a signed 32-bit `int` ranges from about −2<sup>31</sup> to 2<sup>31</sup>, that is, about ±2 billion elements. Strictly speaking, the compiler scales the index by `sizeof(int)` = 4, so on a 64-bit platform the reachable byte range is about ±8 GB. Either way, the attacker can reach almost any interesting memory near the program's data. The fix is a bounds check such as `if (idx < 0 || idx >= 10) return;`, or the use of an unsigned type with an upper bound check.
+> **Note:** Index range and byte offset differ according to the element size. With `sizeof(int) == 4` and a signed 32-bit index extended for 64-bit address arithmetic, byte offsets span about ±8 GiB in 4-byte steps. An out of bounds access is undefined behavior in C, so this is an address calculation model, not a range guaranteed by the language. The important issue is that an unchecked index can corrupt adjacent memory. A correct bounds check is `if (idx < 0 || idx >= 10) return;`.
 
 ### 3.3 Attack Primitive: Arbitrary Writing, Limited Location
 
 ```c
-void vuln(char *u1) {
+int vuln(char *u1) {
   /* assert(strlen(u1) < MAX); */
   char tmp[MAX];
   strcpy(tmp, u1);
   /* equivalent:
-     while (*u1 != 0)
-       *(tmp++) = *u1++;
+     char *out = tmp;
+     while ((*out++ = *u1++) != '\0') {}
    */
   return strcmp(tmp, "foo");
 }
@@ -253,9 +254,9 @@ The commented "equivalent" loop explains both restrictions. The copy proceeds by
 
 ### 3.4 Use After Free
 
-![Figure 4. Use after free: a dangling pointer ends up pointing to a new object (slide 22)](../images/L01_p22.png)
+![Figure 4. Use after free: a dangling pointer ends up pointing to a new object](../images/L01_p22.png)
 
-*Figure 4. Use after free: a dangling pointer ends up pointing to a new object (slide 22)*
+*Figure 4. Use after free: a dangling pointer ends up pointing to a new object*
 
 | Time | Event |
 |:-----|:------|
@@ -301,9 +302,9 @@ Address Sanitizer is the **most widely used sanitizer**.
 - It uses **shadow memory** to record whether each byte is accessible.
 - It has detected **over 10,000 memory safety violations**.
 
-![Figure 5. ASan checks `IsAccessible(p)` in shadow memory before each access; touching a redzone reports a bug (slide 24)](../images/L01_p24.png)
+![Figure 5. ASan checks `IsAccessible(p)` in shadow memory before each access; touching a redzone reports a bug](../images/L01_p24.png)
 
-*Figure 5. ASan checks `IsAccessible(p)` in shadow memory before each access; touching a redzone reports a bug (slide 24)*
+*Figure 5. ASan checks `IsAccessible(p)` in shadow memory before each access; touching a redzone reports a bug*
 
 The detection works in three steps:
 
@@ -319,9 +320,9 @@ The detection works in three steps:
 - To **detect** triggered bugs, fuzzers **leverage sanitizers**.
 - **Fuzzer + Sanitizer** is a popular and effective combination.
 
-![Figure 6. The fuzzer sends random inputs to a sanitizer-instrumented target (e.g., Chrome built with LLVM or GCC) and uses feedback to find bugs (slide 25)](../images/L01_p25.png)
+![Figure 6. The fuzzer sends random inputs to a sanitizer-instrumented target (e.g., Chrome built with LLVM or GCC) and uses feedback to find bugs](../images/L01_p25.png)
 
-*Figure 6. The fuzzer sends random inputs to a sanitizer-instrumented target (e.g., Chrome built with LLVM or GCC) and uses feedback to find bugs (slide 25)*
+*Figure 6. The fuzzer sends random inputs to a sanitizer-instrumented target (e.g., Chrome built with LLVM or GCC) and uses feedback to find bugs*
 
 The two tools complement each other. The fuzzer is good at *reaching* buggy states but is bad at *noticing* silent memory corruption. The sanitizer is good at *noticing* corruption the moment it happens but cannot generate inputs. Combined, a silent out-of-bounds write that would otherwise go unnoticed becomes an immediate, reproducible crash report.
 
@@ -329,7 +330,7 @@ The two tools complement each other. The fuzzer is good at *reaching* buggy stat
 
 ### 4.4 Fuzzing Farm
 
-The slide shows photographs of a **fuzzing farm**: racks of machines (and devices) dedicated to running fuzzers continuously. Because fuzzing is a numbers game, organizations scale it out across many machines to execute billions of test inputs per day.
+A **fuzzing farm** runs fuzzers continuously across multiple machines and devices. Parallel execution expands the number of inputs and execution paths that can be explored.
 
 > **Note:** A well-known example is Google's **ClusterFuzz**, which runs fuzzers for Chrome on a large cluster, and its open-source counterpart **OSS-Fuzz**, which continuously fuzzes critical open-source projects and has reported tens of thousands of bugs.
 
@@ -357,7 +358,7 @@ The S2 Lab focuses on enforcing **software and system security** in three areas:
 2. Rust language security
 3. Robot security, web (browser) security, and AI security, including autonomous vehicles and drones
 
-The first area focuses on **developing advanced sanitizers and fuzzers**. The works listed on the slide are as follows.
+The first area focuses on **developing advanced sanitizers and fuzzers**. Representative research includes the following works.
 
 | Sanitizers | Venue | Fuzzers | Venue |
 |:-----------|:------|:--------|:------|
@@ -379,9 +380,9 @@ The first area focuses on **developing advanced sanitizers and fuzzers**. The wo
 
 ### 6.1 Why Rust
 
-![Figure 7. Languages positioned by control/performance and safety (left) and "love for programming language" over time (right) (slide 30)](../images/L01_p30.png)
+![Figure 7. Languages positioned by control/performance and safety (left) and "love for programming language" over time (right)](../images/L01_p30.png)
 
-*Figure 7. Languages positioned by control/performance and safety (left) and "love for programming language" over time (right) (slide 30)*
+*Figure 7. Languages positioned by control/performance and safety (left) and "love for programming language" over time (right)*
 
 - **Left chart:** C and C++ offer high control and performance but low safety. Go, Java, and ML trade some control for more safety, and Haskell offers high safety with less control. **Rust** is positioned at the top right, offering **both** control/performance **and** safety.
 - **Right chart:** In the developer preference survey from 2015 to 2019 (Rust, Kotlin, Python, Go, and Swift), Rust is consistently the most loved language.
@@ -391,17 +392,17 @@ The first area focuses on **developing advanced sanitizers and fuzzers**. The wo
 - **Government policy:** A news article titled "White House urges software developers to use memory-safe programming languages" (February 2024) reports that a number of headline-making cyberattacks started with memory safety flaws, according to a White House cyber official.
 - **Firefox:** The share of C/C++ lines in Firefox steadily decreased while the share of Rust lines increased.
 
-![Figure 8. C/C++ and Rust usage in Firefox (2019 to 2020) (slide 32)](../images/L01_p32.png)
+![Figure 8. C/C++ and Rust usage in Firefox (2019 to 2020)](../images/L01_p32.png)
 
-*Figure 8. C/C++ and Rust usage in Firefox (2019 to 2020) (slide 32)*
+*Figure 8. C/C++ and Rust usage in Firefox (2019 to 2020)*
 
 > **Note:** In the chart, the C/C++ share (blue) drops from about 94% to about 88% within roughly a year and a half, and the Rust share (red) grows correspondingly. Mozilla created Rust in the first place to write a safer browser engine, and rewrote components such as the CSS engine (Stylo) in Rust.
 
 ### 6.3 Ownership
 
-![Figure 9. In `let x = v;`, the variable `x` owns the value `v` (slide 33)](../images/L01_p33.png)
+![Figure 9. In `let x = v;`, the variable `x` owns the value `v`](../images/L01_p33.png)
 
-*Figure 9. In `let x = v;`, the variable `x` owns the value `v` (slide 33)*
+*Figure 9. In `let x = v;`, the variable `x` owns the value `v`*
 
 - All allocated memory is **"owned" by a unique owner**.
 - **Ownership can transfer** to another variable.
@@ -441,32 +442,32 @@ Rust contains **a second language hidden inside it** that does not enforce these
 
 ## 7. Research Area 3: Autonomous Vehicle and Drone Security
 
-![Figure 10. DriveFuzz (ACM CCS 2022) mutates driving scenarios, and AdversarialSwarm (IEEE S&P 2022) tests drone swarms (slide 37)](../images/L01_p37.png)
+![Figure 10. DriveFuzz (ACM CCS 2022) mutates driving scenarios, and AdversarialSwarm (IEEE S&P 2022) tests drone swarms](../images/L01_p37.png)
 
-*Figure 10. DriveFuzz (ACM CCS 2022) mutates driving scenarios, and AdversarialSwarm (IEEE S&P 2022) tests drone swarms (slide 37)*
+*Figure 10. DriveFuzz (ACM CCS 2022) mutates driving scenarios, and AdversarialSwarm (IEEE S&P 2022) tests drone swarms*
 
 The third area applies security testing to **cyber-physical systems** such as autonomous vehicles and drone swarms.
 
 ### 7.1 Motivation
 
-- Autonomous driving is **becoming real** (images from Tesla).
-- **But can we really trust autonomous driving systems?** The slides show two news reports: a Tesla in Taiwan crashing directly into an overturned truck with Autopilot on, and a Tesla on Autopilot hitting a police vehicle, which then hit an ambulance.
+- Autonomous driving systems integrate perception, decision making, and vehicle control.
+- Collisions with overturned or stationary vehicles have occurred with driving assistance enabled. Errors in perception, decision making, or path planning can result in physical collisions.
 - **Rigorous testing** is often suggested as a way of ensuring the robustness of such systems.
 
 ### 7.2 Challenges
 
-YouTube experiments titled "Will Tesla Autopilot hit a dog, human, or traffic cone?" and "Will a Tesla KILL a cat?" show that the behavior of real vehicles in unusual situations is uncertain. Testing such systems faces two challenges:
+Autonomous driving systems must behave safely even with unusual object configurations and environmental conditions. Testing these systems faces two major challenges:
 
 1. **Testing all corner cases is practically impossible**, because the input space is infinite.
-2. **There is no end-to-end testing framework.** Individual components are tested, but the system as a whole is not.
+2. **Component testing alone cannot establish system safety.** Interactions between components require testing the system as a whole.
 
 Therefore, we need **(1) an end-to-end testing framework for autonomous driving systems (2) that can tackle corner-case bugs.**
 
 ### 7.3 Background: Fuzzing
 
-![Figure 11. A fuzzer feeds mutated inputs to the target system and uses the bug monitor and coverage map as feedback (slide 44)](../images/L01_p44.png)
+![Figure 11. A fuzzer feeds mutated inputs to the target system and uses the bug monitor and coverage map as feedback](../images/L01_p44.png)
 
-*Figure 11. A fuzzer feeds mutated inputs to the target system and uses the bug monitor and coverage map as feedback (slide 44)*
+*Figure 11. A fuzzer feeds mutated inputs to the target system and uses the bug monitor and coverage map as feedback*
 
 Fuzzing is an automated software testing technique that works in a loop:
 
@@ -480,17 +481,17 @@ Fuzzing is an automated software testing technique that works in a loop:
 
 ### 7.4 AutoFuzzer: Input Mutation
 
-![Figure 12. The input is a driving scene in a simulator, with a goal that the autopilot vehicle must reach (slide 46)](../images/L01_p46.png)
+![Figure 12. The input is a driving scene in a simulator, with a goal that the autopilot vehicle must reach](../images/L01_p46.png)
 
-*Figure 12. The input is a driving scene in a simulator, with a goal that the autopilot vehicle must reach (slide 46)*
+*Figure 12. The input is a driving scene in a simulator, with a goal that the autopilot vehicle must reach*
 
-The input of the fuzzer (called **AutoFuzzer** on the slides) is a **driving scene** whose **weather, puddles, and actors** are mutated.
+The input of **AutoFuzzer** is a **driving scene** whose **weather, puddles, and actors** are mutated.
 
 **Mutating weather:**
 
-![Figure 13. The same scene with different cloud and rain parameters (slide 47)](../images/L01_p47.png)
+![Figure 13. The same scene with different cloud and rain parameters](../images/L01_p47.png)
 
-*Figure 13. The same scene with different cloud and rain parameters (slide 47)*
+*Figure 13. The same scene with different cloud and rain parameters*
 
 | Scene | `sun_angle` | `cloud` | `rain` |
 |:------|:-----------:|:-------:|:------:|
@@ -500,9 +501,9 @@ The input of the fuzzer (called **AutoFuzzer** on the slides) is a **driving sce
 
 **Mutating actors:**
 
-![Figure 14. Adding other vehicles and pedestrians to the scene (slide 48)](../images/L01_p48.png)
+![Figure 14. Adding other vehicles and pedestrians to the scene](../images/L01_p48.png)
 
-*Figure 14. Adding other vehicles and pedestrians to the scene (slide 48)*
+*Figure 14. Adding other vehicles and pedestrians to the scene*
 
 - Scene 1: one moving vehicle and one stationary vehicle
 - Scene 2: one walking pedestrian and one stationary vehicle
@@ -511,9 +512,9 @@ The input of the fuzzer (called **AutoFuzzer** on the slides) is a **driving sce
 
 **AutoFuzzer found 20 critical bugs!**
 
-![Figure 15. The 20 critical bugs, classified by layer, component, impact, and root cause (slide 49)](../images/L01_p49.png)
+![Figure 15. The 20 critical bugs, classified by layer, component, impact, and root cause](../images/L01_p49.png)
 
-*Figure 15. The 20 critical bugs, classified by layer, component, impact, and root cause (slide 49)*
+*Figure 15. The 20 critical bugs, classified by layer, component, impact, and root cause*
 
 | Layer | Bugs | Examples |
 |:------|:----:|:---------|
@@ -525,9 +526,25 @@ The input of the fuzzer (called **AutoFuzzer** on the slides) is a **driving sce
 
 - **Impact legend:** C = Collision, I = Vehicle becomes Immobile, L = Lane invasion, S = Speeding, V = Miscellaneous traffic Violation
 - **Root causes:** Most bugs are **logic errors**, and the others are features that are not implemented, a faulty configuration, or a data error. Many of the bugs were acknowledged (ACK) by the developers.
-- The last slide of this part shows a bird's-eye view of an intersection in which the planned path of the vehicle leads it into an unsafe maneuver.
+- A path planning error at an intersection can lead to a collision or unsafe maneuver.
 
 > **Note:** Unlike memory safety bugs in C/C++, most of these bugs are **logic errors**. A sanitizer would not detect them, because no memory is corrupted. This is why fuzzing cyber-physical systems requires a domain-specific bug monitor that understands traffic rules and collisions.
+
+---
+
+<br>
+
+## Concept Applications
+
+**T/F Practice:**
+
+| Statement | Answer and Reason |
+|:----------|:------------------|
+| Every bug is an exploitable vulnerability. | **F.** An attacker must be able to reach and use the bug to violate a security property. |
+| Reusing a freed object’s address automatically makes an old pointer valid again. | **F.** The original object’s lifetime has ended. |
+| A sanitizer generates the inputs that trigger bugs. | **F.** A fuzzer explores inputs; a sanitizer detects violations during the executions reached. |
+| Rust ownership makes all bounds checks compile time checks. | **F.** Ownership and lifetime checking are primarily static, while indexing can require runtime bounds checks. |
+| An autonomous driving logic error can occur without memory corruption. | **T.** Detecting collisions and traffic violations requires a domain specific oracle. |
 
 ---
 
@@ -563,7 +580,7 @@ The input of the fuzzer (called **AutoFuzzer** on the slides) is a **driving sce
 
 2. **Arbitrary Write:** In `void set(int idx, int val) { global[idx] = val; }`, why does an attacker obtain an arbitrary write primitive, and how should the function be fixed?
 
-   > **Answer:** The function does not check that `idx` lies between 0 and 9, and `global[idx]` is computed as `global + idx * 4`. Since the attacker controls both `idx` (any signed 32-bit value, positive or negative) and `val`, the attacker can write any 4-byte value to almost any location around `global`, such as a function pointer. The fix is a bounds check, for example `if (idx < 0 || idx >= 10) return;`.
+   > **Answer:** The function does not check that `idx` is between 0 and 9. In a byte address model, the location is `(char *)global + idx * sizeof(int)`, so the attacker selects the location through `idx` and the stored value through `val`. Actual reach depends on address arithmetic and mappings. The check `if (idx < 0 || idx >= 10) return;` rejects both negative and excessive indices.
 
 3. **`strcpy` Overflow:** In the `strcpy` example, which locations can the attacker overwrite, and why can the attacker not write `\0` bytes freely?
 
@@ -585,7 +602,7 @@ The input of the fuzzer (called **AutoFuzzer** on the slides) is a **driving sce
 
    > **Answer:** Every value has a unique owner and is freed exactly once when the owner goes out of scope. The borrow checker prohibits shared mutable aliases and ensures that references do not outlive the value, which prevents dangling pointers. Objects such as slices and vectors carry a length field, and indexing is bounds-checked at run time, which prevents buffer overflows. However, **unsafe Rust** allows raw pointer dereferences, calls to unsafe functions, and access to mutable statics, which the compiler does not check, so bugs in unsafe code (or in C/C++ code called from Rust) can still break memory safety.
 
-8. **Autonomous Driving Fuzzing:** Why is it difficult to test autonomous driving systems, and how does the fuzzer presented in the lecture define and mutate its inputs?
+8. **Autonomous Driving Fuzzing:** Why is it difficult to test autonomous driving systems, and how does an autonomous driving fuzzer define and mutate its inputs?
 
    > **Answer:** The input space of the physical world is infinite, so not all corner cases can be tested, and existing tests check individual components rather than the system as a whole. The fuzzer performs end-to-end testing in a simulator: its input is a driving scene, and it mutates the weather (sun angle, clouds, rain), puddles, and actors (moving or stationary vehicles and pedestrians). Bugs are detected as unsafe driving outcomes, such as collisions, immobility, lane invasions, speeding, and other traffic violations, which revealed 20 critical bugs.
 
