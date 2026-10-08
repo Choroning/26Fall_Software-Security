@@ -299,12 +299,12 @@ For example, a test that expects SIGSEGV for a null argument may behave differen
 
 | Sanitizer | Finds | Metadata | Typical Slowdown |
 |:----------|:------|:---------|:-----------------|
-| **ASan** | Out-of-bounds, use-after-free/return/scope, double/invalid free, leaks | Shadow memory (1 byte per 8 bytes) + redzones | 2x |
-| **LSan** | Memory leaks | Allocated-object tracking | Almost none until exit |
-| **TSan** | Data races (WAW, RAW, WAR) | Shadow area with last accesses (thread ID, epoch) | 4x to 10x |
-| **MSan** | Uninitialized reads | Bit-level initialization shadow, one byte per byte | 2.5x to 4x |
+| **ASan** (AddressSanitizer) | Out-of-bounds, use-after-free/return/scope, double/invalid free, leaks | Shadow memory (1 byte per 8 bytes) + redzones | 2x |
+| **LSan** (LeakSanitizer) | Memory leaks | Allocated-object tracking | Almost none until exit |
+| **TSan** (ThreadSanitizer) | Data races (WAW, RAW, WAR) | Shadow area with last accesses (thread ID, epoch) | 4x to 10x |
+| **MSan** (MemorySanitizer) | Uninitialized reads | Bit-level initialization shadow, one byte per byte | 2.5x to 4x |
 | **HexType** | Type confusion | True type of allocated objects | ~1.5x |
-| **UBSan** | Undefined behavior | Inline checks | Depends (production-capable) |
+| **UBSan** (UndefinedBehaviorSanitizer) | Undefined behavior | Inline checks | Depends (production-capable) |
 | **Valgrind memcheck** | Memory errors (binary, no recompile) | Binary translation | 20x to 30x |
 
 - Software testing finds bugs before an attacker can exploit them.
