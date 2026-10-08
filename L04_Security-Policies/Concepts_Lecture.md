@@ -1,4 +1,4 @@
-# L04 Security Policies
+# Lecture 04 — Security Policies
 
 > **Last Updated:** 2026-10-08
 >

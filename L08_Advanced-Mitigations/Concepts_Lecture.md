@@ -1,4 +1,4 @@
-# L08 Advanced Mitigations
+# Lecture 08 — Advanced Mitigations
 
 > **Last Updated:** 2026-10-08
 >

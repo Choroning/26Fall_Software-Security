@@ -1,4 +1,4 @@
-# L07 Mitigations
+# Lecture 07 — Mitigations
 
 > **Last Updated:** 2026-10-08
 >

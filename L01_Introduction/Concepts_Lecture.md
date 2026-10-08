@@ -1,4 +1,4 @@
-# L01 Introduction
+# Lecture 01 — Introduction
 
 > **Last Updated:** 2026-10-08
 >

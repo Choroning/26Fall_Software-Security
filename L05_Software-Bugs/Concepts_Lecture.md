@@ -1,4 +1,4 @@
-# L05 Software Bugs
+# Lecture 05 — Software Bugs
 
 > **Last Updated:** 2026-10-08
 >

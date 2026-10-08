@@ -1,4 +1,4 @@
-# L02 Basic Principles
+# Lecture 02 — Basic Principles
 
 > **Last Updated:** 2026-10-08
 >

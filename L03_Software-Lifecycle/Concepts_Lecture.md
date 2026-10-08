@@ -1,4 +1,4 @@
-# L03 Software Lifecycle
+# Lecture 03 — Software Lifecycle
 
 > **Last Updated:** 2026-10-08
 >

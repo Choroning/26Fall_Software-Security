@@ -1,4 +1,4 @@
-# L10 Sanitization
+# Lecture 10 — Sanitization
 
 > **Last Updated:** 2026-10-08
 >

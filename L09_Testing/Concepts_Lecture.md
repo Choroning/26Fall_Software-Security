@@ -1,4 +1,4 @@
-# L09 Why Testing?
+# Lecture 09 — Why Testing?
 
 > **Last Updated:** 2026-10-08
 >
